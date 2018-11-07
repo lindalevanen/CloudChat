@@ -3,6 +3,9 @@ import {
   Text, View, StyleSheet,
 } from 'react-native';
 import { createSwitchNavigator } from 'react-navigation';
+import { compose } from 'recompose';
+import { connect } from 'react-redux';
+import { firebaseConnect } from 'react-redux-firebase';
 import { SplashScreen } from 'expo';
 
 import HomeScreen from '../HomeScreen';
@@ -17,27 +20,36 @@ const styles = StyleSheet.create({
 });
 
 class AuthLoadingScreen extends React.Component {
-  componentDidMount() {
-    const authenticated = false; // authenticate with firebase
-    setTimeout(() => {
-      const { navigation } = this.props;
+  componentWillReceiveProps(props) {
+    if (props !== this.props && props.auth.isLoaded) {
+      const { auth, navigation } = props;
+      navigation.navigate(!auth.isEmpty ? 'App' : 'Login');
       SplashScreen.hide();
-      navigation.navigate(authenticated ? 'App' : 'Login');
-    }, 200);
+    }
   }
 
   render() {
     return (
       <View style={styles.container}>
-        <Text>loading</Text>
+        <Text>Loading</Text>
       </View>
     );
   }
 }
 
+const mapStateToProps = state => ({
+  auth: state.firebase.auth,
+});
+
+const enhance = compose(
+  firebaseConnect(),
+  connect(mapStateToProps),
+);
+const ConnectedAuthLoadingScreen = enhance(AuthLoadingScreen);
+
 export default createSwitchNavigator(
   {
-    AuthLoading: AuthLoadingScreen,
+    AuthLoading: ConnectedAuthLoadingScreen,
     App: HomeScreen,
     Login: LoginScreen,
   },

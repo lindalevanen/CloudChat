@@ -12,7 +12,7 @@ import { chatReducer } from './chat/reducer';
 const rootReducer = combineReducers({ chat: chatReducer, firebase: firebaseReducer });
 
 export default function configureStore(preloadedState) {
-  const middlewares = [thunkMiddleware, logger];
+  const middlewares = [thunkMiddleware];
   const middlewareEnhancer = applyMiddleware(...middlewares);
 
   const enhancers = compose(initFirebaseMiddleware(), middlewareEnhancer);
