@@ -6,6 +6,8 @@ import {
 } from 'react-navigation';
 import { Ionicons } from '@expo/vector-icons';
 
+import ChatMock from '../Chats';
+
 const Test = ({ text }) => (
   <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
     <Text>{text}</Text>
@@ -15,7 +17,7 @@ const Test = ({ text }) => (
 const Tabs = createBottomTabNavigator(
   {
     Chats: {
-      screen: () => <Test text="Chats" />,
+      screen: ChatMock,
       navigationOptions: {
         headerTitle: 'Chats',
         tabBarIcon: ({ tintColor }) => <Ionicons name="ios-chatbubbles" size={25} color={tintColor} />,
