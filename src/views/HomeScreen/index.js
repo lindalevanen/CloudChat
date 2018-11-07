@@ -8,6 +8,7 @@ import { Ionicons } from '@expo/vector-icons';
 
 import ChatMock from '../Chats';
 import ProfileView from '../Profile';
+import ChangeUsernameSheet from '../Profile/ChangeUsernameSheet';
 import SettingsView from '../Settings';
 
 const Test = ({ text }) => (
@@ -63,7 +64,13 @@ export default createStackNavigator({
       headerTitle: 'CloudChat',
     },
   },
+  ChangeUsernameSheet: {
+    screen: ChangeUsernameSheet,
+    navigationOptions: {
+      headerTitle: 'Change username',
+    },
+  },
 }, {
   mode: 'modal',
-  headerMode: 'float',
+  headerMode: 'screen',
 });
