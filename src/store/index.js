@@ -1,12 +1,11 @@
 import {
-  applyMiddleware,
-  createStore,
-  combineReducers,
-  compose,
+  applyMiddleware, createStore, combineReducers, compose,
 } from 'redux';
 import thunkMiddleware from 'redux-thunk';
 
-const rootReducer = combineReducers();
+import { chatReducer } from './chat/reducer';
+
+const rootReducer = combineReducers({ chat: chatReducer });
 
 export default function configureStore(preloadedState) {
   const middlewares = [thunkMiddleware];
