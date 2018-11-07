@@ -1,5 +1,7 @@
 import React from 'react';
 import { Text, View, StyleSheet } from 'react-native';
+import { withFirebase } from 'react-redux-firebase';
+
 
 import Button from '../../components/Button';
 
@@ -11,12 +13,15 @@ const styles = StyleSheet.create({
 });
 
 const ProfileView = ({
-  params,
-}) => (
-  <View styles={styles.container}>
-    <Text>ProfileView</Text>
-    <Button title="Logout" color="transparent" titleColor="tomato" />
-  </View>
-);
+  firebase,
+}) => {
+  const logout = () => firebase.logout();
+  return (
+    <View styles={styles.container}>
+      <Text>ProfileView</Text>
+      <Button title="Logout" color="transparent" titleColor="tomato" onPress={logout} />
+    </View>
+  );
+};
 
-export default ProfileView;
+export default withFirebase(ProfileView);
