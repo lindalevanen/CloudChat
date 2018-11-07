@@ -6,8 +6,8 @@ import HomeScreen from './views/HomeScreen';
 
 class Main extends React.Component {
   async componentDidMount() {
-    const { testAction } = this.props;
-    testAction();
+    const { registerListenerAction } = this.props;
+    registerListenerAction();
   }
 
   render() {
@@ -16,7 +16,7 @@ class Main extends React.Component {
 }
 
 const mapDispatchToProps = dispatch => ({
-  testAction: () => dispatch({ type: 'test' }),
+  registerListenerAction: () => dispatch({ type: 'lul' }),
 });
 
 const Connected = connect(

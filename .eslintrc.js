@@ -6,6 +6,6 @@ module.exports = {
             "extensions": [".js", ".jsx"]
         }],
         "react/prop-types": 1,
-        "import/prefer-default-export": 1
+        "import/prefer-default-export": 0
     }
 };

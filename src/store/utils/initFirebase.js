@@ -1,6 +1,5 @@
 import * as firebase from 'firebase';
-
-const { firMiddleware } = require('redux-firebase-middleware');
+import { reactReduxFirebase } from 'react-redux-firebase';
 
 const config = {
   apiKey: 'AIzaSyATNwognBzftHzPB5BkfQF5IBJSF_4uaAY',
@@ -14,5 +13,5 @@ const config = {
 firebase.initializeApp(config);
 
 export function initMiddleware() {
-  return firMiddleware(firebase);
+  return reactReduxFirebase(firebase, { userProfile: 'users', enableRedirectHandling: false });
 }
