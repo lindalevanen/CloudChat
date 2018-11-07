@@ -1,9 +1,8 @@
 import React from 'react';
 import { Text, View, StyleSheet } from 'react-native';
-import { withFirebase } from 'react-redux-firebase';
-
-
-import Button from '../../components/Button';
+import { firebaseConnect } from 'react-redux-firebase';
+import { connect } from 'react-redux';
+import { compose } from 'recompose';
 
 const styles = StyleSheet.create({
   container: {
@@ -13,15 +12,21 @@ const styles = StyleSheet.create({
 });
 
 const ProfileView = ({
-  firebase,
-}) => {
-  const logout = () => firebase.logout();
-  return (
-    <View styles={styles.container}>
-      <Text>ProfileView</Text>
-      <Button title="Logout" color="transparent" titleColor="tomato" onPress={logout} />
-    </View>
-  );
-};
+  auth,
+}) => (
+  <View styles={styles.container}>
+    <Text>Raw auth data:</Text>
+    <Text>{JSON.stringify(auth.providerData, '', 3)}</Text>
+  </View>
+);
 
-export default withFirebase(ProfileView);
+const mapStateToProps = state => ({
+  auth: state.firebase.auth,
+});
+
+const enhance = compose(
+  firebaseConnect(),
+  connect(mapStateToProps),
+);
+
+export default enhance(ProfileView);

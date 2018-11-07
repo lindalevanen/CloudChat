@@ -8,6 +8,7 @@ import { Ionicons } from '@expo/vector-icons';
 
 import ChatMock from '../Chats';
 import ProfileView from '../Profile';
+import SettingsView from '../Settings';
 
 const Test = ({ text }) => (
   <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
@@ -39,7 +40,7 @@ const Tabs = createBottomTabNavigator(
       },
     },
     Settings: {
-      screen: () => <Test text="Settings" />,
+      screen: SettingsView,
       navigationOptions: {
         headerTitle: 'Settings',
         tabBarIcon: ({ tintColor }) => <Ionicons name="ios-cog" size={25} color={tintColor} />,

@@ -56,16 +56,17 @@ const LoginScreen = ({
 }) => {
   const submit = async () => {
     try {
+      let result;
       if (isRegistering) {
-        await firebase.createUser(
+        result = await firebase.createUser(
           { email, password, signIn: true },
           { username },
         );
       } else {
-        const result = await firebase.login({ email, password });
-        console.log('login result', result);
-        navigation.navigate('App');
+        result = await firebase.login({ email, password });
       }
+      console.log('login result', result);
+      navigation.navigate('App');
     } catch (e) {
       console.log('User login failed:', e);
     }
