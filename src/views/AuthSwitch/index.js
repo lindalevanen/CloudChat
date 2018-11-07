@@ -6,6 +6,7 @@ import { createSwitchNavigator } from 'react-navigation';
 import { SplashScreen } from 'expo';
 
 import HomeScreen from '../HomeScreen';
+import LoginScreen from './LoginScreen';
 
 const styles = StyleSheet.create({
   container: {
@@ -17,7 +18,7 @@ const styles = StyleSheet.create({
 
 class AuthLoadingScreen extends React.Component {
   componentDidMount() {
-    const authenticated = true; // authenticate with firebase
+    const authenticated = false; // authenticate with firebase
     setTimeout(() => {
       const { navigation } = this.props;
       SplashScreen.hide();
@@ -34,17 +35,11 @@ class AuthLoadingScreen extends React.Component {
   }
 }
 
-const Login = () => (
-  <View style={styles.container}>
-    <Text>Login</Text>
-  </View>
-);
-
 export default createSwitchNavigator(
   {
     AuthLoading: AuthLoadingScreen,
     App: HomeScreen,
-    Login,
+    Login: LoginScreen,
   },
   {
     initialRouteName: 'AuthLoading',

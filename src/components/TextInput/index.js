@@ -18,7 +18,7 @@ const TextInput = ({
     onChangeText={onChangeText}
     placeholder={placeholder}
     value={value}
-    props={props}
+    {...props}
   />
 );
 
