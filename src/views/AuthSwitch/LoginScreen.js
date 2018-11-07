@@ -3,7 +3,6 @@ import {
   View, Image, Text, StyleSheet,
 } from 'react-native';
 import { withState, compose } from 'recompose';
-import { connect as reduxConnect } from 'react-redux';
 import { firebaseConnect } from 'react-redux-firebase';
 
 import Button from '../../components/Button';
@@ -37,8 +36,6 @@ const styles = StyleSheet.create({
 
 const enhancer = compose(
   firebaseConnect(),
-  reduxConnect(({ firebase: { auth } }) => ({ auth })),
-  withState('debug', 'setDebugMessage', ''),
   withState('isRegistering', 'setIsRegistering', false),
   withState('username', 'setUsername', ''),
   withState('email', 'setEmail', ''),
@@ -46,8 +43,6 @@ const enhancer = compose(
 );
 
 const LoginScreen = ({
-  debug,
-  setDebugMessage,
   isRegistering,
   setIsRegistering,
   username,
@@ -57,22 +52,22 @@ const LoginScreen = ({
   password,
   setPassword,
   firebase,
-  auth,
+  navigation,
 }) => {
   const submit = async () => {
     try {
-      let result;
       if (isRegistering) {
-        result = await firebase.createUser(
+        await firebase.createUser(
           { email, password, signIn: true },
           { username },
         );
       } else {
-        result = await firebase.login({ email, password });
+        const result = await firebase.login({ email, password });
+        console.log('login result', result);
+        navigation.navigate('App');
       }
-      setDebugMessage(result);
     } catch (e) {
-      setDebugMessage(e);
+      console.log('User login failed:', e);
     }
   };
   const getSubmitActionTitle = () => (isRegistering ? 'Register' : 'Login');
@@ -81,8 +76,6 @@ const LoginScreen = ({
     <View style={styles.container}>
       <Image style={styles.logo} source={Logo} />
       <Text style={styles.title}>CloudChat</Text>
-      <Text>{JSON.stringify(auth, null, 2)}</Text>
-      <Text>{JSON.stringify(debug, null, 2)}</Text>
       {isRegistering ? (
         <TextInput
           style={styles.input}
