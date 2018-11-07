@@ -15,3 +15,14 @@ firebase.initializeApp(config);
 export function initMiddleware() {
   return reactReduxFirebase(firebase, { userProfile: 'users', enableRedirectHandling: false });
 }
+
+export function createChatUser(firebaseRef, credentials, profile) {
+  return firebaseRef.createUser(
+    credentials,
+    profile,
+  );
+}
+
+export function loginChatUser(firebaseRef, credentials) {
+  return firebase.login(credentials);
+}

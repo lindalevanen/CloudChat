@@ -5,6 +5,7 @@ import {
 import { withState, compose } from 'recompose';
 import { firebaseConnect } from 'react-redux-firebase';
 
+import { createChatUser, loginChatUser } from '../../store/utils/firebase';
 import Button from '../../components/Button';
 import TextInput from '../../components/TextInput';
 import Logo from '../../../assets/icon.png';
@@ -58,12 +59,12 @@ const LoginScreen = ({
     try {
       let result;
       if (isRegistering) {
-        result = await firebase.createUser(
-          { email, password, signIn: true },
-          { username },
-        );
+        const avatarUrl = 'https://firebasestorage.googleapis.com/v0/b/snazzy-narwhal-on-fire.appspot.com/o/icon.png?alt=media&token=0f162cf6-8b1e-4c27-9d7c-b653bb01381a';
+        result = await createChatUser(firebase, { email, password, signIn: true }, {
+          username, email, avatarUrl,
+        });
       } else {
-        result = await firebase.login({ email, password });
+        result = await loginChatUser({ email, password });
       }
       console.log('login result', result);
       navigation.navigate('App');
