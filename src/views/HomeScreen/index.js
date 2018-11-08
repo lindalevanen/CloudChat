@@ -7,9 +7,10 @@ import {
 import { Ionicons } from '@expo/vector-icons';
 
 import ChatMock from '../Chats';
+import SettingsView from '../Settings';
+import ThemedTabBarComponent from './ThemedTabBarComponent';
 import ChangeUsernameSheet from '../Settings/ProfileSettings/ChangeUsernameSheet';
 import AvatarSelectorSheet from '../Settings/ProfileSettings/AvatarSelectorSheet';
-import SettingsView from '../Settings';
 
 const Test = ({ text }) => (
   <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
@@ -43,6 +44,7 @@ const Tabs = createBottomTabNavigator(
   },
   {
     initialRouteName: 'Chats',
+    tabBarComponent: ThemedTabBarComponent,
     tabBarOptions: {
       activeTintColor: 'tomato',
       inactiveTintColor: 'gray',
