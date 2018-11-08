@@ -1,17 +1,85 @@
 import React from 'react';
 import { Text, View } from 'react-native';
+import { ImagePicker, Permissions } from 'expo';
+import { compose, withState } from 'recompose';
+import { firebaseConnect } from 'react-redux-firebase';
+import { connect } from 'react-redux';
 
+import { uploadAvatar } from '../../store/utils/firebase';
 import Avatar from '../Avatar';
+import Button from '../Button';
+
+const imgOptions = {
+  mediaTypes: ImagePicker.MediaTypeOptions.Images,
+  allowsEditing: true,
+  aspect: [1, 1],
+  exif: false,
+};
 
 const AvatarSelector = ({
-  url,
+  firebase,
+  profile,
+  profileUid,
+  loading,
+  setLoading,
+  error,
+  setError,
+}) => {
+  const handleResult = async (result) => {
+    if (!result.cancelled) {
+      setLoading(true);
+      const { uri } = result;
+      const response = await fetch(uri);
+      const file = await response.blob();
+      const {
+        uploadTaskSnapshot: { ref },
+      } = await uploadAvatar(firebase, file, profileUid);
+      const downloadUrl = await ref.getDownloadURL();
+      await firebase.updateProfile({ avatarUrl: downloadUrl });
+      setLoading(false);
+    }
+  };
+  const takeFromCamera = async () => {
+    const { status } = await Permissions.askAsync(
+      Permissions.CAMERA,
+      Permissions.CAMERA_ROLL,
+    );
+    if (status !== 'granted') {
+      setError('Permission to access images not granted');
+    } else {
+      handleResult(await ImagePicker.launchCameraAsync(imgOptions));
+    }
+  };
+  const pickImage = async () => {
+    const { status } = await Permissions.askAsync(Permissions.CAMERA_ROLL);
+    if (status !== 'granted') {
+      setError('Permission to access images not granted');
+    } else {
+      handleResult(await ImagePicker.launchImageLibraryAsync(imgOptions));
+    }
+  };
+  return (
+    <View>
+      <Text>{loading ? 'loading' : 'ready'}</Text>
+      <Text>{error}</Text>
+      <Avatar url={profile.avatarUrl} />
+      <Button title="take new" onPress={takeFromCamera} />
+      <Button title="pick photo" onPress={pickImage} />
+      <Text>AvatarSelector</Text>
+    </View>
+  );
+};
 
-}) => (
-  <View>
+const mapStateToProps = state => ({
+  profile: state.firebase.profile,
+  profileUid: state.firebase.auth.uid,
+});
 
-    <Text>AvatarSelector</Text>
-  </View>
+const enhancer = compose(
+  firebaseConnect(),
+  withState('error', 'setError', null),
+  withState('loading', 'setLoading', false),
+  connect(mapStateToProps),
 );
 
-
-export default AvatarSelector;
+export default enhancer(AvatarSelector);

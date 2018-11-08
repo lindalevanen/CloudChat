@@ -34,10 +34,13 @@ const ProfileSettings = ({ navigation }) => {
   const openChangeUsernameSheet = () => navigation.dispatch(StackActions.push({
     routeName: 'ChangeUsernameSheet',
   }));
+  const openAvatarSelectorSheet = () => navigation.dispatch(StackActions.push({
+    routeName: 'AvatarSelectorSheet',
+  }));
   return (
     <View>
       <View style={[styles.section]}>
-        <Button title="Change avatar" titleColor="tomato" color="transparent" style={{ alignSelf: 'flex-start' }} />
+        <Button title="Change avatar" onPress={openAvatarSelectorSheet} titleColor="tomato" color="transparent" style={{ alignSelf: 'flex-start' }} />
       </View>
       <View style={[styles.section]}>
         <Button title="Change username" onPress={openChangeUsernameSheet} titleColor="tomato" color="transparent" style={{ alignSelf: 'flex-start' }} />

@@ -9,6 +9,7 @@ import { Ionicons } from '@expo/vector-icons';
 import ChatMock from '../Chats';
 import ProfileView from '../Profile';
 import ChangeUsernameSheet from '../Profile/ChangeUsernameSheet';
+import AvatarSelectorSheet from '../Profile/AvatarSelectorSheet';
 import SettingsView from '../Settings';
 
 const Test = ({ text }) => (
@@ -68,6 +69,12 @@ export default createStackNavigator({
     screen: ChangeUsernameSheet,
     navigationOptions: {
       headerTitle: 'Change username',
+    },
+  },
+  AvatarSelectorSheet: {
+    screen: AvatarSelectorSheet,
+    navigationOptions: {
+      headerTitle: 'Select your avatar',
     },
   },
 }, {
