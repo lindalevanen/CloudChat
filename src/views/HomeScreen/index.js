@@ -11,6 +11,8 @@ import SettingsView from '../Settings';
 import ThemedTabBarComponent from './ThemedTabBarComponent';
 import ChangeUsernameSheet from '../Settings/ProfileSettings/ChangeUsernameSheet';
 import AvatarSelectorSheet from '../Settings/ProfileSettings/AvatarSelectorSheet';
+import ThemedHeaderComponent from '../../components/ThemedHeaderComponent';
+import { resolveHeaderTitleForRoute } from './routeUtils';
 
 const Test = ({ text }) => (
   <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
@@ -23,21 +25,21 @@ const Tabs = createBottomTabNavigator(
     Chats: {
       screen: ChatMock,
       navigationOptions: {
-        headerTitle: 'Chats',
+        title: 'Chats',
         tabBarIcon: ({ tintColor }) => <Ionicons name="ios-chatbubbles" size={25} color={tintColor} />,
       },
     },
     Contacts: {
       screen: () => <Test text="Contacts" />,
       navigationOptions: {
-        headerTitle: 'Contacts',
+        title: 'Contacts',
         tabBarIcon: ({ tintColor }) => <Ionicons name="ios-contacts" size={25} color={tintColor} />,
       },
     },
     Settings: {
       screen: SettingsView,
       navigationOptions: {
-        headerTitle: 'Settings',
+        title: 'Settings',
         tabBarIcon: ({ tintColor }) => <Ionicons name="ios-cog" size={25} color={tintColor} />,
       },
     },
@@ -56,7 +58,7 @@ export default createStackNavigator({
   Home: {
     screen: Tabs,
     navigationOptions: {
-      headerTitle: 'CloudChat',
+      header: ThemedHeaderComponent,
     },
   },
   ChangeUsernameSheet: {
@@ -74,4 +76,5 @@ export default createStackNavigator({
 }, {
   mode: 'modal',
   headerMode: 'screen',
+  navigationOptions: resolveHeaderTitleForRoute,
 });
