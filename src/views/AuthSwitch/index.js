@@ -21,8 +21,8 @@ const styles = StyleSheet.create({
 
 class AuthLoadingScreen extends React.Component {
   componentWillReceiveProps(props) {
-    if (props !== this.props && props.auth.isLoaded) {
-      const { auth, navigation } = props;
+    const { auth, navigation } = props;
+    if (props !== this.props && auth.isLoaded) {
       navigation.navigate(!auth.isEmpty ? 'App' : 'Login');
       SplashScreen.hide();
     }
