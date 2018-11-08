@@ -7,8 +7,8 @@ import {
 import { Ionicons } from '@expo/vector-icons';
 
 import ChatMock from '../Chats';
-import ChangeUsernameSheet from '../Profile/ChangeUsernameSheet';
-import AvatarSelectorSheet from '../Profile/AvatarSelectorSheet';
+import ChangeUsernameSheet from '../Settings/ProfileSettings/ChangeUsernameSheet';
+import AvatarSelectorSheet from '../Settings/ProfileSettings/AvatarSelectorSheet';
 import SettingsView from '../Settings';
 
 const Test = ({ text }) => (
