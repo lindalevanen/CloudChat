@@ -7,7 +7,6 @@ import {
 import { Ionicons } from '@expo/vector-icons';
 
 import ChatMock from '../Chats';
-import ProfileView from '../Profile';
 import ChangeUsernameSheet from '../Profile/ChangeUsernameSheet';
 import AvatarSelectorSheet from '../Profile/AvatarSelectorSheet';
 import SettingsView from '../Settings';
@@ -32,13 +31,6 @@ const Tabs = createBottomTabNavigator(
       navigationOptions: {
         headerTitle: 'Contacts',
         tabBarIcon: ({ tintColor }) => <Ionicons name="ios-contacts" size={25} color={tintColor} />,
-      },
-    },
-    Profile: {
-      screen: ProfileView,
-      navigationOptions: {
-        headerTitle: 'Profile',
-        tabBarIcon: ({ tintColor }) => <Ionicons name="ios-person" size={25} color={tintColor} />,
       },
     },
     Settings: {

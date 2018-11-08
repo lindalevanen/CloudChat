@@ -1,8 +1,8 @@
 import React from 'react';
-import { View, StyleSheet } from 'react-native';
+import { ScrollView, StyleSheet } from 'react-native';
 import { withFirebase } from 'react-redux-firebase';
 
-import Button from '../../components/Button';
+import ProfileView from '../Profile';
 
 const styles = StyleSheet.create({
   container: {
@@ -14,16 +14,10 @@ const styles = StyleSheet.create({
 const SettingsView = ({
   firebase,
   navigation,
-}) => {
-  const logout = async () => {
-    await firebase.logout();
-    navigation.navigate('Login');
-  };
-  return (
-    <View styles={styles.container}>
-      <Button title="Logout" onPress={logout} titleColor="white" />
-    </View>
-  );
-};
+}) => (
+  <ScrollView styles={styles.container}>
+    <ProfileView navigation={navigation} />
+  </ScrollView>
+);
 
 export default withFirebase(SettingsView);

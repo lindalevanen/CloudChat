@@ -1,6 +1,6 @@
 import React from 'react';
 import {
-  Text, View, Image, StyleSheet, ScrollView,
+  Text, View, StyleSheet,
 } from 'react-native';
 import { withFirebase } from 'react-redux-firebase';
 import { connect } from 'react-redux';
@@ -30,7 +30,11 @@ const styles = StyleSheet.create({
   },
 });
 
-const ProfileSettings = ({ navigation }) => {
+const ProfileSettings = ({ navigation, firebase }) => {
+  const logout = async () => {
+    await firebase.logout();
+    navigation.navigate('Login');
+  };
   const openChangeUsernameSheet = () => navigation.dispatch(StackActions.push({
     routeName: 'ChangeUsernameSheet',
   }));
@@ -45,12 +49,17 @@ const ProfileSettings = ({ navigation }) => {
       <View style={[styles.section]}>
         <Button title="Change username" onPress={openChangeUsernameSheet} titleColor="tomato" color="transparent" style={{ alignSelf: 'flex-start' }} />
       </View>
+      <View style={[styles.section]}>
+        <Button title="Logout" onPress={logout} titleColor="red" color="transparent" style={{ alignSelf: 'flex-start' }} />
+      </View>
     </View>
   );
 };
 
-const ProfileView = ({ auth, profile, navigation }) => (
-  <ScrollView styles={styles.container}>
+const ProfileView = ({
+  profile, navigation, firebase,
+}) => (
+  <View styles={styles.container}>
     <View style={[styles.topContainer, styles.section]}>
       <Avatar url={profile.avatarUrl} />
       <View>
@@ -58,12 +67,8 @@ const ProfileView = ({ auth, profile, navigation }) => (
         <Text style={[styles.profileText, { marginBottom: 10 }]}>{profile.email}</Text>
       </View>
     </View>
-    <ProfileSettings navigation={navigation} />
-    <Text>Raw auth data:</Text>
-    <Text>{JSON.stringify(auth.providerData, '', 3)}</Text>
-    <Text>Raw profile data:</Text>
-    <Text>{JSON.stringify(profile, '', 3)}</Text>
-  </ScrollView>
+    <ProfileSettings navigation={navigation} firebase={firebase} />
+  </View>
 );
 
 const mapStateToProps = state => ({
