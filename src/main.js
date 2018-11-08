@@ -3,6 +3,7 @@ import { Provider } from 'react-redux';
 import { SplashScreen } from 'expo';
 
 import configureStore from './store';
+import { ConnectedThemeContextProvider } from './views/ThemeContext';
 import AuthSwitch from './views/AuthSwitch';
 
 const store = configureStore();
@@ -16,7 +17,9 @@ class App extends React.Component {
   render() {
     return (
       <Provider store={store}>
-        <AuthSwitch />
+        <ConnectedThemeContextProvider>
+          <AuthSwitch />
+        </ConnectedThemeContextProvider>
       </Provider>
     );
   }
