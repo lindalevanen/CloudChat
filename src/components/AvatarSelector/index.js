@@ -62,10 +62,9 @@ const AvatarSelector = ({
     <View>
       <Text>{loading ? 'loading' : 'ready'}</Text>
       <Text>{error}</Text>
-      <Avatar url={profile.avatarUrl} />
+      <Avatar url={profile.avatarUrl} size={120} />
       <Button title="take new" onPress={takeFromCamera} />
       <Button title="pick photo" onPress={pickImage} />
-      <Text>AvatarSelector</Text>
     </View>
   );
 };

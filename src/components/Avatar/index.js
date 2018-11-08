@@ -3,9 +3,6 @@ import { Image, StyleSheet } from 'react-native';
 
 const styles = StyleSheet.create({
   avatar: {
-    height: 60,
-    width: 60,
-    borderRadius: 30,
     borderColor: 'darkgrey',
     borderWidth: 0.3,
   },
@@ -13,8 +10,9 @@ const styles = StyleSheet.create({
 
 const Avatar = ({
   url,
+  size = 60,
 }) => (
-  <Image style={styles.avatar} source={{ url }} />
+  <Image style={[styles.avatar, { height: size, width: size, borderRadius: size / 2 }]} source={{ url }} />
 );
 
 export default Avatar;
