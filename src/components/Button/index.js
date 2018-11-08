@@ -1,5 +1,6 @@
 import React from 'react';
 import { Text, TouchableOpacity, StyleSheet } from 'react-native';
+import { withTheme } from '../ThemedWrapper';
 
 const styles = StyleSheet.create({
   container: {
@@ -13,6 +14,7 @@ const styles = StyleSheet.create({
 });
 
 const Button = ({
+  useDarkTheme,
   onPress,
   title,
   style,
@@ -32,4 +34,4 @@ const Button = ({
   </TouchableOpacity>
 );
 
-export default Button;
+export default withTheme(Button);
