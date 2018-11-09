@@ -3,6 +3,8 @@ import {
   Text, View, Switch, StyleSheet,
 } from 'react-native';
 import { connect } from 'react-redux';
+import { compose } from 'recompose';
+import { withNavigation } from 'react-navigation';
 
 import { changeSetting } from '../../../store/settings/actions';
 
@@ -29,14 +31,21 @@ const styles = StyleSheet.create({
 const ThemeSettings = ({
   useDarkTheme,
   setDarkThemeAction,
-}) => (
-  <View style={styles.container}>
-    <View style={[styles.section, styles.setting]}>
-      <Text style={styles.title}>Use dark theme</Text>
-      <Switch value={useDarkTheme} onValueChange={setDarkThemeAction} />
+  navigation,
+}) => {
+  const setDarkMode = (value) => {
+    setDarkThemeAction(value);
+    navigation.setParams({ useDarkTheme: value });
+  };
+  return (
+    <View style={styles.container}>
+      <View style={[styles.section, styles.setting]}>
+        <Text style={styles.title}>Use dark theme</Text>
+        <Switch value={useDarkTheme} onValueChange={setDarkMode} />
+      </View>
     </View>
-  </View>
-);
+  );
+};
 
 const mapStateToProps = state => ({
   useDarkTheme: state.settings.useDarkTheme,
@@ -46,4 +55,9 @@ const mapDispatchToProps = dispatch => ({
   setDarkThemeAction: value => dispatch(changeSetting('useDarkTheme', value)),
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(ThemeSettings);
+const enhance = compose(
+  withNavigation,
+  connect(mapStateToProps, mapDispatchToProps),
+);
+
+export default enhance(ThemeSettings);

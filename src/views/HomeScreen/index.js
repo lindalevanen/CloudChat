@@ -12,7 +12,7 @@ import ThemedTabBarComponent from './ThemedTabBarComponent';
 import ChangeUsernameSheet from '../Settings/ProfileSettings/ChangeUsernameSheet';
 import AvatarSelectorSheet from '../Settings/ProfileSettings/AvatarSelectorSheet';
 import ThemedHeaderComponent from '../../components/ThemedHeaderComponent';
-import { resolveHeaderTitleForRoute } from './routeUtils';
+import { resolveNavigationOptionsForScreen } from './routeUtils';
 
 const Test = ({ text }) => (
   <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
@@ -57,24 +57,23 @@ const Tabs = createBottomTabNavigator(
 export default createStackNavigator({
   Home: {
     screen: Tabs,
-    navigationOptions: {
-      header: ThemedHeaderComponent,
-    },
+    navigationOptions: resolveNavigationOptionsForScreen,
   },
   ChangeUsernameSheet: {
     screen: ChangeUsernameSheet,
     navigationOptions: {
+      header: ThemedHeaderComponent,
       headerTitle: 'Change username',
     },
   },
   AvatarSelectorSheet: {
     screen: AvatarSelectorSheet,
     navigationOptions: {
+      header: ThemedHeaderComponent,
       headerTitle: 'Select your avatar',
     },
   },
 }, {
   mode: 'modal',
   headerMode: 'screen',
-  navigationOptions: resolveHeaderTitleForRoute,
 });

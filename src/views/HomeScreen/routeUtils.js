@@ -1,5 +1,10 @@
-export function resolveHeaderTitleForRoute({ navigation }) {
+import ThemedHeaderComponent from '../../components/ThemedHeaderComponent';
+
+import { getState } from '../../store';
+
+export function resolveNavigationOptionsForScreen({ navigation }) {
   let name;
+
   const { index } = navigation.state;
   if (index === undefined) {
     name = navigation.state.routeName;
@@ -9,7 +14,16 @@ export function resolveHeaderTitleForRoute({ navigation }) {
   }
   const headerTitle = name;
 
+  const { useDarkTheme } = getState().settings;
+
   return {
     headerTitle,
+    headerStyle: {
+      backgroundColor: useDarkTheme ? '#191B2C' : 'white',
+    },
+    headerTitleStyle: {
+      color: useDarkTheme ? 'white' : 'black',
+    },
+    header: ThemedHeaderComponent,
   };
 }
