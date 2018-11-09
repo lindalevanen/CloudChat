@@ -20,6 +20,7 @@ export function resolveNavigationOptionsForScreen({ navigation }) {
     headerTitle,
     headerStyle: {
       backgroundColor: useDarkTheme ? '#191B2C' : 'white',
+      borderBottomColor: useDarkTheme ? '#0E0E19' : 'grey',
     },
     headerTitleStyle: {
       color: useDarkTheme ? 'white' : 'black',

@@ -11,6 +11,9 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 16,
   },
+  dark: {
+    // backgroundColor: '#191B2C',
+  },
 });
 
 const Button = ({
@@ -25,7 +28,7 @@ const Button = ({
 }) => (
   <TouchableOpacity
     onPress={onPress}
-    style={[styles.container, { backgroundColor: color }, style]}
+    style={[styles.container, { backgroundColor: color }, style, useDarkTheme && styles.dark]}
     {...props}
   >
     <Text style={[styles.title, { color: titleColor }, titleStyle]}>

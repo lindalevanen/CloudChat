@@ -16,9 +16,13 @@ const styles = StyleSheet.create({
     borderColor: 'darkgrey',
     borderBottomWidth: 0.3,
   },
+  dark: {
+    backgroundColor: '#191B2C',
+    borderColor: '#0E0E19',
+  },
 });
 
-const Preferences = ({ navigation, firebase }) => {
+const Preferences = ({ navigation, firebase, useDarkTheme }) => {
   const logout = async () => {
     await firebase.logout();
     navigation.navigate('Login');
@@ -31,13 +35,13 @@ const Preferences = ({ navigation, firebase }) => {
   }));
   return (
     <View>
-      <View style={[styles.section]}>
+      <View style={[styles.section, useDarkTheme && styles.dark]}>
         <Button title="Change avatar" onPress={openAvatarSelectorSheet} titleColor="tomato" color="transparent" style={{ alignSelf: 'flex-start' }} />
       </View>
-      <View style={[styles.section]}>
+      <View style={[styles.section, useDarkTheme && styles.dark]}>
         <Button title="Change username" onPress={openChangeUsernameSheet} titleColor="tomato" color="transparent" style={{ alignSelf: 'flex-start' }} />
       </View>
-      <View style={[styles.section]}>
+      <View style={[styles.section, useDarkTheme && styles.dark]}>
         <Button title="Logout" onPress={logout} titleColor="red" color="transparent" style={{ alignSelf: 'flex-start' }} />
       </View>
     </View>
@@ -45,11 +49,11 @@ const Preferences = ({ navigation, firebase }) => {
 };
 
 const ProfileSettings = ({
-  profile, navigation, firebase,
+  profile, navigation, firebase, useDarkTheme,
 }) => (
   <View>
-    <ProfileInfo profile={profile} />
-    <Preferences navigation={navigation} firebase={firebase} />
+    <ProfileInfo profile={profile} useDarkTheme={useDarkTheme} />
+    <Preferences navigation={navigation} firebase={firebase} useDarkTheme={useDarkTheme} />
   </View>
 );
 

@@ -7,13 +7,15 @@ const styles = StyleSheet.create({
   dark: {
     backgroundColor: '#191B2C',
   },
-  light: {
-
-  },
+  light: {},
 });
 
 const ThemedTabBarComponent = ({ useDarkTheme, ...props }) => (
-  <BottomTabBar style={useDarkTheme ? styles.dark : styles.light} {...props} />
+  <BottomTabBar
+    {...props}
+    style={useDarkTheme ? styles.dark : styles.light}
+    inactiveTintColor={useDarkTheme ? '#7C8997' : 'grey'}
+  />
 );
 
 export default withTheme(ThemedTabBarComponent);

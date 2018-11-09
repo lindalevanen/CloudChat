@@ -26,6 +26,13 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 16,
   },
+  dark: {
+    backgroundColor: '#191B2C',
+    borderColor: '#0E0E19',
+  },
+  darkText: {
+    color: '#FAFAFA',
+  },
 });
 
 const ThemeSettings = ({
@@ -37,11 +44,14 @@ const ThemeSettings = ({
     setDarkThemeAction(value);
     navigation.setParams({ useDarkTheme: value });
   };
+  const switchStyleProps = {
+    trackColor: { false: undefined, true: '#6970B9' },
+  };
   return (
     <View style={styles.container}>
-      <View style={[styles.section, styles.setting]}>
-        <Text style={styles.title}>Use dark theme</Text>
-        <Switch value={useDarkTheme} onValueChange={setDarkMode} />
+      <View style={[styles.section, styles.setting, useDarkTheme && styles.dark]}>
+        <Text style={[styles.title, useDarkTheme && styles.darkText]}>Use dark theme</Text>
+        <Switch value={useDarkTheme} onValueChange={setDarkMode} {...switchStyleProps} />
       </View>
     </View>
   );
