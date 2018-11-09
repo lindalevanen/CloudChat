@@ -57,7 +57,6 @@ const Tabs = createBottomTabNavigator(
 export default createStackNavigator({
   Home: {
     screen: Tabs,
-    navigationOptions: resolveNavigationOptionsForScreen,
   },
   ChangeUsernameSheet: {
     screen: ChangeUsernameSheet,
@@ -76,4 +75,5 @@ export default createStackNavigator({
 }, {
   mode: 'modal',
   headerMode: 'screen',
+  navigationOptions: resolveNavigationOptionsForScreen,
 });
