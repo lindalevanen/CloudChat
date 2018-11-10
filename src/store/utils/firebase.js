@@ -19,11 +19,11 @@ firebase.initializeApp(config);
 function generateUid() {
   return uuidv4();
 }
-
 export function initMiddleware() {
   return reactReduxFirebase(firebase, {
     userProfile: 'users',
     enableRedirectHandling: false,
+    profileParamsToPopulate: ['chats:chats'],
   });
 }
 
