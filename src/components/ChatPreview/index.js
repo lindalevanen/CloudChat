@@ -1,17 +1,10 @@
 import React from 'react';
+import { format } from 'date-fns';
 import { Text, View, StyleSheet } from 'react-native';
 
 import Avatar from '../Avatar';
 
-const prettyTimestamp = (unix) => {
-  const date = new Date(unix);
-  const pad = '00';
-  const hours = date.getHours();
-  const hoursStr = pad.substring(0, pad.length - hours.toString().length) + hours;
-  const minutes = date.getMinutes();
-  const minutesStr = pad.substring(0, pad.length - minutes.toString().length) + minutes;
-  return `${hoursStr}:${minutesStr}`;
-};
+const prettyTimestamp = unix => format(new Date(unix), 'HH:mm');
 
 const styles = StyleSheet.create({
   section: {
