@@ -46,7 +46,7 @@ export function createChatRoom(firebaseRef, groupChat, profileUids, title) {
     roomData.title = title
   }
   const res = firebaseRef.push(`chats/`, roomData)
-  const roomID = res.path.pieces_[1]
+  const roomID = res.path.pieces_[1]  // very hacky, but these lines will be ultimately removed
 
   addRoomToUsers(firebaseRef, roomID, profileUids)
 
