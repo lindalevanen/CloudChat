@@ -1,70 +1,68 @@
 import React from 'react';
-import {
-  Text, View, StyleSheet,
-} from 'react-native';
+import { View } from 'react-native';
 import { firebaseConnect } from 'react-redux-firebase';
 import { withNavigation, StackActions } from 'react-navigation';
 
 import { compose, withState } from 'recompose';
+import { connect } from 'react-redux';
 import Button from '../../../components/Button';
 import TextInput from '../../../components/TextInput';
+import { withTheme } from '../../../components/ThemedWrapper';
 
-const styles = StyleSheet.create({
-  logo: {
-    height: 60,
-    width: 60,
-    alignSelf: 'center',
-  },
-  title: {
-    fontSize: 20,
-    marginBottom: 20,
-    textAlign: 'center',
-  },
-  input: {
-    marginBottom: 10,
-  },
-});
+import { styles } from '../../../styles/form/style';
 
 const ChangeUsernameSheet = ({
-  username, setUsername, firebase, navigation,
+  useDarkTheme,
+  username,
+  setUsername,
+  firebase,
+  navigation,
 }) => {
   const onUsernameSaved = async () => {
     try {
-      // Update profile to redux & firebase with firebaseConnect
+      // Update profile to firebase with firebaseConnect
+      // (successful updates flow back to redux)
       await firebase.updateProfile({ username });
-      // Go to the settings view with withNavigation
-      navigation.dispatch(StackActions.pop({
-        n: 1,
-      }));
+      // Go back to the settings view with withNavigation
+      navigation.dispatch(StackActions.pop());
     } catch (e) {
-      console.log(`User login failed: ${e}`);
+      console.log(`Username change failed: ${e}`);
     }
   };
   return (
-    <View>
-      <Text key="title" styles={styles.title}>Change your username</Text>
-      <TextInput
-        style={styles.input}
-        placeholder="username"
-        autoCapitalize="none"
-        autoCorrect={false}
-        value={username}
-        onChangeText={setUsername}
-      />
-      <Button
-        title="Save"
-        titelColor="white"
-        onPress={onUsernameSaved}
-      />
+    <View
+      style={[
+        styles.view, useDarkTheme && styles.viewDark,
+      ]}
+    >
+      <View style={[
+        styles.container, styles.section, useDarkTheme && styles.sectionDark,
+      ]}
+      >
+        <TextInput
+          style={styles.input}
+          placeholder="Username"
+          autoCapitalize="none"
+          autoCorrect={false}
+          value={username}
+          onChangeText={setUsername}
+        />
+        <Button title="Save" titleColor="white" onPress={onUsernameSaved} />
+      </View>
     </View>
   );
 };
 
-const enhance = compose(
-  firebaseConnect(),
-  withNavigation,
-  withState('username', 'setUsername', ''),
-);
+const mapStateToProps = state => ({
+  currentUsername: state.firebase.profile.username,
+});
 
+const enhance = compose(
+  withNavigation,
+  withTheme,
+  firebaseConnect(),
+  connect(mapStateToProps),
+  withState('username', 'setUsername', ({ currentUsername }) => currentUsername),
+);
 
 export default enhance(ChangeUsernameSheet);
