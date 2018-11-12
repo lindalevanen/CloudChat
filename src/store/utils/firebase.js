@@ -37,10 +37,12 @@ export function loginChatUser(firebaseRef, credentials) {
 }
 
 export function createChatRoom(firebaseRef, groupChat, profileUids, title, imageUrl) {
+  const keysAsValsUids = {}
+  profileUids.forEach(x => keysAsValsUids[x] = x)
   const roomData = {
     lastMessage: "",
     timeModified: (new Date()).getTime(),
-    members: profileUids,
+    members: keysAsValsUids,
     groupChat: groupChat
   }
   if(title) {
@@ -60,7 +62,7 @@ export function createChatRoom(firebaseRef, groupChat, profileUids, title, image
 /* TODO: this should be ultimately done with FB functions*/
 export function addRoomToUsers(firebaseRef, roomId, userIds) {
   for(i in userIds) {
-    firebaseRef.push(`users/${userIds[i]}/chats`, roomId)
+    firebaseRef.set(`users/${userIds[i]}/chats/${roomId}`, roomId)
   }
 }
 

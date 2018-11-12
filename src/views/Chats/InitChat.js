@@ -3,6 +3,7 @@ import { View, Text } from 'react-native';
 import { connect } from 'react-redux';
 import { compose, withState } from 'recompose';
 import { firebaseConnect } from 'react-redux-firebase';
+import { withNavigation, StackActions } from 'react-navigation'
 
 import { createChatRoom } from '../../store/utils/firebase';
 import Button from '../../components/Button';
@@ -13,6 +14,7 @@ const randomChatIcon = "https://cdn0.iconfinder.com/data/icons/chat-2/100/Chat-0
 
 const InitChat = ({ 
   firebase,
+  navigation,
   profileId,
   groupName,
   setGroupName,
@@ -33,9 +35,9 @@ const InitChat = ({
         logoUrl ? logoUrl : randomChatIcon
       );
       console.log(chatRoomResult)
-
+      navigation.dispatch(StackActions.pop());
     } else {
-      setError("omg fill all fields")
+      setError("Please fill at least group name and friend's user id")
     }
   }
   return (
@@ -72,6 +74,7 @@ const InitChat = ({
 };
 
 export default compose(
+  withNavigation,
   firebaseConnect(),
   connect(state => ({
     profileId: state.firebase.auth.uid,

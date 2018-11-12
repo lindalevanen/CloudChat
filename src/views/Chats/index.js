@@ -21,9 +21,6 @@ const chatStyles = StyleSheet.create({
   },
   list: {
     flex: 1,
-  },
-  button: {
-    flex: 0
   }
 });
 
@@ -36,8 +33,14 @@ const Chats = ({ navigation, chats, useDarkTheme }) => (
         <ChatList chats={chats} useDarkTheme={useDarkTheme} />
       )}
     </ScrollView>
-    <View style={[chatStyles.button, styles.section, useDarkTheme && styles.sectionDark]}>
-      <Button title="Create a chat" onPress={() => navigation.navigate('InitChatSheet')} titleColor="red" color="transparent" style={{ alignSelf: 'flex-start' }} />
+    <View style={[styles.section, useDarkTheme && styles.sectionDark]}>
+      <Button
+        title="Create a chat"
+        onPress={() => navigation.navigate('InitChatSheet')}
+        titleColor="red"
+        color="transparent"
+        style={{ alignSelf: 'flex-start' }}
+      />
     </View>
   </View>
 );
