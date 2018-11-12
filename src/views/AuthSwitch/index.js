@@ -21,8 +21,8 @@ const styles = StyleSheet.create({
 
 class AuthLoadingScreen extends React.Component {
   componentWillReceiveProps(props) {
-    const { auth, navigation } = props;
-    if (props !== this.props && auth.isLoaded) {
+    const { auth, navigation, rehydrationDone } = props;
+    if (props !== this.props && auth.isLoaded && rehydrationDone) {
       navigation.navigate(!auth.isEmpty ? 'App' : 'Login');
       SplashScreen.hide();
     }
@@ -38,6 +38,7 @@ class AuthLoadingScreen extends React.Component {
 }
 
 const mapStateToProps = state => ({
+  rehydrationDone: state.appStatus.rehydrationDone,
   auth: state.firebase.auth,
 });
 

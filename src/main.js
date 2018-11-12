@@ -7,7 +7,7 @@ import configureStore from './store';
 import { ConnectedThemeContextProvider } from './views/ThemeContext';
 import AuthSwitch from './views/AuthSwitch';
 
-const store = configureStore();
+const { store } = configureStore();
 
 class App extends React.Component {
   constructor() {
