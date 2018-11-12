@@ -1,6 +1,8 @@
 import React from 'react';
 import { Text, View, StyleSheet } from 'react-native';
 
+import Avatar from '../Avatar';
+
 const prettyTimestamp = (unix) => {
   const date = new Date(unix);
   const pad = '00';
@@ -51,8 +53,8 @@ const styles = StyleSheet.create({
 
 const ChatPreview = ({ chat, useDarkTheme }) => (
   <View style={[styles.chatPreview]}>
-    {/* <Avatar url={groupChat.avatarUrl} /> */}
     <View style={[styles.chatContainer, styles.section, useDarkTheme && styles.dark]}>
+      <Avatar url={chat.avatarUrl} />
       <View style={[styles.summaryContainer]}>
         <Text
           style={[
