@@ -13,15 +13,13 @@ const ExampleChatInits = ({
   profileUid
 }) => {
 
-  const initGroupChat = async (users, title) => {
+  const initGroupChat = async (users, title, imgUrl) => {
     const chatRoomResult = await createChatRoom(
       firebase,
       true,
       users,
       title
     );
-    //const roomId = chatRoomResult.path.pieces_[1] // hacky but does the job for now
-    //await addRoomToUsers(firebase, roomId, users)
   }
 
   const initOne2OneChat = async (withUserId) => {
@@ -31,8 +29,6 @@ const ExampleChatInits = ({
       false,
       users,
     );
-    //const roomId = chatRoomResult.path.pieces_[1]
-    //await addRoomToUsers(firebase, roomId, users)
   }
 
   return (

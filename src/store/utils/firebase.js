@@ -48,7 +48,9 @@ export function createChatRoom(firebaseRef, groupChat, profileUids, title) {
   const res = firebaseRef.push(`chats/`, roomData)
   const roomID = res.path.pieces_[1]
 
-  return addRoomToUsers(firebaseRef, roomID, profileUids)
+  addRoomToUsers(firebaseRef, roomID, profileUids)
+
+  return res
 }
 
 /* TODO: this should be ultimately done with FB functions*/
