@@ -16,7 +16,6 @@ const styles = StyleSheet.create({
     padding: 10,
     paddingLeft: 50,
     flex: 1,
-    flexDirection: 'column',
     justifyContent: 'space-between',
     alignItems: 'flex-start',
   },
@@ -46,32 +45,23 @@ const styles = StyleSheet.create({
 
 const ChatPreview = ({ chat, useDarkTheme }) => (
   <View style={[styles.chatPreview]}>
-    <View style={[styles.chatContainer, styles.section, useDarkTheme && styles.dark]}>
+    <View
+      style={[
+        styles.chatContainer,
+        styles.section,
+        useDarkTheme && styles.dark,
+      ]}
+    >
       <Avatar url={chat.avatarUrl} />
       <View style={[styles.summaryContainer]}>
-        <Text
-          style={[
-            styles.chatTitleText,
-            useDarkTheme && styles.darkText,
-          ]}
-        >
-          {(chat && chat.title) ? chat.title : '-'}
+        <Text style={[styles.chatTitleText, useDarkTheme && styles.darkText]}>
+          {chat && chat.title ? chat.title : '-'}
         </Text>
-        <Text
-          style={[
-            styles.chatUpdatedText,
-            useDarkTheme && styles.darkText,
-          ]}
-        >
+        <Text style={[styles.chatUpdatedText, useDarkTheme && styles.darkText]}>
           {prettyTimestamp(chat.timeModified)}
         </Text>
       </View>
-      <Text
-        style={[
-          styles.chatUpdatedText,
-          useDarkTheme && styles.darkText,
-        ]}
-      >
+      <Text style={[styles.chatUpdatedText, useDarkTheme && styles.darkText]}>
         {chat.lastMessage}
       </Text>
     </View>
