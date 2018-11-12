@@ -1,20 +1,34 @@
 import React from 'react';
-import { View, Text } from 'react-native';
+import { Text, ScrollView, StyleSheet } from 'react-native';
 import { connect } from 'react-redux';
 import { compose } from 'redux';
-import { firebaseConnect, isLoaded } from 'react-redux-firebase';
+import { isLoaded, withFirebase } from 'react-redux-firebase';
 
-const ChatMock = ({ messages }) => (
-  <View>
-    {isLoaded(isLoaded) ? <Text>{JSON.stringify(messages)}</Text> : <Text>Loading</Text> }
-  </View>
+import { withTheme } from '../../components/ThemedWrapper';
+import ChatList from './ChatList';
+
+const styles = StyleSheet.create({
+  dark: {
+    backgroundColor: '#262636',
+  },
+});
+
+const Chats = ({ chats, useDarkTheme }) => (
+  <ScrollView style={useDarkTheme && styles.dark}>
+    {!isLoaded(chats) ? (
+      <Text>Loading</Text>
+    ) : (
+      <ChatList chats={chats} useDarkTheme={useDarkTheme} />
+    )}
+  </ScrollView>
 );
 
+const mapStateToProps = state => ({
+  chats: state.firebase.profile.chats,
+});
+
 export default compose(
-  firebaseConnect([
-    'messages',
-  ]),
-  connect(state => ({
-    messages: state.firebase.data.messages,
-  })),
-)(ChatMock);
+  withTheme,
+  withFirebase,
+  connect(mapStateToProps),
+)(Chats);

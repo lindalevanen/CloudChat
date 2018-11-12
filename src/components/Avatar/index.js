@@ -12,7 +12,7 @@ const Avatar = ({
   url,
   size = 60,
 }) => (
-  <Image style={[styles.avatar, { height: size, width: size, borderRadius: size / 2 }]} source={{ url }} />
+  <Image style={[styles.avatar, { height: size, width: size, borderRadius: size / 2 }]} source={{ uri: url }} />
 );
 
 export default Avatar;
