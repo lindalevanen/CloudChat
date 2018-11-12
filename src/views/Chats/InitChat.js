@@ -1,7 +1,7 @@
 import React from 'react';
-import { View } from 'react-native';
+import { View, Text } from 'react-native';
 import { connect } from 'react-redux';
-import { compose } from 'redux';
+import { compose, withState } from 'recompose';
 import { firebaseConnect } from 'react-redux-firebase';
 
 import { createChatRoom } from '../../store/utils/firebase';
@@ -11,7 +11,7 @@ import { styles } from '../../styles/form/style';
 
 const randomChatIcon = "https://cdn0.iconfinder.com/data/icons/chat-2/100/Chat-05-512.png"
 
-const InitGroupChat = ({ 
+const InitChat = ({ 
   firebase,
   profileId,
   groupName,
@@ -23,14 +23,14 @@ const InitGroupChat = ({
   error,
   setError
 }) => {
-  const handleCreatePress = async () => {
+  const onCreateGroupPressed = async () => {
     if(groupName && userId) {
       const chatRoomResult = await createChatRoom(
         firebase,
         true,
         [userId, profileId],
         groupName,
-        imageUrl ? imageUrl : randomChatIcon
+        logoUrl ? logoUrl : randomChatIcon
       );
       console.log(chatRoomResult)
 
@@ -66,11 +66,10 @@ const InitGroupChat = ({
         titleColor="white"
         onPress={onCreateGroupPressed}
       />
-      {error}
+      {error && <Text>{error}</Text>}
   </View>
   )
-}
-);
+};
 
 export default compose(
   firebaseConnect(),
