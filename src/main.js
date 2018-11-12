@@ -1,6 +1,6 @@
 import React from 'react';
 import { Provider } from 'react-redux';
-import { YellowBox } from 'react-native';
+import { YellowBox } from 'react-native';
 import { SplashScreen } from 'expo';
 
 import configureStore from './store';
