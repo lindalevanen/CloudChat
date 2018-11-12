@@ -4,11 +4,16 @@ import { connect } from 'react-redux';
 import { compose } from 'redux';
 import { firebaseConnect } from 'react-redux-firebase';
 
+import { createChatRoom } from '../../store/utils/firebase';
 import Button from '../../components/Button';
 import TextInput from '../../components/TextInput';
+import { styles } from '../../styles/form/style';
+
+const randomChatIcon = "https://cdn0.iconfinder.com/data/icons/chat-2/100/Chat-05-512.png"
 
 const InitGroupChat = ({ 
-  firebase, 
+  firebase,
+  profileId,
   groupName,
   setGroupName,
   logoUrl, 
@@ -20,7 +25,15 @@ const InitGroupChat = ({
 }) => {
   const handleCreatePress = async () => {
     if(groupName && userId) {
-      // TODO: create room
+      const chatRoomResult = await createChatRoom(
+        firebase,
+        true,
+        [userId, profileId],
+        groupName,
+        imageUrl ? imageUrl : randomChatIcon
+      );
+      console.log(chatRoomResult)
+
     } else {
       setError("omg fill all fields")
     }

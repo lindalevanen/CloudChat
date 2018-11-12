@@ -35,7 +35,7 @@ export function loginChatUser(firebaseRef, credentials) {
   return firebase.login(credentials);
 }
 
-export function createChatRoom(firebaseRef, groupChat, profileUids, title) {
+export function createChatRoom(firebaseRef, groupChat, profileUids, title, imageUrl) {
   const roomData = {
     lastMessage: "",
     timeModified: (new Date()).getTime(),
@@ -44,6 +44,9 @@ export function createChatRoom(firebaseRef, groupChat, profileUids, title) {
   }
   if(title) {
     roomData.title = title
+  }
+  if(imageUrl) {
+    roomData.avatarUrl = imageUrl
   }
   const res = firebaseRef.push(`chats/`, roomData)
   const roomID = res.path.pieces_[1]  // very hacky, but these lines will be ultimately removed
