@@ -1,5 +1,6 @@
 import React from 'react';
 import { TextInput as RNTextInput, StyleSheet } from 'react-native';
+import { withTheme } from '../ThemedWrapper';
 
 const styles = StyleSheet.create({
   input: {
@@ -8,13 +9,22 @@ const styles = StyleSheet.create({
     borderRadius: 4,
     fontSize: 16,
   },
+  dark: {
+    backgroundColor: '#373C60',
+    color: 'white',
+  },
 });
 
 const TextInput = ({
-  onChangeText, value, placeholder, style, ...props
+  useDarkTheme,
+  onChangeText,
+  value,
+  placeholder,
+  style,
+  ...props
 }) => (
   <RNTextInput
-    style={[styles.input, style]}
+    style={[styles.input, useDarkTheme && styles.dark, style]}
     onChangeText={onChangeText}
     placeholder={placeholder}
     value={value}
@@ -22,4 +32,4 @@ const TextInput = ({
   />
 );
 
-export default TextInput;
+export default withTheme(TextInput);
