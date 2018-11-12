@@ -23,7 +23,7 @@ const ChatMock = ({ chats, useDarkTheme }) => {
 };
 
 const mapStateToProps = state => ({
-  chats: populate(state.firebase, 'profile', ['chats:chats']).chats, // populate settings are
+  chats: state.firebase.profile.chats,
 });
 
 export default compose(

@@ -24,6 +24,7 @@ export function initMiddleware() {
     userProfile: 'users',
     enableRedirectHandling: false,
     profileParamsToPopulate: ['chats:chats'],
+    autoPopulateProfile: true,
   });
 }
 
