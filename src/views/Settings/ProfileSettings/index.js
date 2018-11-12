@@ -10,17 +10,7 @@ import { withNavigation, StackActions } from 'react-navigation';
 import Button from '../../../components/Button';
 import ProfileInfo from '../../../components/ProfileInfo';
 
-const styles = StyleSheet.create({
-  section: {
-    backgroundColor: 'white',
-    borderColor: 'darkgrey',
-    borderBottomWidth: 0.3,
-  },
-  dark: {
-    backgroundColor: '#191B2C',
-    borderColor: '#0E0E19',
-  },
-});
+import { styles } from '../../../styles/form/style';
 
 const Preferences = ({ navigation, firebase, useDarkTheme }) => {
   const logout = async () => {
@@ -35,13 +25,13 @@ const Preferences = ({ navigation, firebase, useDarkTheme }) => {
   }));
   return (
     <View>
-      <View style={[styles.section, useDarkTheme && styles.dark]}>
+      <View style={[styles.section, useDarkTheme && styles.sectionDark]}>
         <Button title="Change avatar" onPress={openAvatarSelectorSheet} titleColor="tomato" color="transparent" style={{ alignSelf: 'flex-start' }} />
       </View>
-      <View style={[styles.section, useDarkTheme && styles.dark]}>
+      <View style={[styles.section, useDarkTheme && styles.sectionDark]}>
         <Button title="Change username" onPress={openChangeUsernameSheet} titleColor="tomato" color="transparent" style={{ alignSelf: 'flex-start' }} />
       </View>
-      <View style={[styles.section, useDarkTheme && styles.dark]}>
+      <View style={[styles.section, useDarkTheme && styles.sectionDark]}>
         <Button title="Logout" onPress={logout} titleColor="red" color="transparent" style={{ alignSelf: 'flex-start' }} />
       </View>
     </View>
