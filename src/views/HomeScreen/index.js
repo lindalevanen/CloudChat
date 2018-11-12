@@ -6,6 +6,7 @@ import {
 } from 'react-navigation';
 import { Ionicons } from '@expo/vector-icons';
 
+import UserSearch from '../../components/UserSearch';
 import ChatMock from '../Chats';
 import SettingsView from '../Settings';
 import ThemedTabBarComponent from './ThemedTabBarComponent';
@@ -31,7 +32,7 @@ const Tabs = createBottomTabNavigator(
       },
     },
     Contacts: {
-      screen: () => <Test text="Contacts" />,
+      screen: UserSearch,
       navigationOptions: {
         title: 'Contacts',
         tabBarIcon: ({ tintColor }) => <Ionicons name="ios-contacts" size={25} color={tintColor} />,
