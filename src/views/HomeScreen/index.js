@@ -11,6 +11,7 @@ import SettingsView from '../Settings';
 import ThemedTabBarComponent from './ThemedTabBarComponent';
 import ChangeUsernameSheet from '../Settings/ProfileSettings/ChangeUsernameSheet';
 import AvatarSelectorSheet from '../Settings/ProfileSettings/AvatarSelectorSheet';
+import InitChat from '../Chats/InitChat'
 import ThemedHeaderComponent from '../../components/ThemedHeaderComponent';
 import { resolveNavigationOptionsForScreen } from './routeUtils';
 
@@ -70,6 +71,13 @@ export default createStackNavigator({
     navigationOptions: {
       header: ThemedHeaderComponent,
       headerTitle: 'Select your avatar',
+    },
+  },
+  InitChatSheet: {
+    screen: InitChat,
+    navigationOptions: {
+      header: ThemedHeaderComponent,
+      headerTitle: 'Create Group chat',
     },
   },
 }, {

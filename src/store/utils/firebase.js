@@ -36,6 +36,36 @@ export function loginChatUser(firebaseRef, credentials) {
   return firebase.login(credentials);
 }
 
+export function createChatRoom(firebaseRef, groupChat, profileUids, title, imageUrl) {
+  const keysAsValsUids = {};
+  profileUids.forEach((x) => { keysAsValsUids[x] = x; });
+  const roomData = {
+    lastMessage: '',
+    timeModified: (new Date()).getTime(),
+    members: keysAsValsUids,
+    groupChat,
+  };
+  if (title) {
+    roomData.title = title;
+  }
+  if (imageUrl) {
+    roomData.avatarUrl = imageUrl;
+  }
+  const res = firebaseRef.push('chats/', roomData);
+  const roomID = res.path.pieces_[1]; // very hacky, but these lines will be ultimately removed
+
+  addRoomToUsers(firebaseRef, roomID, profileUids);
+
+  return res;
+}
+
+/* TODO: this should be ultimately done with FB functions */
+export function addRoomToUsers(firebaseRef, roomId, userIds) {
+  for (i in userIds) {
+    firebaseRef.set(`users/${userIds[i]}/chats/${roomId}`, roomId);
+  }
+}
+
 function uploadImageWithMetadata(firebaseRef, file, filePath, fileName, fileOwner) {
   const options = {
     name: fileName,
