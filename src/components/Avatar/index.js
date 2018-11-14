@@ -1,19 +1,28 @@
 import React from 'react';
-import { Image, StyleSheet } from 'react-native';
+import { StyleSheet } from 'react-native';
+import Image from 'react-native-image-progress';
+import ProgressBar from 'react-native-progress/Circle';
 
 const styles = StyleSheet.create({
-  avatar: {
+  circle: {
     borderColor: 'darkgrey',
-    borderWidth: 0.3,
+    borderWidth: 0.4,
     backgroundColor: 'white',
+  },
+  image: {
+
   },
 });
 
-const Avatar = ({
-  url,
-  size = 60,
-}) => (
-  <Image style={[styles.avatar, { height: size, width: size, borderRadius: size / 2 }]} source={{ uri: url }} />
+const Avatar = ({ url, size = 60 }) => (
+  <Image
+    style={[
+      { height: size, width: size },
+    ]}
+    imageStyle={{ ...styles.circle, borderRadius: size / 2 }}
+    source={{ uri: url }}
+    indicator={ProgressBar}
+  />
 );
 
 export default Avatar;
