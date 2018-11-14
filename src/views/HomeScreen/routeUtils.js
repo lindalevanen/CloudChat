@@ -1,6 +1,21 @@
+import React from 'react';
 import ThemedHeaderComponent from '../../components/ThemedHeaderComponent';
 
 import { getState } from '../../store';
+import HeaderButton from '../../components/HeaderButton';
+
+function getNavigationCallback(navigation, routeName) {
+  return () => navigation.navigate(routeName);
+}
+
+function getHeaderActionForRoute(routeName, navigation) {
+  switch (routeName) {
+    case 'Chats':
+      return <HeaderButton navigation={navigation} title="New" onPress={getNavigationCallback(navigation, 'InitChatSheet')} />;
+    default:
+      return null;
+  }
+}
 
 export function resolveNavigationOptionsForScreen({ navigation }) {
   let name;
@@ -26,5 +41,6 @@ export function resolveNavigationOptionsForScreen({ navigation }) {
       color: useDarkTheme ? 'white' : 'black',
     },
     header: ThemedHeaderComponent,
+    headerRight: getHeaderActionForRoute(name, navigation),
   };
 }
