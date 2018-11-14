@@ -10,9 +10,7 @@ import ChatList from './ChatList';
 
 const chatStyles = StyleSheet.create({
   container: {
-    display: 'flex',
-    flexDirection: 'column',
-    height: '100%',
+    flex: 1,
   },
   dark: {
     backgroundColor: '#262636',
