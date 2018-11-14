@@ -1,5 +1,7 @@
 import React from 'react';
-import { View, Text, ScrollView, StyleSheet } from 'react-native';
+import {
+  View, Text, ScrollView, StyleSheet,
+} from 'react-native';
 import { withNavigation } from 'react-navigation';
 import { connect } from 'react-redux';
 import { compose } from 'redux';
@@ -17,7 +19,7 @@ const chatStyles = StyleSheet.create({
   },
   list: {
     flex: 1,
-  }
+  },
 });
 
 const Chats = ({ chats, useDarkTheme }) => (
