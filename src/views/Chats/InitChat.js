@@ -3,43 +3,43 @@ import { View, Text } from 'react-native';
 import { connect } from 'react-redux';
 import { compose, withState } from 'recompose';
 import { firebaseConnect } from 'react-redux-firebase';
-import { withNavigation, StackActions } from 'react-navigation'
+import { withNavigation, StackActions } from 'react-navigation';
 
 import { createChatRoom } from '../../store/utils/firebase';
 import Button from '../../components/Button';
 import TextInput from '../../components/TextInput';
 import { styles } from '../../styles/form/style';
 
-const randomChatIcon = "https://cdn0.iconfinder.com/data/icons/chat-2/100/Chat-05-512.png"
+const randomChatIcon = 'https://cdn0.iconfinder.com/data/icons/chat-2/100/Chat-05-512.png';
 
-const InitChat = ({ 
+const InitChat = ({
   firebase,
   navigation,
   profileId,
   groupName,
   setGroupName,
-  logoUrl, 
+  logoUrl,
   setLogoUrl,
   userId,
   setUserId,
   error,
-  setError
+  setError,
 }) => {
   const onCreateGroupPressed = async () => {
-    if(groupName && userId) {
+    if (groupName && userId) {
       const chatRoomResult = await createChatRoom(
         firebase,
         true,
         [userId, profileId],
         groupName,
-        logoUrl ? logoUrl : randomChatIcon
+        logoUrl || randomChatIcon,
       );
-      console.log(chatRoomResult)
+      console.log(chatRoomResult);
       navigation.dispatch(StackActions.pop());
     } else {
-      setError("Please fill at least group name and friend's user id")
+      setError("Please fill at least group name and friend's user id");
     }
-  }
+  };
   return (
     <View>
       <TextInput
@@ -69,8 +69,8 @@ const InitChat = ({
         onPress={onCreateGroupPressed}
       />
       {error && <Text>{error}</Text>}
-  </View>
-  )
+    </View>
+  );
 };
 
 export default compose(
@@ -82,5 +82,5 @@ export default compose(
   withState('groupName', 'setGroupName'),
   withState('logoUrl', 'setLogoUrl'),
   withState('userId', 'setUserId'),
-  withState('error', 'setError')
+  withState('error', 'setError'),
 )(InitChat);

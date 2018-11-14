@@ -11,7 +11,7 @@ import SettingsView from '../Settings';
 import ThemedTabBarComponent from './ThemedTabBarComponent';
 import ChangeUsernameSheet from '../Settings/ProfileSettings/ChangeUsernameSheet';
 import AvatarSelectorSheet from '../Settings/ProfileSettings/AvatarSelectorSheet';
-import InitChat from '../Chats/InitChat'
+import InitChat from '../Chats/InitChat';
 import ThemedHeaderComponent from '../../components/ThemedHeaderComponent';
 import { resolveNavigationOptionsForScreen } from './routeUtils';
 
