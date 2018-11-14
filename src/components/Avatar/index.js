@@ -5,6 +5,7 @@ const styles = StyleSheet.create({
   avatar: {
     borderColor: 'darkgrey',
     borderWidth: 0.3,
+    backgroundColor: 'white',
   },
 });
 
