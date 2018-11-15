@@ -16,7 +16,7 @@ export const styles = theme => ({
   },
   section: {
     backgroundColor: theme.foreground,
-    borderColor: theme.backdrop,
+    borderColor: theme.separator,
     borderBottomWidth: 0.3,
   },
 });
