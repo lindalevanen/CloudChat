@@ -10,7 +10,7 @@ import { isLoaded, withFirebase } from 'react-redux-firebase';
 import { withTheme } from '../../components/ThemedWrapper';
 import ChatList from './ChatList';
 
-const chatStyles = StyleSheet.create({
+const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
@@ -23,8 +23,8 @@ const chatStyles = StyleSheet.create({
 });
 
 const Chats = ({ chats, useDarkTheme }) => (
-  <View style={chatStyles.container}>
-    <ScrollView style={[chatStyles.list, useDarkTheme && chatStyles.dark]}>
+  <View style={styles.container}>
+    <ScrollView style={[styles.list, useDarkTheme && styles.dark]}>
       {!isLoaded(chats) ? (
         <Text>Loading</Text>
       ) : (

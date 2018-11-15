@@ -8,7 +8,6 @@ import { withNavigation, StackActions } from 'react-navigation';
 import { createChatRoom } from '../../store/utils/firebase';
 import Button from '../../components/Button';
 import TextInput from '../../components/TextInput';
-import { styles } from '../../styles/form/style';
 
 const randomChatIcon = 'https://cdn0.iconfinder.com/data/icons/chat-2/100/Chat-05-512.png';
 
