@@ -27,13 +27,13 @@ const Preferences = ({ navigation, firebase, theme }) => {
   return (
     <View>
       <View style={[style.section]}>
-        <Button title="Change avatar" onPress={openAvatarSelectorSheet} color="transparent" style={{ alignSelf: 'flex-start' }} />
+        <Button title="Change avatar" onPress={openAvatarSelectorSheet} color="transparent" titleStyle={{ alignSelf: 'flex-start' }} />
       </View>
       <View style={[style.section]}>
-        <Button title="Change username" onPress={openChangeUsernameSheet} color="transparent" style={{ alignSelf: 'flex-start' }} />
+        <Button title="Change username" onPress={openChangeUsernameSheet} color="transparent" titleStyle={{ alignSelf: 'flex-start' }} />
       </View>
       <View style={[style.section]}>
-        <Button title="Logout" onPress={logout} titleColor="red" color="transparent" style={{ alignSelf: 'flex-start' }} />
+        <Button title="Logout" onPress={logout} titleColor="red" color="transparent" titleStyle={{ alignSelf: 'flex-start' }} />
       </View>
     </View>
   );
