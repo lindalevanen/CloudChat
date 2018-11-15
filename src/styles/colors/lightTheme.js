@@ -4,6 +4,7 @@ const palette = {
   backdrop: colors.lightgrey,
   foreground: colors.white,
   topBar: colors.white,
+  headerTintColor: colors.black,
   bottomBar: colors.white,
   barBorder: colors.grey,
   barIconActive: colors.blush,

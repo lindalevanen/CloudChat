@@ -1,7 +1,7 @@
 import React from 'react';
-import ThemedHeaderComponent from '../../components/ThemedHeaderComponent';
+import { Platform } from 'react-native';
 
-import colors from '../../styles/colors';
+import ThemedHeaderComponent from '../../components/ThemedHeaderComponent';
 import lightTheme from '../../styles/colors/lightTheme';
 import darkTheme from '../../styles/colors/darkTheme';
 import { getState } from '../../store';
@@ -44,7 +44,7 @@ export function resolveNavigationOptionsForScreen({ navigation }) {
     headerTitleStyle: {
       color: theme.text1,
     },
-    headerTintColor: theme.text1,
+    headerTintColor: Platform.OS == 'ios' ? theme.actionHero : theme.text1,
     header: ThemedHeaderComponent,
     headerRight: getHeaderActionForRoute(name, navigation),
   };

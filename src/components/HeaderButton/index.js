@@ -7,6 +7,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
   },
   title: {
+    fontSize: 16,
     color: colors.blush,
   },
 });
