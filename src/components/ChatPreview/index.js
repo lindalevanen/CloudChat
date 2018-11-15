@@ -1,21 +1,17 @@
 import React from 'react';
 import { format } from 'date-fns';
-import { Text, View, StyleSheet } from 'react-native';
+import { Text, View } from 'react-native';
 
 import Avatar from '../Avatar';
 import { withTheme } from '../ThemedWrapper';
 
 const prettyTimestamp = unix => format(new Date(unix), 'HH:mm');
 
-const styles = StyleSheet.create({
+const styles = theme => ({
   chatPreview: {
-    backgroundColor: 'white',
-    borderColor: 'darkgrey',
+    backgroundColor: theme.foreground,
+    borderColor: theme.separator,
     borderBottomWidth: 0.3,
-  },
-  darkChatPreview: {
-    backgroundColor: '#191B2C',
-    borderColor: '#0E0E19',
   },
   chatContainer: {
     padding: 10,
@@ -34,32 +30,34 @@ const styles = StyleSheet.create({
   chatTitleText: {
     fontSize: 16,
     fontWeight: 'bold',
+    color: theme.text1,
   },
   chatUpdatedText: {
     fontSize: 12,
-  },
-  darkText: {
-    color: '#FAFAFA',
+    color: theme.text1,
   },
 });
 
-const ChatPreview = ({ chat, useDarkTheme }) => (
-  <View style={[styles.chatPreview, useDarkTheme && styles.darkChatPreview]}>
-    <View style={[styles.chatContainer]}>
-      <Avatar url={chat.avatarUrl} />
-      <View style={[styles.summaryContainer]}>
-        <Text style={[styles.chatTitleText, useDarkTheme && styles.darkText]}>
-          {chat && chat.title ? chat.title : '-'}
-        </Text>
-        <Text style={[styles.chatUpdatedText, useDarkTheme && styles.darkText]}>
-          {prettyTimestamp(chat.timeModified)}
+const ChatPreview = ({ chat, theme }) => {
+  const style = styles(theme);
+  return (
+    <View style={[style.chatPreview]}>
+      <View style={[style.chatContainer]}>
+        <Avatar url={chat.avatarUrl} />
+        <View style={[style.summaryContainer]}>
+          <Text style={[style.chatTitleText]}>
+            {chat && chat.title ? chat.title : '-'}
+          </Text>
+          <Text style={[style.chatUpdatedText]}>
+            {prettyTimestamp(chat.timeModified)}
+          </Text>
+        </View>
+        <Text style={[style.chatUpdatedText]}>
+          {chat.lastMessage}
         </Text>
       </View>
-      <Text style={[styles.chatUpdatedText, useDarkTheme && styles.darkText]}>
-        {chat.lastMessage}
-      </Text>
     </View>
-  </View>
-);
+  );
+};
 
 export default withTheme(ChatPreview);
