@@ -6,6 +6,7 @@ import { firebaseConnect } from 'react-redux-firebase';
 import { connect } from 'react-redux';
 
 import { uploadAvatar } from '../../store/utils/firebase';
+import urlToBlob from '../../store/utils/urlToBlob';
 import Avatar from '../Avatar';
 import Button from '../Button';
 
@@ -29,12 +30,12 @@ const AvatarSelector = ({
     if (!result.cancelled) {
       setLoading(true);
       const { uri } = result;
-      const response = await fetch(uri);
-      const file = await response.blob();
+      const file = await urlToBlob(uri);
       const {
         uploadTaskSnapshot: { ref },
       } = await uploadAvatar(firebase, file, profileUid);
       const downloadUrl = await ref.getDownloadURL();
+
       await firebase.updateProfile({ avatarUrl: downloadUrl });
       setLoading(false);
     }
