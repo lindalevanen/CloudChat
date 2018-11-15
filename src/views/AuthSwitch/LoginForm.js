@@ -62,6 +62,8 @@ const LoginForm = ({
       <Button
         disabled={!email || !password}
         title="Login"
+        type="Hero"
+        titleColor="white"
         onPress={onLoginPressed}
       />
     </View>

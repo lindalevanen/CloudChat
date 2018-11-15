@@ -16,7 +16,7 @@ const styles = theme => ({
     padding: 40,
     paddingTop: 160,
     justifyContent: 'space-between',
-    backgroundColor: theme.backdrop,
+    backgroundColor: theme.foreground,
   },
   registerButton: {
     marginTop: 10,
@@ -51,7 +51,7 @@ const LoginScreen = ({
         style={style.registerButton}
         title={getToggleActionTitle()}
         onPress={() => setIsRegistering(!isRegistering)}
-        titleColor={theme.actionDefault}
+        titleColor={theme.actionHero}
         color="transparent"
       />
     </View>

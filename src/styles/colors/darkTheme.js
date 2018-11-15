@@ -9,6 +9,7 @@ const palette = {
   barIconActive: colors.blush,
   barIconInactive: colors.darkGrey,
   actionDefault: colors.blueLightGrey,
+  actionHero: colors.blush,
   actionPrimary: colors.blue,
   actionSuccess: colors.green,
   actionWarning: colors.orange,
