@@ -1,47 +1,47 @@
 import React from 'react';
-import { View, Text, TextInput } from 'react-native';
+import { View, Text } from 'react-native';
 import { isLoaded, isEmpty, firebaseConnect } from 'react-redux-firebase';
 import { connect } from 'react-redux';
 import { compose, withState } from 'recompose';
+import _map from 'lodash/map';
+import _filter from 'lodash/filter';
+
+import TextInput from '../TextInput';
 import UserList from '../UserList';
-import Button from '../Button';
+import { withTheme } from '../ThemedWrapper';
 
 const UserSearch = ({
-  firebase, users, text, setText,
+  theme, users, searchString, setSearchString,
 }) => {
-  const userList = !isLoaded(users)
-    ? null
-    : isEmpty(users)
-      ? <Text>No search results</Text>
-      : <UserList users={users} />;
-
-  const asd = 'lelele';
-  const queryUsers = () => {
-    firebase.watchEvent('value', 'users', 'users', { queryParams: ['orderByChild=username', 'equalTo=lelele'] });
-  };
-
+  const loading = !isLoaded(users);
+  const hasUsers = !loading && !isEmpty(users);
   return (
-    <View>
+    <View style={{ flex: 1, backgroundColor: theme.backdrop }}>
       <TextInput
-        style={{ height: 40, borderColor: 'gray', borderWidth: 1 }}
-        placeholder="Search"
-        onChangeText={setText}
-        value={text}
+        placeholder="Search users"
+        onChangeText={setSearchString}
+        autoCorrect={false}
+        autoCapitalize="none"
+        value={searchString}
       />
-      <Button title="Search" onPress={queryUsers} />
-
-      {userList}
+      {hasUsers ? (
+        <UserList theme={theme} users={users} />
+      ) : (
+        <Text>no users</Text>
+      )}
     </View>
   );
 };
 
-// { path: 'users', queryParams: ['orderByChild=username', `equalTo=${asd}`] }
-
 const enhance = compose(
-  firebaseConnect(),
-  withState('text', 'setText'),
-  connect(state => ({
-    users: state.firebase.data.users,
+  withTheme,
+  withState('searchString', 'setSearchString', ''),
+  firebaseConnect([{ path: 'users', queryParams: ['orderByChild=username'] }]),
+  connect((state, { searchString }) => ({
+    users: _filter(
+      _map(state.firebase.data.users, (item, key) => ({ key, ...item })),
+      ({ username }) => username.toLowerCase().indexOf(searchString.toLowerCase()) >= 0,
+    ),
   })),
 );
 export default enhance(UserSearch);

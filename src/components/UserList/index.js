@@ -1,16 +1,13 @@
 import React from 'react';
-import { View, Text } from 'react-native';
-import _map from 'lodash/map';
-import Avatar from '../Avatar';
+import { FlatList } from 'react-native';
+import User from '../User';
 
-
-const UserList = ({ users }) => <View>{_map(users, user => <User user={user} />)}</View>;
-
-const User = ({ user }) => (
-  <View>
-    <Avatar url={user.avatarUrl} />
-    <Text>{user.username}</Text>
-  </View>
+const UserList = ({ theme, users }) => (
+  <FlatList
+    data={users}
+    keyExtractor={({ key }) => key}
+    renderItem={({ item }) => <User theme={theme} user={item} />}
+  />
 );
 
 export default UserList;
