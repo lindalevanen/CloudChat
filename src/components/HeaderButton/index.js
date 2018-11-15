@@ -1,12 +1,13 @@
 import React from 'react';
 import { TouchableOpacity, Text, StyleSheet } from 'react-native';
+import colors from '../../styles/colors';
 
 const styles = StyleSheet.create({
   container: {
     paddingHorizontal: 16,
   },
   title: {
-    color: 'tomato',
+    color: colors.blush,
   },
 });
 

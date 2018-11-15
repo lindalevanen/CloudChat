@@ -1,6 +1,7 @@
 import React from 'react';
 import ThemedHeaderComponent from '../../components/ThemedHeaderComponent';
 
+import colors from '../../styles/colors';
 import lightTheme from '../../styles/colors/lightTheme';
 import darkTheme from '../../styles/colors/darkTheme';
 import { getState } from '../../store';
@@ -32,16 +33,18 @@ export function resolveNavigationOptionsForScreen({ navigation }) {
   const headerTitle = name;
 
   const { useDarkTheme } = getState().settings;
+  const theme = useDarkTheme ? darkTheme : lightTheme;
 
   return {
     headerTitle,
     headerStyle: {
-      backgroundColor: useDarkTheme ? darkTheme.topBar : lightTheme.topBar,
-      borderBottomColor: useDarkTheme ? darkTheme.separator : lightTheme.separator,
+      backgroundColor: theme.topBar,
+      borderBottomColor: theme.separator,
     },
     headerTitleStyle: {
-      color: useDarkTheme ? 'white' : 'black',
+      color: theme.text1,
     },
+    headerTintColor: theme.text1,
     header: ThemedHeaderComponent,
     headerRight: getHeaderActionForRoute(name, navigation),
   };
