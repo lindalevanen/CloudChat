@@ -16,9 +16,9 @@ const styles = StyleSheet.create({
   },
 });
 
-const NoImageAvailable = ({ username, style }) => (
-  <View style={[styles.circle, styles.placeHolder, style]}>
-    <Text style={{ fontSize: 22, color: 'white' }}>{username.substring(0, 2).toUpperCase()}</Text>
+const NoImageAvailable = ({ username, size }) => (
+  <View style={[styles.circle, styles.placeHolder, { height: size, width: size, borderRadius: size / 2 }]}>
+    <Text style={{ fontSize: size === 60 ? 22 : undefined, color: 'white' }}>{username.substring(0, 2).toUpperCase()}</Text>
   </View>
 );
 
@@ -26,7 +26,7 @@ const noUrl = url => url === undefined || url === '';
 
 const Avatar = ({ url, username, size = 60 }) => (noUrl(url) ? (
   <NoImageAvailable
-    style={[{ height: size, width: size, borderRadius: size / 2 }]}
+    size={size}
     username={username}
   />
 ) : (
