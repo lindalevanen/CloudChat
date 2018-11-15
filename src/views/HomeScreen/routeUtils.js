@@ -14,7 +14,7 @@ function getNavigationCallback(navigation, routeName) {
 function getHeaderActionForRoute(routeName, navigation) {
   switch (routeName) {
     case 'Chats':
-      return <HeaderButton navigation={navigation} title="New" onPress={getNavigationCallback(navigation, 'InitChatSheet')} />;
+      return <HeaderButton navigation={navigation} title="New chat" onPress={getNavigationCallback(navigation, 'InitChatSheet')} />;
     default:
       return null;
   }
