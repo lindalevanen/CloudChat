@@ -28,7 +28,7 @@ const User = ({
   const style = styles(theme);
   return (
     <View style={style.container}>
-      <Avatar url={user.avatarUrl} />
+      <Avatar url={user.avatarUrl} username={user.username} />
       <Text style={style.text}>{user.username}</Text>
     </View>
   );
