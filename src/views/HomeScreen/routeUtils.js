@@ -14,7 +14,7 @@ function getNavigationCallback(navigation, routeName) {
 function getHeaderActionForRoute(routeName, navigation) {
   switch (routeName) {
     case 'Chats':
-      return <HeaderButton navigation={navigation} title="New chat" onPress={getNavigationCallback(navigation, 'InitChatSheet')} />;
+      return <HeaderButton navigation={navigation} title="New chat" onPress={getNavigationCallback(navigation, 'CreateChatSheet')} />;
     default:
       return null;
   }
@@ -36,6 +36,7 @@ export function resolveNavigationOptionsForScreen({ navigation }) {
   const theme = useDarkTheme ? darkTheme : lightTheme;
 
   return {
+    headerBackTitle: name,
     headerTitle,
     headerStyle: {
       backgroundColor: theme.topBar,
@@ -44,7 +45,7 @@ export function resolveNavigationOptionsForScreen({ navigation }) {
     headerTitleStyle: {
       color: theme.text1,
     },
-    headerTintColor: Platform.OS == 'ios' ? theme.actionHero : theme.text1,
+    headerTintColor: Platform.OS === 'ios' ? theme.actionHero : theme.text1,
     header: ThemedHeaderComponent,
     headerRight: getHeaderActionForRoute(name, navigation),
   };

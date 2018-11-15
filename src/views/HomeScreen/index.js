@@ -12,6 +12,7 @@ import SettingsView from '../Settings';
 import ThemedTabBarComponent from './ThemedTabBarComponent';
 import ChangeUsernameSheet from '../Settings/ProfileSettings/ChangeUsernameSheet';
 import AvatarSelectorSheet from '../Settings/ProfileSettings/AvatarSelectorSheet';
+import CreateChatSheet from '../Chats/CreateChatSheet';
 import InitChat from '../Chats/InitChat';
 import ThemedHeaderComponent from '../../components/ThemedHeaderComponent';
 import { resolveNavigationOptionsForScreen } from './routeUtils';
@@ -70,6 +71,12 @@ export default createStackNavigator({
       headerTitle: 'Select your avatar',
     },
   },
+  CreateChatSheet: {
+    screen: CreateChatSheet,
+    navigationOptions: {
+      headerTitle: 'New chat',
+    },
+  },
   InitChatSheet: {
     screen: InitChat,
     navigationOptions: {
@@ -78,7 +85,7 @@ export default createStackNavigator({
     },
   },
 }, {
-  mode: 'modal',
+  // mode: 'modal',
   headerMode: 'screen',
   navigationOptions: resolveNavigationOptionsForScreen,
 });
