@@ -27,7 +27,7 @@ const styles = StyleSheet.create({
 });
 
 const LoginForm = ({
-  email, setEmail, password, setPassword, firebase, onLoggedIn,
+  theme, email, setEmail, password, setPassword, firebase, onLoggedIn,
 }) => {
   const onLoginPressed = async () => {
     try {
@@ -41,7 +41,7 @@ const LoginForm = ({
   return (
     <View>
       <Image key="logo" style={styles.logo} source={Logo} />
-      <Text key="title" style={styles.title}>CloudChat</Text>
+      <Text key="title" style={[styles.title, { color: theme.text1 }]}>CloudChat</Text>
       <TextInput
         style={styles.input}
         placeholder="email"
@@ -60,8 +60,8 @@ const LoginForm = ({
         onChangeText={setPassword}
       />
       <Button
+        disabled={!email || !password}
         title="Login"
-        titleColor="white"
         onPress={onLoginPressed}
       />
     </View>

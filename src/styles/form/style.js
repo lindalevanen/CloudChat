@@ -1,12 +1,7 @@
-import { StyleSheet } from 'react-native';
-
-export const styles = StyleSheet.create({
+export const styles = theme => ({
   view: {
     flex: 1,
-    backgroundColor: 'white',
-  },
-  viewDark: {
-    backgroundColor: '#262636',
+    backgroundColor: theme.foreground,
   },
   container: {
     padding: 10,
@@ -20,12 +15,8 @@ export const styles = StyleSheet.create({
     marginBottom: 10,
   },
   section: {
-    backgroundColor: 'white',
-    borderColor: 'darkgrey',
+    backgroundColor: theme.foreground,
+    borderColor: theme.backdrop,
     borderBottomWidth: 0.3,
-  },
-  sectionDark: {
-    backgroundColor: '#191B2C',
-    borderColor: '#0E0E19',
   },
 });

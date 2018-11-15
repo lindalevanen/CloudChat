@@ -1,22 +1,19 @@
 import React from 'react';
-import { TextInput as RNTextInput, StyleSheet } from 'react-native';
+import { TextInput as RNTextInput } from 'react-native';
 import { withTheme } from '../ThemedWrapper';
 
-const styles = StyleSheet.create({
+const styles = theme => ({
   input: {
-    backgroundColor: '#f0f0f0ff',
+    backgroundColor: theme.inputBackground,
+    color: theme.text1,
     padding: 12,
     borderRadius: 4,
     fontSize: 16,
   },
-  dark: {
-    backgroundColor: '#373C60',
-    color: 'white',
-  },
 });
 
 const TextInput = ({
-  useDarkTheme,
+  theme,
   onChangeText,
   value,
   placeholder,
@@ -24,9 +21,10 @@ const TextInput = ({
   ...props
 }) => (
   <RNTextInput
-    style={[styles.input, useDarkTheme && styles.dark, style]}
+    style={[styles(theme).input, style]}
     onChangeText={onChangeText}
     placeholder={placeholder}
+    placeholderTextColor={theme.inputPlaceholder}
     value={value}
     {...props}
   />

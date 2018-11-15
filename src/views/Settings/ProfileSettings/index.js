@@ -1,6 +1,6 @@
 import React from 'react';
 import {
-  View, StyleSheet,
+  View,
 } from 'react-native';
 import { withFirebase } from 'react-redux-firebase';
 import { connect } from 'react-redux';
@@ -12,7 +12,7 @@ import ProfileInfo from '../../../components/ProfileInfo';
 
 import { styles } from '../../../styles/form/style';
 
-const Preferences = ({ navigation, firebase, useDarkTheme }) => {
+const Preferences = ({ navigation, firebase, theme }) => {
   const logout = async () => {
     await firebase.logout();
     navigation.navigate('Login');
@@ -23,15 +23,16 @@ const Preferences = ({ navigation, firebase, useDarkTheme }) => {
   const openAvatarSelectorSheet = () => navigation.dispatch(StackActions.push({
     routeName: 'AvatarSelectorSheet',
   }));
+  const style = styles(theme);
   return (
     <View>
-      <View style={[styles.section, useDarkTheme && styles.sectionDark]}>
-        <Button title="Change avatar" onPress={openAvatarSelectorSheet} titleColor="tomato" color="transparent" style={{ alignSelf: 'flex-start' }} />
+      <View style={[style.section]}>
+        <Button title="Change avatar" onPress={openAvatarSelectorSheet} color="transparent" style={{ alignSelf: 'flex-start' }} />
       </View>
-      <View style={[styles.section, useDarkTheme && styles.sectionDark]}>
-        <Button title="Change username" onPress={openChangeUsernameSheet} titleColor="tomato" color="transparent" style={{ alignSelf: 'flex-start' }} />
+      <View style={[style.section]}>
+        <Button title="Change username" onPress={openChangeUsernameSheet} color="transparent" style={{ alignSelf: 'flex-start' }} />
       </View>
-      <View style={[styles.section, useDarkTheme && styles.sectionDark]}>
+      <View style={[style.section]}>
         <Button title="Logout" onPress={logout} titleColor="red" color="transparent" style={{ alignSelf: 'flex-start' }} />
       </View>
     </View>
@@ -39,11 +40,11 @@ const Preferences = ({ navigation, firebase, useDarkTheme }) => {
 };
 
 const ProfileSettings = ({
-  profile, navigation, firebase, useDarkTheme,
+  profile, navigation, firebase, theme,
 }) => (
   <View>
-    <ProfileInfo profile={profile} useDarkTheme={useDarkTheme} />
-    <Preferences navigation={navigation} firebase={firebase} useDarkTheme={useDarkTheme} />
+    <ProfileInfo profile={profile} theme={theme} />
+    <Preferences navigation={navigation} firebase={firebase} theme={theme} />
   </View>
 );
 

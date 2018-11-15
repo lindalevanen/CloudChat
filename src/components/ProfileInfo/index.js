@@ -1,16 +1,16 @@
 import React from 'react';
-import { Text, View, StyleSheet } from 'react-native';
+import { Text, View } from 'react-native';
 
 import Avatar from '../Avatar';
 
-const styles = StyleSheet.create({
+const styles = theme => ({
   container: {
     padding: 10,
     flex: 1,
   },
   section: {
-    backgroundColor: 'white',
-    borderColor: 'darkgrey',
+    backgroundColor: theme.foreground,
+    borderColor: theme.separator,
     borderBottomWidth: 0.3,
   },
   topContainer: {
@@ -20,34 +20,30 @@ const styles = StyleSheet.create({
   profileText: {
     marginLeft: 10,
     fontSize: 16,
-  },
-  dark: {
-    backgroundColor: '#191B2C',
-    borderColor: '#0E0E19',
-  },
-  darkText: {
-    color: '#FAFAFA',
+    color: theme.text1,
   },
 });
 
-const ProfileInfo = ({ profile, useDarkTheme }) => (
-  <View style={[styles.topContainer, styles.section, useDarkTheme && styles.dark]}>
-    <Avatar url={profile.avatarUrl} />
-    <View>
-      <Text
-        style={[
-          styles.profileText,
-          { marginTop: 10, marginBottom: 5, fontWeight: 'bold' },
-          useDarkTheme && styles.darkText,
-        ]}
-      >
-        {profile.username}
-      </Text>
-      <Text style={[styles.profileText, { marginBottom: 10 }, useDarkTheme && styles.darkText]}>
-        {profile.email}
-      </Text>
+const ProfileInfo = ({ profile, theme }) => {
+  const style = styles(theme);
+  return (
+    <View style={[style.topContainer, style.section]}>
+      <Avatar url={profile.avatarUrl} />
+      <View>
+        <Text
+          style={[
+            style.profileText,
+            { marginTop: 10, marginBottom: 5, fontWeight: 'bold' },
+          ]}
+        >
+          {profile.username}
+        </Text>
+        <Text style={[style.profileText, { marginBottom: 10 }]}>
+          {profile.email}
+        </Text>
+      </View>
     </View>
-  </View>
-);
+  );
+};
 
 export default ProfileInfo;

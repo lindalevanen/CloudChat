@@ -1,9 +1,8 @@
 import React from 'react';
-import { StyleSheet } from 'react-native';
 import { BottomTabBar } from 'react-navigation-tabs';
 import { withTheme } from '../../components/ThemedWrapper';
 
-const styles = theme => StyleSheet.create({
+const styles = theme => ({
   container: {
     backgroundColor: theme.bottomBar,
   },

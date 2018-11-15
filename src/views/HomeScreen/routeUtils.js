@@ -1,6 +1,8 @@
 import React from 'react';
 import ThemedHeaderComponent from '../../components/ThemedHeaderComponent';
 
+import lightTheme from '../../styles/colors/lightTheme';
+import darkTheme from '../../styles/colors/darkTheme';
 import { getState } from '../../store';
 import HeaderButton from '../../components/HeaderButton';
 
@@ -34,8 +36,8 @@ export function resolveNavigationOptionsForScreen({ navigation }) {
   return {
     headerTitle,
     headerStyle: {
-      backgroundColor: useDarkTheme ? '#191B2C' : 'white',
-      borderBottomColor: useDarkTheme ? '#0E0E19' : 'grey',
+      backgroundColor: useDarkTheme ? darkTheme.topBar : lightTheme.topBar,
+      borderBottomColor: useDarkTheme ? darkTheme.separator : lightTheme.separator,
     },
     headerTitleStyle: {
       color: useDarkTheme ? 'white' : 'black',

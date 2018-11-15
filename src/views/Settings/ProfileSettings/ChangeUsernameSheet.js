@@ -47,7 +47,7 @@ const ChangeUsernameSheet = ({
           value={username}
           onChangeText={setUsername}
         />
-        <Button title="Save" titleColor="white" onPress={onUsernameSaved} />
+        <Button title="Save" onPress={onUsernameSaved} type="Success" />
       </View>
     </View>
   );

@@ -1,21 +1,23 @@
 import React from 'react';
 import {
-  Text, View, Switch, StyleSheet,
+  Text, View,
 } from 'react-native';
 import { connect } from 'react-redux';
 import { compose } from 'recompose';
 import { withNavigation } from 'react-navigation';
 
+import { withTheme } from '../../../components/ThemedWrapper';
+import Switch from '../../../components/Switch';
 import { changeSetting } from '../../../store/settings/actions';
 
-const styles = StyleSheet.create({
+const styles = theme => ({
   container: {
     marginTop: 18,
   },
   section: {
     padding: 10,
-    backgroundColor: 'white',
-    borderColor: 'darkgrey',
+    backgroundColor: theme.foreground,
+    borderColor: theme.separator,
     borderBottomWidth: 0.3,
   },
   setting: {
@@ -25,17 +27,12 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 16,
-  },
-  dark: {
-    backgroundColor: '#191B2C',
-    borderColor: '#0E0E19',
-  },
-  darkText: {
-    color: '#FAFAFA',
+    color: theme.text1,
   },
 });
 
 const ThemeSettings = ({
+  theme,
   useDarkTheme,
   setDarkThemeAction,
   navigation,
@@ -44,14 +41,12 @@ const ThemeSettings = ({
     setDarkThemeAction(value);
     navigation.setParams({ useDarkTheme: value });
   };
-  const switchStyleProps = {
-    trackColor: { false: undefined, true: '#6970B9' },
-  };
+  const style = styles(theme);
   return (
-    <View style={styles.container}>
-      <View style={[styles.section, styles.setting, useDarkTheme && styles.dark]}>
-        <Text style={[styles.title, useDarkTheme && styles.darkText]}>Use dark theme</Text>
-        <Switch value={useDarkTheme} onValueChange={setDarkMode} {...switchStyleProps} />
+    <View style={style.container}>
+      <View style={[style.section, style.setting]}>
+        <Text style={[style.title]}>Use dark theme</Text>
+        <Switch value={useDarkTheme} onValueChange={setDarkMode} />
       </View>
     </View>
   );
@@ -66,6 +61,7 @@ const mapDispatchToProps = dispatch => ({
 });
 
 const enhance = compose(
+  withTheme,
   withNavigation,
   connect(mapStateToProps, mapDispatchToProps),
 );

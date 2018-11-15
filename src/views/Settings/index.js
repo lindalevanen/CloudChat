@@ -7,16 +7,16 @@ import ProfileSettings from './ProfileSettings';
 import ThemeSettings from './ThemeSettings';
 import { withTheme } from '../../components/ThemedWrapper';
 
-const styles = StyleSheet.create({
-  dark: {
-    backgroundColor: '#262636',
+const styles = theme => ({
+  container: {
+    backgroundColor: theme.backdrop,
   },
 });
 
-const SettingsView = ({ useDarkTheme }) => (
-  <ScrollView style={useDarkTheme && styles.dark}>
-    <ProfileSettings useDarkTheme={useDarkTheme} />
-    <ThemeSettings useDarkTheme={useDarkTheme} />
+const SettingsView = ({ theme }) => (
+  <ScrollView style={styles(theme).container}>
+    <ProfileSettings theme={theme} />
+    <ThemeSettings theme={theme} />
   </ScrollView>
 );
 
