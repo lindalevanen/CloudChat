@@ -8,10 +8,17 @@ import _filter from 'lodash/filter';
 
 import TextInput from '../TextInput';
 import UserList from '../UserList';
+import SelectableUserList from '../UserList/SelectableUserList';
 import { withTheme } from '../ThemedWrapper';
 
+const UserListComponent = ({
+  theme, users, onSelectionDone, onUserPress,
+}) => (onSelectionDone
+  ? <SelectableUserList theme={theme} users={users} onSelectionDone={onSelectionDone} />
+  : <UserList theme={theme} users={users} onUserPress={onUserPress} />);
+
 const UserSearch = ({
-  theme, users, searchString, setSearchString,
+  onSelectionDone, onUserPress, theme, searchString, setSearchString, users,
 }) => {
   const loading = !isLoaded(users);
   const hasUsers = !loading && !isEmpty(users);
@@ -27,7 +34,7 @@ const UserSearch = ({
         />
       </View>
       {hasUsers ? (
-        <UserList theme={theme} users={users} />
+        <UserListComponent theme={theme} users={users} onUserPress={onUserPress} onSelectionDone={onSelectionDone} />
       ) : (
         <Text>no users</Text>
       )}
@@ -41,7 +48,7 @@ const enhance = compose(
   firebaseConnect([{ path: 'users', queryParams: ['orderByChild=username'] }]),
   connect((state, { searchString }) => ({
     users: _filter(
-      _map(state.firebase.data.users, (item, key) => ({ key, ...item })),
+      _map(state.firebase.data.users, (item, key) => ({ id: key, ...item })),
       ({ username }) => username.toLowerCase().indexOf(searchString.toLowerCase()) >= 0,
     ),
   })),
