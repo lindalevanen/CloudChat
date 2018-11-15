@@ -15,13 +15,15 @@ const CreateChatSheet = ({ theme, navigation }) => {
   );
   return (
     <View style={{ flex: 1 }}>
-      <Button
-        title="Create group chat"
-        color={theme.foreground}
-        titleColor={theme.actionHero}
-        titleStyle={{ alignSelf: 'flex-start' }}
-        onPress={openGroupChatSheet}
-      />
+      <View style={{ backgroundColor: theme.foreground }}>
+        <Button
+          title="Create group chat"
+          color={theme.foreground}
+          titleColor={theme.actionHero}
+          titleStyle={{ alignSelf: 'flex-start' }}
+          onPress={openGroupChatSheet}
+        />
+      </View>
       <UserSearch
         onUserPress={id => console.log(`start chat with person ${id}`)}
       />
