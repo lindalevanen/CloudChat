@@ -17,13 +17,15 @@ const UserSearch = ({
   const hasUsers = !loading && !isEmpty(users);
   return (
     <View style={{ flex: 1, backgroundColor: theme.backdrop }}>
-      <TextInput
-        placeholder="Search users"
-        onChangeText={setSearchString}
-        autoCorrect={false}
-        autoCapitalize="none"
-        value={searchString}
-      />
+      <View style={{ padding: 10, backgroundColor: theme.foreground }}>
+        <TextInput
+          placeholder="Search users"
+          onChangeText={setSearchString}
+          autoCorrect={false}
+          autoCapitalize="none"
+          value={searchString}
+        />
+      </View>
       {hasUsers ? (
         <UserList theme={theme} users={users} />
       ) : (
