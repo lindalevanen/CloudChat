@@ -17,7 +17,7 @@ const palette = {
   actionDanger: colors.red,
   switchActive: colors.darkGrey,
   switchInactive: colors.green,
-  separator: colors.darkGrey,
+  separator: colors.lightgrey,
   inputBackground: colors.lightgrey,
   inputPlaceholder: colors.darkGrey,
   text1: 'black',
