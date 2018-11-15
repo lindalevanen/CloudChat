@@ -28,7 +28,7 @@ const ProfileInfo = ({ profile, theme }) => {
   const style = styles(theme);
   return (
     <View style={[style.topContainer, style.section]}>
-      <Avatar url={profile.avatarUrl} />
+      <Avatar url={profile.avatarUrl} username={profile.username} />
       <View>
         <Text
           style={[
