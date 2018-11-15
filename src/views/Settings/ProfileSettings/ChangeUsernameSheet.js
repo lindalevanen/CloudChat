@@ -12,7 +12,7 @@ import { withTheme } from '../../../components/ThemedWrapper';
 import { styles } from '../../../styles/form/style';
 
 const ChangeUsernameSheet = ({
-  useDarkTheme,
+  theme,
   username,
   setUsername,
   firebase,
@@ -29,18 +29,12 @@ const ChangeUsernameSheet = ({
       console.log(`Username change failed: ${e}`);
     }
   };
+  const style = styles(theme);
   return (
-    <View
-      style={[
-        styles.view, useDarkTheme && styles.viewDark,
-      ]}
-    >
-      <View style={[
-        styles.container, styles.section, useDarkTheme && styles.sectionDark,
-      ]}
-      >
+    <View style={[style.view]}>
+      <View style={[style.container, style.section]}>
         <TextInput
-          style={styles.input}
+          style={style.input}
           placeholder="Username"
           autoCapitalize="none"
           autoCorrect={false}

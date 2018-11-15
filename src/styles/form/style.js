@@ -1,7 +1,7 @@
 export const styles = theme => ({
   view: {
     flex: 1,
-    backgroundColor: theme.foreground,
+    backgroundColor: theme.backdrop,
   },
   container: {
     padding: 10,
