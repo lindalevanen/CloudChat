@@ -10,7 +10,7 @@ import { withTheme } from '../../components/ThemedWrapper';
 const CreateChatSheet = ({ theme, navigation }) => {
   const openGroupChatSheet = () => navigation.dispatch(
     StackActions.push({
-      routeName: 'InitChatSheet',
+      routeName: 'CreateGroupSheetSheet',
     }),
   );
   return (

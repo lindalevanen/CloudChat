@@ -13,7 +13,7 @@ import ThemedTabBarComponent from './ThemedTabBarComponent';
 import ChangeUsernameSheet from '../Settings/ProfileSettings/ChangeUsernameSheet';
 import AvatarSelectorSheet from '../Settings/ProfileSettings/AvatarSelectorSheet';
 import CreateChatSheet from '../Chats/CreateChatSheet';
-import InitChat from '../Chats/InitChat';
+import CreateGroupSheet from '../Chats/CreateGroupSheet';
 import ThemedHeaderComponent from '../../components/ThemedHeaderComponent';
 import { resolveNavigationOptionsForScreen } from './routeUtils';
 
@@ -77,11 +77,11 @@ export default createStackNavigator({
       headerTitle: 'New chat',
     },
   },
-  InitChatSheet: {
-    screen: InitChat,
+  CreateGroupSheetSheet: {
+    screen: CreateGroupSheet,
     navigationOptions: {
       header: ThemedHeaderComponent,
-      headerTitle: 'Create Group chat',
+      headerTitle: 'New group',
     },
   },
 }, {

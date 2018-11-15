@@ -8,10 +8,11 @@ import { withNavigation, StackActions } from 'react-navigation';
 import { createChatRoom } from '../../store/utils/firebase';
 import Button from '../../components/Button';
 import TextInput from '../../components/TextInput';
+import UserSearch from '../../components/UserSearch';
 
 const randomChatIcon = 'https://cdn0.iconfinder.com/data/icons/chat-2/100/Chat-05-512.png';
 
-const InitChat = ({
+const CreateGroupSheet = ({
   firebase,
   navigation,
   profileId,
@@ -19,28 +20,28 @@ const InitChat = ({
   setGroupName,
   logoUrl,
   setLogoUrl,
-  userId,
-  setUserId,
+  userIds,
+  setUserIds,
   error,
   setError,
 }) => {
   const onCreateGroupPressed = async () => {
-    if (groupName && userId) {
+    if (groupName && userIds) {
       const chatRoomResult = await createChatRoom(
         firebase,
         true,
-        [userId, profileId],
+        [...userIds, profileId],
         groupName,
         logoUrl || randomChatIcon,
       );
       console.log(chatRoomResult);
-      navigation.dispatch(StackActions.pop());
+      navigation.dispatch(StackActions.popToTop());
     } else {
       setError("Please fill at least group name and friend's user id");
     }
   };
   return (
-    <View>
+    <View style={{ flex: 1 }}>
       <TextInput
         placeholder="Group name"
         autoCapitalize="none"
@@ -55,13 +56,8 @@ const InitChat = ({
         value={logoUrl}
         onChangeText={setLogoUrl}
       />
-      <TextInput
-        placeholder="Friend's user id"
-        autoCapitalize="none"
-        autoCorrect={false}
-        value={userId}
-        onChangeText={setUserId}
-      />
+      <UserSearch onSelectionDone={setUserIds} />
+      <Text>{userIds.join(',')}</Text>
       <Button
         title="Create group!"
         titleColor="white"
@@ -80,6 +76,6 @@ export default compose(
   })),
   withState('groupName', 'setGroupName'),
   withState('logoUrl', 'setLogoUrl'),
-  withState('userId', 'setUserId'),
+  withState('userIds', 'setUserIds', []),
   withState('error', 'setError'),
-)(InitChat);
+)(CreateGroupSheet);

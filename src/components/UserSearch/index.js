@@ -18,12 +18,12 @@ const UserListComponent = ({
   : <UserList theme={theme} users={users} onUserPress={onUserPress} />);
 
 const UserSearch = ({
-  onSelectionDone, onUserPress, theme, searchString, setSearchString, users,
+  style, onSelectionDone, onUserPress, theme, searchString, setSearchString, users,
 }) => {
   const loading = !isLoaded(users);
   const hasUsers = !loading && !isEmpty(users);
   return (
-    <View style={{ flex: 1, backgroundColor: theme.backdrop }}>
+    <View style={[{ flex: 1, backgroundColor: theme.backdrop }, style]}>
       <View style={{ padding: 10, backgroundColor: theme.foreground }}>
         <TextInput
           placeholder="Search users"
