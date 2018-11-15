@@ -3,18 +3,18 @@ import { StyleSheet } from 'react-native';
 import { BottomTabBar } from 'react-navigation-tabs';
 import { withTheme } from '../../components/ThemedWrapper';
 
-const styles = StyleSheet.create({
-  dark: {
-    backgroundColor: '#191B2C',
+const styles = theme => StyleSheet.create({
+  container: {
+    backgroundColor: theme.bottomBar,
   },
-  light: {},
 });
 
-const ThemedTabBarComponent = ({ useDarkTheme, ...props }) => (
+const ThemedTabBarComponent = ({ theme, ...props }) => (
   <BottomTabBar
     {...props}
-    style={useDarkTheme ? styles.dark : styles.light}
-    inactiveTintColor={useDarkTheme ? '#7C8997' : 'grey'}
+    style={styles(theme).container}
+    activeTintColor={theme.barIconActive}
+    inactiveTintColor={theme.barIconInactive}
   />
 );
 

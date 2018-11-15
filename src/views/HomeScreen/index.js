@@ -48,10 +48,6 @@ const Tabs = createBottomTabNavigator(
   {
     initialRouteName: 'Chats',
     tabBarComponent: ThemedTabBarComponent,
-    tabBarOptions: {
-      activeTintColor: 'tomato',
-      inactiveTintColor: 'gray',
-    },
   },
 );
 
