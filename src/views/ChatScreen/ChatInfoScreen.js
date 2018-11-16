@@ -54,12 +54,20 @@ const ChatInfoScreen = ({ theme, chat }) => {
         </View>
       </View>
       <View style={style.section}>
+        <Button
+          title="Chat gallery"
+          titleStyle={{ alignSelf: 'flex-start' }}
+          color="transparent"
+          titleColor={theme.actionPrimary}
+        />
+      </View>
+      <View style={style.section}>
         <UserList
           scrollEnabled={false}
           users={_map(chat.members, (user, id) => ({ id, ...user }))}
         />
       </View>
-      <View style={infoStyle.section}>
+      <View style={style.section}>
         <Button
           title="Leave group"
           titleStyle={{ alignSelf: 'flex-start' }}
