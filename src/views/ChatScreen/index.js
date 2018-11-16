@@ -1,5 +1,5 @@
 import React from 'react';
-import { Text, View } from 'react-native';
+import { View, Text } from 'react-native';
 import { connect } from 'react-redux';
 import { compose, withState } from 'recompose';
 import { firebaseConnect, populate } from 'react-redux-firebase';
@@ -7,10 +7,11 @@ import TextInput from '../../components/TextInput';
 import Button from '../../components/Button';
 
 
-const sendMessage = async (firebaseRef, messageString, chatId) => {
+const sendMessage = async (firebaseRef, messageString, chatId, userId) => {
   const messageData = {
     body: messageString,
     createdAt: Date.now(),
+    sender: userId,
     attachment: '',
   };
   const res = await firebaseRef.push(`chats/${chatId}/messages`, messageData);
@@ -22,15 +23,16 @@ const ChatScreen = ({
   setMessageString,
   firebase,
   navigation,
+  profileUid,
 }) => {
   const sendAndClearMessage = async () => {
     const messageBody = messageString;
     setMessageString('');
-    await sendMessage(firebase, messageBody, navigation.state.params.chatId);
+    await sendMessage(firebase, messageBody, navigation.state.params.chatId, profileUid);
   };
   return (
     <View>
-
+      <Text>{JSON.stringify(profileUid, '', 2)}</Text>
       <TextInput
         placeholder="Message"
         onChangeText={setMessageString}
@@ -49,6 +51,7 @@ const populates = [
 
 const mapStateToProps = ({ firebase }, { navigation }) => ({
   chat: populate(firebase, `chats/${navigation.state.params.chatId}`, populates),
+  profileUid: firebase.auth.uid,
 });
 
 const enhance = compose(
