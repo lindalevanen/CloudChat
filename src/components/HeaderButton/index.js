@@ -8,13 +8,16 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 16,
-    color: colors.blush,
+    color: colors.actionHero,
   },
 });
 
-const HeaderButton = ({ navigation, onPress, title }) => (
+const HeaderButton = ({
+  navigation, onPress, title, children,
+}) => (
   <TouchableOpacity style={styles.container} onPress={onPress}>
-    <Text style={styles.title}>{title}</Text>
+    {title ? <Text style={styles.title}>{title}</Text> : null}
+    {children}
   </TouchableOpacity>
 );
 

@@ -1,13 +1,14 @@
 import React from 'react';
 import { Platform } from 'react-native';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 
 import ThemedHeaderComponent from '../../components/ThemedHeaderComponent';
 import lightTheme from '../../styles/colors/lightTheme';
 import darkTheme from '../../styles/colors/darkTheme';
+import colors from '../../styles/colors';
 import { getState } from '../../store';
 import HeaderButton from '../../components/HeaderButton';
 import ChatScreenHeaderButton from '../../components/ChatScreenHeaderButton';
-
 
 function getNavigationCallback(navigation, routeName) {
   return () => navigation.navigate(routeName);
@@ -16,7 +17,14 @@ function getNavigationCallback(navigation, routeName) {
 function getHeaderActionForRoute(routeName, navigation) {
   switch (routeName) {
     case 'Chats':
-      return <HeaderButton navigation={navigation} title="New chat" onPress={getNavigationCallback(navigation, 'CreateChatSheet')} />;
+      return (
+        <HeaderButton
+          navigation={navigation}
+          onPress={getNavigationCallback(navigation, 'CreateChatSheet')}
+        >
+          <MaterialCommunityIcons name="lead-pencil" size={24} color={colors.blush} />
+        </HeaderButton>
+      );
     case 'ChatScreen':
       return <ChatScreenHeaderButton navigation={navigation} />;
     default:
