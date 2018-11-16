@@ -6,10 +6,9 @@ import { firebaseConnect, populate } from 'react-redux-firebase';
 
 const ChatScreen = ({
   chat,
-  chatMembers,
 }) => (
   <View>
-    <Text>{JSON.stringify(chat, '', 2)}</Text>
+    <Text>{JSON.stringify(chat.messages ?? 'no messages', '', 2)}</Text>
   </View>
 );
 

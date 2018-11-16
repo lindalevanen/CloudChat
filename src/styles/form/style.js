@@ -14,10 +14,21 @@ export const styles = theme => ({
   input: {
     marginBottom: 10,
   },
-  section: {
+  panel: {
     backgroundColor: theme.foreground,
     borderColor: theme.separator,
     borderBottomWidth: 0.3,
+  },
+  setting: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+  section: {
     marginBottom: 18,
+  },
+  text: {
+    fontSize: 16,
+    color: theme.text1,
   },
 });

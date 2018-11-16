@@ -37,7 +37,7 @@ const ChatInfoScreen = ({ theme, chat }) => {
   const infoStyle = infoStyles(theme);
   return (
     <ScrollView style={style.view}>
-      <View style={[infoStyle.topContainer, style.section]}>
+      <View style={[infoStyle.topContainer, style.panel]}>
         <Avatar url={chat.avatarUrl} username={chat.title} />
         <View>
           <Text
@@ -53,7 +53,7 @@ const ChatInfoScreen = ({ theme, chat }) => {
           </Text>
         </View>
       </View>
-      <View style={style.section}>
+      <View style={[style.section, style.panel]}>
         <Button
           title="Chat gallery"
           titleStyle={{ alignSelf: 'flex-start' }}
@@ -61,13 +61,13 @@ const ChatInfoScreen = ({ theme, chat }) => {
           titleColor={theme.actionPrimary}
         />
       </View>
-      <View style={style.section}>
+      <View style={[style.section, style.panel]}>
         <UserList
           scrollEnabled={false}
           users={_map(chat.members, (user, id) => ({ id, ...user }))}
         />
       </View>
-      <View style={style.section}>
+      <View style={[style.section, style.panel]}>
         <Button
           title="Leave group"
           titleStyle={{ alignSelf: 'flex-start' }}

@@ -25,16 +25,10 @@ const Preferences = ({ navigation, firebase, theme }) => {
   }));
   const style = styles(theme);
   return (
-    <View>
-      <View style={[style.section]}>
-        <Button title="Change avatar" onPress={openAvatarSelectorSheet} color="transparent" titleStyle={{ alignSelf: 'flex-start' }} />
-      </View>
-      <View style={[style.section]}>
-        <Button title="Change username" onPress={openChangeUsernameSheet} color="transparent" titleStyle={{ alignSelf: 'flex-start' }} />
-      </View>
-      <View style={[style.section]}>
-        <Button title="Logout" onPress={logout} titleColor="red" color="transparent" titleStyle={{ alignSelf: 'flex-start' }} />
-      </View>
+    <View style={[style.section, style.panel]}>
+      <Button title="Change avatar" onPress={openAvatarSelectorSheet} color="transparent" titleStyle={{ alignSelf: 'flex-start' }} />
+      <Button title="Change username" onPress={openChangeUsernameSheet} color="transparent" titleStyle={{ alignSelf: 'flex-start' }} />
+      <Button title="Logout" onPress={logout} titleColor="red" color="transparent" titleStyle={{ alignSelf: 'flex-start' }} />
     </View>
   );
 };
