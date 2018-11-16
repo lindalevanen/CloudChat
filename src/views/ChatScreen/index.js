@@ -24,6 +24,7 @@ const sendMessage = (firebaseRef, messageString, chatId, userId) => {
 };
 
 const ChatScreen = ({
+  chat,
   messageString,
   setMessageString,
   firebase,
@@ -37,7 +38,7 @@ const ChatScreen = ({
   };
   return (
     <View>
-      <Text>{JSON.stringify(profileUid, '', 2)}</Text>
+      <Text>{JSON.stringify(chat.messages, '', 2)}</Text>
       <TextInput
         placeholder="Message"
         onChangeText={setMessageString}
