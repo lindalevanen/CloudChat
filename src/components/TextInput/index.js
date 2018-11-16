@@ -13,6 +13,7 @@ const styles = theme => ({
 });
 
 const TextInput = ({
+  useDarkTheme,
   theme,
   onChangeText,
   value,
@@ -26,6 +27,7 @@ const TextInput = ({
     placeholder={placeholder}
     placeholderTextColor={theme.inputPlaceholder}
     value={value}
+    keyboardAppearance={useDarkTheme ? 'dark' : 'light'}
     {...props}
   />
 );
