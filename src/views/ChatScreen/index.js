@@ -6,25 +6,6 @@ import { firebaseConnect, populate } from 'react-redux-firebase';
 import TextInput from '../../components/TextInput';
 import Button from '../../components/Button';
 
-const ChatScreen = ({
-  chat,
-  messageString,
-  setMessageString,
-  firebase,
-  navigation,
-}) => (
-  <View>
-
-    <TextInput
-      placeholder="Message"
-      onChangeText={setMessageString}
-      autoCorrect={false}
-      autoCapitalize="none"
-      value={messageString}
-    />
-    <Button title="Send" onPress={() => sendMessage(firebase, messageString, navigation.state.params.chatId)} />
-  </View>
-);
 
 const sendMessage = async (firebaseRef, messageString, chatId) => {
   const messageData = {
@@ -32,8 +13,34 @@ const sendMessage = async (firebaseRef, messageString, chatId) => {
     createdAt: Date.now(),
     attachment: '',
   };
-  const res = firebaseRef.push(`chats/${chatId}/messages`, messageData);
-  console.log(res);
+  const res = await firebaseRef.push(`chats/${chatId}/messages`, messageData);
+  return res;
+};
+
+const ChatScreen = ({
+  messageString,
+  setMessageString,
+  firebase,
+  navigation,
+}) => {
+  const sendAndClearMessage = async () => {
+    const messageBody = messageString;
+    setMessageString('');
+    await sendMessage(firebase, messageBody, navigation.state.params.chatId);
+  };
+  return (
+    <View>
+
+      <TextInput
+        placeholder="Message"
+        onChangeText={setMessageString}
+        autoCorrect={false}
+        autoCapitalize="none"
+        value={messageString}
+      />
+      <Button title="Send" onPress={sendAndClearMessage} />
+    </View>
+  );
 };
 
 const populates = [
