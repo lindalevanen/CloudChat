@@ -2,6 +2,7 @@ import React from 'react';
 import { Text, View, TouchableOpacity } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 
+import { withTheme } from '../ThemedWrapper';
 import Avatar from '../Avatar';
 
 const styles = theme => ({
@@ -57,4 +58,4 @@ const User = ({
   );
 };
 
-export default User;
+export default withTheme(User);
