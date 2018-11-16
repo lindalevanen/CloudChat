@@ -3,7 +3,7 @@ import { FlatList } from 'react-native';
 import User from '../User';
 
 const UserList = ({
-  theme, users, selection, onSelect, onUserPress,
+  users, selection, onSelect, onUserPress,
 }) => (
   <FlatList
     data={users}
@@ -11,7 +11,6 @@ const UserList = ({
     extraData={selection}
     renderItem={({ item }) => (
       <User
-        theme={theme}
         onPress={onUserPress}
         selectable={selection !== undefined}
         onSelect={onSelect}
