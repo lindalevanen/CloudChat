@@ -1,6 +1,6 @@
 import React from 'react';
 import { format } from 'date-fns';
-import { Text, View } from 'react-native';
+import { TouchableOpacity, Text, View } from 'react-native';
 
 import Avatar from '../Avatar';
 import { withTheme } from '../ThemedWrapper';
@@ -38,10 +38,11 @@ const styles = theme => ({
   },
 });
 
-const ChatPreview = ({ chat, theme }) => {
+const ChatPreview = ({ chat, theme, onPress }) => {
   const style = styles(theme);
+  const openChat = () => onPress(chat.id, chat.title, chat.avatarUrl);
   return (
-    <View style={[style.chatPreview]}>
+    <TouchableOpacity style={[style.chatPreview]} onPress={openChat}>
       <View style={[style.chatContainer]}>
         <Avatar url={chat.avatarUrl} />
         <View style={[style.summaryContainer]}>
@@ -56,7 +57,7 @@ const ChatPreview = ({ chat, theme }) => {
           {chat.lastMessage}
         </Text>
       </View>
-    </View>
+    </TouchableOpacity>
   );
 };
 

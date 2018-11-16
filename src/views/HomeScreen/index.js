@@ -14,6 +14,7 @@ import ChangeUsernameSheet from '../Settings/ProfileSettings/ChangeUsernameSheet
 import AvatarSelectorSheet from '../Settings/ProfileSettings/AvatarSelectorSheet';
 import CreateChatSheet from '../Chats/CreateChatSheet';
 import CreateGroupSheet from '../Chats/CreateGroupSheet';
+import ChatScreen from '../ChatScreen';
 import ThemedHeaderComponent from '../../components/ThemedHeaderComponent';
 import { resolveNavigationOptionsForScreen } from './routeUtils';
 
@@ -82,6 +83,12 @@ export default createStackNavigator({
     navigationOptions: {
       header: ThemedHeaderComponent,
       headerTitle: 'New group',
+    },
+  },
+  ChatScreen: {
+    screen: ChatScreen,
+    navigationOptions: {
+      header: ThemedHeaderComponent,
     },
   },
 }, {
