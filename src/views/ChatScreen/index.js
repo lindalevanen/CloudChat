@@ -7,15 +7,20 @@ import TextInput from '../../components/TextInput';
 import Button from '../../components/Button';
 
 
-const sendMessage = async (firebaseRef, messageString, chatId, userId) => {
+const sendMessage = (firebaseRef, messageString, chatId, userId) => {
+  if (messageString === '') {
+    return Promise.reject(new Error('Empty message not sent'));
+  }
+  if (!chatId || !userId) {
+    return Promise.reject(new Error('chatId or userId missing'));
+  }
   const messageData = {
     body: messageString,
     createdAt: Date.now(),
     sender: userId,
     attachment: '',
   };
-  const res = await firebaseRef.push(`chats/${chatId}/messages`, messageData);
-  return res;
+  return firebaseRef.push(`chats/${chatId}/messages`, messageData);
 };
 
 const ChatScreen = ({
