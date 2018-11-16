@@ -29,8 +29,11 @@ export function resolveNavigationOptionsForScreen({ navigation }) {
   let route;
   const { params, index } = navigation.state;
   if (params && params.chatName) {
-    headerTitle = params.chatName;
-    route = 'ChatScreen';
+    headerTitle = 'Chat info';
+    if (params.chatAvatarUrl) {
+      headerTitle = params.chatName;
+      route = 'ChatScreen';
+    }
   } else if (index === undefined) {
     headerTitle = navigation.state.routeName;
     route = navigation.state.routeName;
