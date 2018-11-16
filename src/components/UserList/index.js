@@ -3,12 +3,13 @@ import { FlatList } from 'react-native';
 import User from '../User';
 
 const UserList = ({
-  users, selection, onSelect, onUserPress,
+  users, scrollEnabled = true, selection, onSelect, onUserPress,
 }) => (
   <FlatList
     data={users}
     keyExtractor={({ id }) => id}
     extraData={selection}
+    scrollEnabled={scrollEnabled}
     renderItem={({ item }) => (
       <User
         onPress={onUserPress}

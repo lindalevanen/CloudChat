@@ -1,5 +1,5 @@
 import React from 'react';
-import { Text, View } from 'react-native';
+import { ScrollView, Text, View } from 'react-native';
 import { connect } from 'react-redux';
 import { compose } from 'recompose';
 import { firebaseConnect, populate } from 'react-redux-firebase';
@@ -36,7 +36,7 @@ const ChatInfoScreen = ({ theme, chat }) => {
   const style = styles(theme);
   const infoStyle = infoStyles(theme);
   return (
-    <View style={style.view}>
+    <ScrollView style={style.view}>
       <View style={[infoStyle.topContainer, style.section]}>
         <Avatar url={chat.avatarUrl} username={chat.title} />
         <View>
@@ -54,7 +54,10 @@ const ChatInfoScreen = ({ theme, chat }) => {
         </View>
       </View>
       <View style={style.section}>
-        <UserList users={_map(chat.members, (user, id) => ({ id, ...user }))} />
+        <UserList
+          scrollEnabled={false}
+          users={_map(chat.members, (user, id) => ({ id, ...user }))}
+        />
       </View>
       <View style={infoStyle.section}>
         <Button
@@ -64,7 +67,7 @@ const ChatInfoScreen = ({ theme, chat }) => {
           titleColor={theme.actionHero}
         />
       </View>
-    </View>
+    </ScrollView>
   );
 };
 
