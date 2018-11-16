@@ -10,12 +10,15 @@ import UserSearch from '../../components/UserSearch';
 import ChatMock from '../Chats';
 import SettingsView from '../Settings';
 import ThemedTabBarComponent from './ThemedTabBarComponent';
+
 import ChangeUsernameSheet from '../Settings/ProfileSettings/ChangeUsernameSheet';
 import AvatarSelectorSheet from '../Settings/ProfileSettings/AvatarSelectorSheet';
 import CreateChatSheet from '../Chats/CreateChatSheet';
 import CreateGroupSheet from '../Chats/CreateGroupSheet';
 import ChatScreen from '../ChatScreen';
 import ChatInfoScreen from '../ChatScreen/ChatInfoScreen';
+import UserInfoScreen from '../UserInfoScreen';
+
 import ThemedHeaderComponent from '../../components/ThemedHeaderComponent';
 import { resolveNavigationOptionsForScreen } from './routeUtils';
 
@@ -97,6 +100,9 @@ export default createStackNavigator({
     navigationOptions: {
       header: ThemedHeaderComponent,
     },
+  },
+  UserInfoScreen: {
+    screen: UserInfoScreen,
   },
 }, {
   // mode: 'modal',

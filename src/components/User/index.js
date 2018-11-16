@@ -1,5 +1,7 @@
 import React from 'react';
 import { Text, View, TouchableOpacity } from 'react-native';
+import { withNavigation, StackActions } from 'react-navigation';
+import { compose } from 'recompose';
 import { Ionicons } from '@expo/vector-icons';
 
 import { withTheme } from '../ThemedWrapper';
@@ -29,8 +31,23 @@ const styles = theme => ({
   },
 });
 
+const openUserInfoScreen = (navigation, userId) => navigation.dispatch(
+  StackActions.push({
+    routeName: 'UserInfoScreen',
+    params: {
+      userId,
+    },
+  }),
+);
+
 const User = ({
-  theme, user, selectable, onSelect, isSelected, onPress,
+  theme,
+  navigation,
+  user,
+  selectable,
+  onSelect,
+  isSelected,
+  onPress,
 }) => {
   const style = styles(theme);
   const onPressedAction = () => {
@@ -39,8 +56,7 @@ const User = ({
     } else if (onPress) {
       onPress(user.id);
     } else {
-      // open user profile
-      console.log(`open profile ${user.id}`);
+      openUserInfoScreen(navigation, user.id);
     }
   };
   return (
@@ -50,7 +66,11 @@ const User = ({
         <View style={style.nameContainer}>
           <Text style={style.text}>{user.username}</Text>
           {selectable && isSelected(user.id) ? (
-            <Ionicons name="md-checkmark-circle" color={theme.switchActive} size={24} />
+            <Ionicons
+              name="md-checkmark-circle"
+              color={theme.switchActive}
+              size={24}
+            />
           ) : null}
         </View>
       </View>
@@ -58,4 +78,9 @@ const User = ({
   );
 };
 
-export default withTheme(User);
+const enhance = compose(
+  withNavigation,
+  withTheme,
+);
+
+export default enhance(User);

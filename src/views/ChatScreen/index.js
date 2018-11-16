@@ -4,17 +4,13 @@ import { connect } from 'react-redux';
 import { compose } from 'recompose';
 import { firebaseConnect, populate } from 'react-redux-firebase';
 
-const ChatScreen = ({
-  chat,
-}) => (
+const ChatScreen = ({ chat }) => (
   <View>
     <Text>{JSON.stringify(chat.messages ?? 'no messages', '', 2)}</Text>
   </View>
 );
 
-const populates = [
-  { child: 'members', root: 'users' },
-];
+const populates = [{ child: 'members', root: 'users' }];
 
 const mapStateToProps = ({ firebase }, { navigation }) => ({
   chat: populate(firebase, `chats/${navigation.state.params.chatId}`, populates),
