@@ -1,6 +1,7 @@
 import React from 'react';
 import { Text, View } from 'react-native';
 
+import { withTheme } from '../ThemedWrapper';
 import Avatar from '../Avatar';
 
 const styles = theme => ({
@@ -46,4 +47,4 @@ const ProfileInfo = ({ profile, theme }) => {
   );
 };
 
-export default ProfileInfo;
+export default withTheme(ProfileInfo);
