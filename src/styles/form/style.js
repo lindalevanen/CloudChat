@@ -18,5 +18,6 @@ export const styles = theme => ({
     backgroundColor: theme.foreground,
     borderColor: theme.separator,
     borderBottomWidth: 0.3,
+    marginBottom: 18,
   },
 });
