@@ -44,7 +44,7 @@ const ChatPreview = ({ chat, theme, onPress }) => {
   return (
     <TouchableOpacity style={[style.chatPreview]} onPress={openChat}>
       <View style={[style.chatContainer]}>
-        <Avatar url={chat.avatarUrl} />
+        <Avatar url={chat.avatarUrl} username={chat.title} />
         <View style={[style.summaryContainer]}>
           <Text style={[style.chatTitleText]}>
             {chat && chat.title ? chat.title : '-'}

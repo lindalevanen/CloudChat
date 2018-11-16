@@ -24,7 +24,7 @@ const NoImageAvailable = ({ username, size }) => (
 
 const noUrl = url => url === undefined || url === '';
 
-const Avatar = ({ url, username, size = 60 }) => (noUrl(url) ? (
+const Avatar = ({ url, username = '', size = 60 }) => (noUrl(url) ? (
   <NoImageAvailable
     size={size}
     username={username}

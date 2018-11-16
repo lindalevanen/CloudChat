@@ -32,7 +32,7 @@ const CreateGroupSheet = ({
         true,
         [...userIds, profileId],
         groupName,
-        logoUrl || randomChatIcon,
+        logoUrl,
       );
       console.log(chatRoomResult);
       navigation.dispatch(StackActions.popToTop());
