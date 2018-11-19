@@ -4,12 +4,12 @@ import omit from 'lodash/omit';
 import uuidv4 from 'uuid/v4';
 
 const config = {
-  apiKey: 'AIzaSyATNwognBzftHzPB5BkfQF5IBJSF_4uaAY',
-  authDomain: 'snazzy-narwhal-on-fire.firebaseapp.com',
-  databaseURL: 'https://snazzy-narwhal-on-fire.firebaseio.com',
-  projectId: 'snazzy-narwhal-on-fire',
-  storageBucket: 'snazzy-narwhal-on-fire.appspot.com',
-  messagingSenderId: '502454037799',
+  apiKey: 'AIzaSyDkeQYJzG9EDpiHKvkQyWPJ-MBOzRtFdg4',
+  authDomain: 'mcc-fall-2018-g20-223013.firebaseapp.com',
+  databaseURL: 'https://mcc-fall-2018-g20-223013.firebaseio.com',
+  projectId: 'mcc-fall-2018-g20-223013',
+  storageBucket: 'mcc-fall-2018-g20-223013.appspot.com',
+  messagingSenderId: '924342250338',
 };
 
 const STORAGE_METADATA_PATH = 'storageMetadata/';
