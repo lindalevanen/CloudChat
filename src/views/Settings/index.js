@@ -5,6 +5,7 @@ import { withFirebase } from 'react-redux-firebase';
 import { compose } from 'recompose';
 import ProfileSettings from './ProfileSettings';
 import ThemeSettings from './ThemeSettings';
+import ImageSettings from './ImageSettings';
 import { withTheme } from '../../components/ThemedWrapper';
 
 const styles = theme => ({
@@ -17,6 +18,7 @@ const SettingsView = ({ theme }) => (
   <ScrollView style={styles(theme).container}>
     <ProfileSettings theme={theme} />
     <ThemeSettings theme={theme} />
+    <ImageSettings theme={theme} />
   </ScrollView>
 );
 
