@@ -30,8 +30,13 @@ const ThemeSettings = ({
   imageQuality,
   setImageQualityAction,
   navigation,
+  useDarkTheme,
 }) => {
+  // Styling
   const style = styles(theme);
+  const buttonColor = (useDarkTheme) ? 'white' : 'black';
+  data.forEach(d => d.color = buttonColor); //eslint-disable-line
+  data.forEach(d => d.labelColor = buttonColor); //eslint-disable-line
   const onImageQualitySaved = (buttons) => {
     try {
       const selected = buttons.find(b => b.selected);
@@ -55,13 +60,18 @@ const ThemeSettings = ({
   return (
     <View style={[style.section, style.setting, style.container, style.panel]}>
       <Text style={[style.text]}>Image quality</Text>
-      <VerticalButtons data={data} onPress={onImageQualitySaved} />
+      <VerticalButtons
+        style={[style.text, style.section, style.setting, style.container, style.panel]}
+        data={data}
+        onPress={onImageQualitySaved}
+      />
     </View>
   );
 };
 
 const mapStateToProps = state => ({
   imageQuality: state.settings.imageQuality,
+  useDarkTheme: state.settings.useDarkTheme,
 });
 
 const mapDispatchToProps = dispatch => ({
