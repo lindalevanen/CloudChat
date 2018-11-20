@@ -2,9 +2,8 @@ import React from 'react';
 import {
   Text, View,
 } from 'react-native';
-import { firebaseConnect } from 'react-redux-firebase';
 import { connect } from 'react-redux';
-import { compose, withState } from 'recompose';
+import { compose } from 'recompose';
 import { withNavigation } from 'react-navigation';
 
 import { withTheme } from '../../../components/ThemedWrapper';
@@ -28,24 +27,23 @@ const data = [
 
 const ThemeSettings = ({
   theme,
-  firebase,
-  currentImageQuality,
+  imageQuality,
+  setImageQualityAction,
+  navigation,
 }) => {
   const style = styles(theme);
-  const onImageQualitySaved = async (buttons) => {
+  const onImageQualitySaved = (buttons) => {
     try {
       const selected = buttons.find(b => b.selected);
       const qualitySelected = selected.value.toLowerCase();
-      const imageQuality = (qualitySelected === 'original') ? '' : qualitySelected;
-      // Update profile to firebase with firebaseConnect
-      // (successful updates flow back to redux)
-      await firebase.updateProfile({ imageQuality });
+      setImageQualityAction(qualitySelected);
+      navigation.setParams({ imageQuality: qualitySelected });
     } catch (e) {
       console.log(`ImageQuality change failed: ${e}`);
     }
   };
-  // Originally select the proper quality from profile information
-  const expectedLabel = (currentImageQuality) ? currentImageQuality.toLowerCase() : '';
+  // Originally select the proper quality from profile infor smation
+  const expectedLabel = (imageQuality) ? imageQuality.toLowerCase() : '';
   const expectedOption = data.find(d => d.label.toLowerCase() === expectedLabel);
   // Deselect old option and select right one
   if (expectedOption) {
@@ -63,7 +61,7 @@ const ThemeSettings = ({
 };
 
 const mapStateToProps = state => ({
-  currentImageQuality: state.firebase.profile.imageQuality,
+  imageQuality: state.settings.imageQuality,
 });
 
 const mapDispatchToProps = dispatch => ({
@@ -73,9 +71,7 @@ const mapDispatchToProps = dispatch => ({
 const enhance = compose(
   withTheme,
   withNavigation,
-  firebaseConnect(),
   connect(mapStateToProps, mapDispatchToProps),
-  withState('imageQuality', 'setImageQuality', ({ imageQuality }) => imageQuality),
 );
 
 export default enhance(ThemeSettings);
