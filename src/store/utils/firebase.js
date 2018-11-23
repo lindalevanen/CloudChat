@@ -106,3 +106,19 @@ export function uploadAvatar(firebaseRef, file, profileUid) {
     profileUid,
   );
 }
+
+export function sendMessage(firebaseRef, messageString, chatId, userId) {
+  if (messageString === '') {
+    return Promise.reject(new Error('Empty message not sent'));
+  }
+  if (!chatId || !userId) {
+    return Promise.reject(new Error('chatId or userId missing'));
+  }
+  const messageData = {
+    body: messageString,
+    createdAt: Date.now(),
+    sender: userId,
+    attachment: '',
+  };
+  return firebaseRef.push(`chats/${chatId}/messages`, messageData);
+}
