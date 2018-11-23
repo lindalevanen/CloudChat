@@ -5,22 +5,9 @@ import { compose, withState } from 'recompose';
 import { firebaseConnect, populate } from 'react-redux-firebase';
 import TextInput from '../../components/TextInput';
 import Button from '../../components/Button';
+import { sendMessage } from '../../store/utils/firebase';
 
-const sendMessage = (firebaseRef, messageString, chatId, userId) => {
-  if (messageString === '') {
-    return Promise.reject(new Error('Empty message not sent'));
   }
-  if (!chatId || !userId) {
-    return Promise.reject(new Error('chatId or userId missing'));
-  }
-  const messageData = {
-    body: messageString,
-    createdAt: Date.now(),
-    sender: userId,
-    attachment: '',
-  };
-  return firebaseRef.push(`chats/${chatId}/messages`, messageData);
-};
 
 const ChatScreen = ({
   chat,
