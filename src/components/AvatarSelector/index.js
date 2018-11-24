@@ -9,6 +9,8 @@ import { uploadAvatar } from '../../store/utils/firebase';
 import urlToBlob from '../../store/utils/urlToBlob';
 import Avatar from '../Avatar';
 import Button from '../Button';
+import { withTheme } from '../ThemedWrapper';
+import { styles } from '../../styles/form/style';
 
 const imgOptions = {
   mediaTypes: ImagePicker.MediaTypeOptions.Images,
@@ -37,7 +39,9 @@ const AvatarSelector = ({
   error,
   setError,
   imageQuality,
+  theme,
 }) => {
+  const style = styles(theme);
   const resizeImage = async (originalUri, resolution) => {
     const { width, height } = resolution;
     const actions = [{
@@ -88,12 +92,13 @@ const AvatarSelector = ({
     }
   };
   return (
-    <View>
-      <Text>{loading ? 'loading' : 'ready'}</Text>
-      <Text>{error}</Text>
-      <Avatar url={profile.avatarUrl} size={120} />
-      <Button title="take new" onPress={takeFromCamera} />
-      <Button title="pick photo" onPress={pickImage} />
+    <View style={[style.view]}>
+      <View style={[style.container, style.setting]}>
+        <Text>{error}</Text>
+        <Avatar url={profile.avatarUrl} size={120} />
+        <Button title="Camera" onPress={takeFromCamera} type="Success" />
+        <Button title="Gallery" onPress={pickImage} type="Success" />
+      </View>
     </View>
   );
 };
@@ -105,6 +110,7 @@ const mapStateToProps = state => ({
 });
 
 const enhancer = compose(
+  withTheme,
   firebaseConnect(),
   withState('error', 'setError', null),
   withState('loading', 'setLoading', false),
