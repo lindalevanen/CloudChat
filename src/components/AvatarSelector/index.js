@@ -1,6 +1,6 @@
 import React from 'react';
 import { Text, View } from 'react-native';
-import { ImagePicker, Permissions } from 'expo';
+import { ImagePicker, ImageManipulator, Permissions } from 'expo';
 import { compose, withState } from 'recompose';
 import { firebaseConnect } from 'react-redux-firebase';
 import { connect } from 'react-redux';
@@ -17,6 +17,17 @@ const imgOptions = {
   exif: false,
 };
 
+const resolutions = {
+  low: {
+    width: 640,
+    height: 480,
+  },
+  high: {
+    width: 1280,
+    height: 960,
+  },
+};
+
 const AvatarSelector = ({
   firebase,
   profile,
@@ -25,17 +36,34 @@ const AvatarSelector = ({
   setLoading,
   error,
   setError,
+  imageQuality,
 }) => {
+  const resizeImage = async (originalUri, resolution) => {
+    const { width, height } = resolution;
+    const actions = [{
+      resize: {
+        width,
+        height,
+      },
+    }];
+    const saveOptions = {
+      format: 'jpeg',
+    };
+    const resizedResult = await ImageManipulator.manipulateAsync(originalUri, actions, saveOptions);
+    const { uri } = resizedResult;
+    return uri;
+  };
   const handleResult = async (result) => {
     if (!result.cancelled) {
       setLoading(true);
       const { uri } = result;
-      const file = await urlToBlob(uri);
+      const resolution = resolutions[imageQuality];
+      const finalUri = (resolution) ? await resizeImage(uri, resolution) : uri;
+      const file = await urlToBlob(finalUri);
       const {
         uploadTaskSnapshot: { ref },
       } = await uploadAvatar(firebase, file, profileUid);
       const downloadUrl = await ref.getDownloadURL();
-
       await firebase.updateProfile({ avatarUrl: downloadUrl });
       setLoading(false);
     }
@@ -73,6 +101,7 @@ const AvatarSelector = ({
 const mapStateToProps = state => ({
   profile: state.firebase.profile,
   profileUid: state.firebase.auth.uid,
+  imageQuality: state.settings.imageQuality,
 });
 
 const enhancer = compose(
