@@ -62,7 +62,7 @@ const AvatarSelector = ({
       const file = await urlToBlob(finalUri);
       const {
         uploadTaskSnapshot: { ref },
-      } = await uploadAvatar(firebase, file, profileUid);
+      } = await uploadAvatar(firebase, file, profileUid, imageQuality);
       const downloadUrl = await ref.getDownloadURL();
       await firebase.updateProfile({ avatarUrl: downloadUrl });
       setLoading(false);
