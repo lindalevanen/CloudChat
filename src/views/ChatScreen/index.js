@@ -7,15 +7,22 @@ import TextInput from '../../components/TextInput';
 import Button from '../../components/Button';
 import { sendMessage } from '../../store/utils/firebase';
 
-const ChatScreen = ({
-  chat,
-  messageString,
-  setMessageString,
-  firebase,
-  navigation,
-  profileUid,
-}) => {
-  const sendAndClearMessage = async () => {
+let scrollView;
+class ChatScreen extends React.Component {
+  componentDidUpdate(props) {
+    if (props.chat.messages.length !== this.props.chat.messages.length) {
+      scrollView.scrollToEnd();
+    }
+  }
+
+  sendAndClearMessage = async () => {
+    const {
+      setMessageString,
+      messageString,
+      firebase,
+      navigation,
+      profileUid,
+    } = this.props;
     const messageBody = messageString;
     setMessageString('');
     await sendMessage(
@@ -25,22 +32,26 @@ const ChatScreen = ({
       profileUid,
     );
   };
-  return (
-    <View style={{ flex: 1 }}>
-      <ScrollView style={{ flex: 1 }}>
-        <Text>{JSON.stringify(chat.messages, '', 2)}</Text>
-      </ScrollView>
-      <TextInput
-        placeholder="Message"
-        onChangeText={setMessageString}
-        autoCorrect={false}
-        autoCapitalize="none"
-        value={messageString}
-      />
-      <Button title="Send" onPress={sendAndClearMessage} />
-    </View>
-  );
-};
+
+  render() {
+    const { chat, messageString, setMessageString } = this.props;
+    return (
+      <View style={{ flex: 1 }}>
+        <ScrollView style={{ flex: 1 }} ref={(ref) => { scrollView = ref; }}>
+          <Text>{JSON.stringify(chat.messages, '', 2)}</Text>
+        </ScrollView>
+        <TextInput
+          placeholder="Message"
+          onChangeText={setMessageString}
+          autoCorrect={false}
+          autoCapitalize="none"
+          value={messageString}
+        />
+        <Button title="Send" onPress={this.sendAndClearMessage} />
+      </View>
+    );
+  }
+}
 
 const populates = [{ child: 'members', root: 'users' }];
 
