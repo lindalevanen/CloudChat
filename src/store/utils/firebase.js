@@ -97,12 +97,18 @@ export function uploadImage(firebaseRef, file, profileUid) {
   );
 }
 
-export function uploadAvatar(firebaseRef, file, profileUid) {
+function nameImage(quality = null) {
+  const uid = generateUid();
+  const name = (quality !== 'original') ? `${quality}_${uid}` : uid;
+  return name;
+}
+
+export function uploadAvatar(firebaseRef, file, profileUid, quality = null) {
   return uploadImageWithMetadata(
     firebaseRef,
     file,
     `userAvatars/${profileUid}`,
-    `${generateUid()}.jpg`,
+    `${nameImage(quality)}.jpg`,
     profileUid,
   );
 }
