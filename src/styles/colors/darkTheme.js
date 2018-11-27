@@ -26,7 +26,7 @@ const palette = {
   text4: colors.white,
   messageBubble: colors.blue,
   ownMessageBubble: colors.blueGreen,
-  messageSender: colors.darkGrey,
+  messageSender: colors.lightgrey,
   messageBody: colors.black,
 };
 
