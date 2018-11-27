@@ -3,7 +3,7 @@ import { Text, View } from 'react-native';
 import { connect } from 'react-redux';
 import { compose } from 'recompose';
 
-import Avatar from '../../components/Avatar';
+import { AvatarWithProfileLink } from '../../components/Avatar';
 import { withTheme } from '../../components/ThemedWrapper';
 
 const styles = theme => ({
@@ -42,19 +42,23 @@ const styles = theme => ({
 });
 
 const Message = ({
-  theme,
-  sender,
-  message,
-  profileUid,
+  theme, sender, message, profileUid,
 }) => {
   const style = styles(theme);
   const ownMessage = profileUid === sender.id;
   return (
     <View style={[style.container, ownMessage && style.ownMessage]}>
-      <Avatar size={44} url={sender.avatarUrl} username={sender.username} />
+      <AvatarWithProfileLink
+        size={44}
+        url={sender.avatarUrl}
+        username={sender.username}
+        userId={sender.id}
+      />
       <View style={[style.messageBubble, ownMessage && style.ownBubble]}>
         <Text style={style.sender}>{sender.username}</Text>
-        <Text style={style.messageBody}>{message.originalMessage || message.body}</Text>
+        <Text style={style.messageBody}>
+          {message.originalMessage || message.body}
+        </Text>
       </View>
     </View>
   );
