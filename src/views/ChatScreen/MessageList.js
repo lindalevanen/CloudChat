@@ -13,6 +13,8 @@ const styles = theme => ({
   },
 });
 
+let scrollerRef;
+
 const MessageList = ({
   theme, style, chat, messageList,
 }) => {
@@ -22,6 +24,10 @@ const MessageList = ({
       data={messageList}
       keyExtractor={({ id }) => id}
       style={[themedStyle.container, style]}
+      ref={(ref) => { scrollerRef = ref; }}
+      onContentSizeChange={() => {
+        scrollerRef.scrollToEnd({ animated: true });
+      }}
       renderItem={({ item }) => (
         <Message sender={{ id: item.sender, ...chat.members[item.sender] }} message={item} />
       )}
