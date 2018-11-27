@@ -13,13 +13,15 @@ const styles = theme => ({
   },
 });
 
-const MessageList = ({ theme, chat, messageList }) => {
-  const style = styles(theme);
+const MessageList = ({
+  theme, style, chat, messageList,
+}) => {
+  const themedStyle = styles(theme);
   return (
     <FlatList
       data={messageList}
       keyExtractor={({ id }) => id}
-      style={style.container}
+      style={[themedStyle.container, style]}
       renderItem={({ item }) => (
         <Message sender={{ id: item.sender, ...chat.members[item.sender] }} message={item} />
       )}
