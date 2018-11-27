@@ -21,7 +21,7 @@ const palette = {
   inputBackground: colors.blueGrey,
   inputPlaceholder: colors.darkGrey,
   text1: colors.white,
-  text2: colors.white,
+  text2: colors.grey,
   text3: colors.white,
   text4: colors.white,
 };

@@ -23,7 +23,7 @@ const ThemeSettings = ({
   };
   const style = styles(theme);
   return (
-    <View style={[style.section, style.setting, style.container, style.panel]}>
+    <View style={[style.setting, style.container, styles.panel]}>
       <Text style={[style.text]}>Use dark theme</Text>
       <Switch value={useDarkTheme} onValueChange={setDarkMode} />
     </View>

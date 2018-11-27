@@ -23,6 +23,7 @@ export const styles = theme => ({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
+    minHeight: 56,
   },
   section: {
     marginBottom: 18,

@@ -1,69 +1,39 @@
 import React from 'react';
-import {
-  Text, View,
-} from 'react-native';
+import { Text, View } from 'react-native';
 import { connect } from 'react-redux';
 import { compose } from 'recompose';
-import { withNavigation } from 'react-navigation';
 
 import { withTheme } from '../../../components/ThemedWrapper';
-import VerticalButtons from '../../../components/VerticalButtons';
+import RadioButtons from '../../../components/RadioButtons';
 import { changeSetting } from '../../../store/settings/actions';
+
 import { styles } from '../../../styles/form/style';
 
-// Label for what is in the UI, value for the prefix for proper image in Firebase Storage
-const data = [
+const options = [
   {
+    value: 'low',
     label: 'Low',
   },
   {
+    value: 'high',
     label: 'High',
   },
   {
+    value: 'original',
     label: 'Original',
-    selected: true,
   },
 ];
 
-const ThemeSettings = ({
-  theme,
-  imageQuality,
-  setImageQualityAction,
-  navigation,
-  useDarkTheme,
-}) => {
-  // Styling
+const ThemeSettings = ({ theme, imageQuality, setImageQuality }) => {
   const style = styles(theme);
-  const buttonColor = (useDarkTheme) ? 'white' : 'black';
-  data.forEach(d => d.color = buttonColor); //eslint-disable-line
-  data.forEach(d => d.labelColor = buttonColor); //eslint-disable-line
-  const onImageQualitySaved = (buttons) => {
-    try {
-      const selected = buttons.find(b => b.selected);
-      const qualitySelected = selected.value.toLowerCase();
-      setImageQualityAction(qualitySelected);
-      navigation.setParams({ imageQuality: qualitySelected });
-    } catch (e) {
-      console.log(`ImageQuality change failed: ${e}`);
-    }
-  };
-  // Originally select the proper quality from profile infor smation
-  const expectedLabel = (imageQuality) ? imageQuality.toLowerCase() : '';
-  const expectedOption = data.find(d => d.label.toLowerCase() === expectedLabel);
-  // Deselect old option and select right one
-  if (expectedOption) {
-    const currentOption = data.find(d => d.selected);
-    if (currentOption) currentOption.selected = false;
-    expectedOption.selected = true;
-  }
-  // Render settings
   return (
-    <View style={[style.section, style.setting, style.container, style.panel]}>
+    <View style={[style.setting, style.container, styles.panel]}>
       <Text style={[style.text]}>Image quality</Text>
-      <VerticalButtons
-        style={[style.text, style.section, style.setting, style.container, style.panel]}
-        data={data}
-        onPress={onImageQualitySaved}
+      <RadioButtons
+        showLabels
+        options={options}
+        selectedValue={imageQuality}
+        onChange={setImageQuality}
       />
     </View>
   );
@@ -71,17 +41,18 @@ const ThemeSettings = ({
 
 const mapStateToProps = state => ({
   imageQuality: state.settings.imageQuality,
-  useDarkTheme: state.settings.useDarkTheme,
 });
 
 const mapDispatchToProps = dispatch => ({
-  setImageQualityAction: value => dispatch(changeSetting('imageQuality', value)),
+  setImageQuality: value => dispatch(changeSetting('imageQuality', value)),
 });
 
 const enhance = compose(
   withTheme,
-  withNavigation,
-  connect(mapStateToProps, mapDispatchToProps),
+  connect(
+    mapStateToProps,
+    mapDispatchToProps,
+  ),
 );
 
 export default enhance(ThemeSettings);
