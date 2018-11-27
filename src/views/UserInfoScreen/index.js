@@ -1,15 +1,12 @@
 import React from 'react';
-import { View } from 'react-native';
 import { firebaseConnect } from 'react-redux-firebase';
 import { connect } from 'react-redux';
 import { compose } from 'recompose';
 
 import ProfileInfo from '../../components/ProfileInfo';
 
-const UserInfoScreen = ({ profile, navigation }) => (
-  <View>
-    <ProfileInfo profile={profile} />
-  </View>
+const UserInfoScreen = ({ profile }) => (
+  <ProfileInfo profile={profile} />
 );
 
 const enhance = compose(

@@ -1,14 +1,12 @@
 import React from 'react';
 import { Text, View } from 'react-native';
 
+import { styles as formStyles } from '../../styles/form/style';
+
 import { withTheme } from '../ThemedWrapper';
 import Avatar from '../Avatar';
 
 const styles = theme => ({
-  container: {
-    padding: 10,
-    flex: 1,
-  },
   section: {
     backgroundColor: theme.foreground,
     borderColor: theme.separator,
@@ -27,21 +25,24 @@ const styles = theme => ({
 
 const ProfileInfo = ({ profile, theme }) => {
   const style = styles(theme);
+  const formStyle = formStyles(theme);
   return (
-    <View style={[style.topContainer, style.section]}>
-      <Avatar url={profile.avatarUrl} username={profile.username} />
-      <View>
-        <Text
-          style={[
-            style.profileText,
-            { marginTop: 10, marginBottom: 5, fontWeight: 'bold' },
-          ]}
-        >
-          {profile.username}
-        </Text>
-        <Text style={[style.profileText, { marginBottom: 10 }]}>
-          {profile.email}
-        </Text>
+    <View style={formStyle.view}>
+      <View style={[style.topContainer, style.section]}>
+        <Avatar url={profile.avatarUrl} username={profile.username} />
+        <View>
+          <Text
+            style={[
+              style.profileText,
+              { marginTop: 10, marginBottom: 5, fontWeight: 'bold' },
+            ]}
+          >
+            {profile.username}
+          </Text>
+          <Text style={[style.profileText, { marginBottom: 10 }]}>
+            {profile.email}
+          </Text>
+        </View>
       </View>
     </View>
   );
