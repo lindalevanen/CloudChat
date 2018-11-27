@@ -33,7 +33,7 @@ const Avatar = ({ url, username = '', size = 60 }) => (noUrl(url) ? (
   <Image
     style={[{ height: size, width: size }]}
     imageStyle={{ ...styles.circle, borderRadius: size / 2 }}
-    source={{ uri: url }}
+    source={{ uri: url, cache: 'force-cache' }}
     indicator={ProgressBar}
   />
 ));
