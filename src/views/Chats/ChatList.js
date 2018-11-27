@@ -13,6 +13,7 @@ const createOpenChatCallback = navigation => (
   StackActions.push({
     routeName: 'ChatScreen',
     params: {
+      headerTitle: chatName,
       chatId,
       chatName, // to pass these to the header component
       chatAvatarUrl,

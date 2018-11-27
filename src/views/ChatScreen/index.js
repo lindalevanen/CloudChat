@@ -1,20 +1,17 @@
 import React from 'react';
-import { ScrollView, View, Text } from 'react-native';
+import { View } from 'react-native';
 import { connect } from 'react-redux';
 import { compose, withState } from 'recompose';
 import { firebaseConnect, populate } from 'react-redux-firebase';
-import TextInput from '../../components/TextInput';
-import Button from '../../components/Button';
+import _get from 'lodash/get';
+import _map from 'lodash/map';
+
+import MessageList from './MessageList';
+import MessageInput from './MessageInput';
+
 import { sendMessage } from '../../store/utils/firebase';
 
-let scrollView;
 class ChatScreen extends React.Component {
-  componentDidUpdate(props) {
-    if (props.chat.messages.length !== this.props.chat.messages.length) {
-      scrollView.scrollToEnd();
-    }
-  }
-
   sendAndClearMessage = async () => {
     const {
       setMessageString,
@@ -35,19 +32,15 @@ class ChatScreen extends React.Component {
 
   render() {
     const { chat, messageString, setMessageString } = this.props;
+    const messageList = _map(_get(chat, 'messages', {}), (message, id) => ({ id, ...message }));
     return (
       <View style={{ flex: 1 }}>
-        <ScrollView style={{ flex: 1 }} ref={(ref) => { scrollView = ref; }}>
-          <Text>{JSON.stringify(chat.messages, '', 2)}</Text>
-        </ScrollView>
-        <TextInput
-          placeholder="Message"
-          onChangeText={setMessageString}
-          autoCorrect={false}
-          autoCapitalize="none"
-          value={messageString}
+        <MessageList chat={chat} messageList={messageList} />
+        <MessageInput
+          messageString={messageString}
+          setMessageString={setMessageString}
+          sendMessage={this.sendAndClearMessage}
         />
-        <Button title="Send" onPress={this.sendAndClearMessage} />
       </View>
     );
   }

@@ -24,6 +24,10 @@ const palette = {
   text2: colors.grey,
   text3: colors.white,
   text4: colors.white,
+  messageBubble: colors.blue,
+  ownMessageBubble: colors.blueGreen,
+  messageSender: colors.darkGrey,
+  messageBody: colors.black,
 };
 
 export default palette;

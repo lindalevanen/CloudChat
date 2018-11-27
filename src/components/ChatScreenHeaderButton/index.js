@@ -19,6 +19,7 @@ const openChatInfoScreen = (navigation, chatId, chatName) => () => navigation.di
   StackActions.push({
     routeName: 'ChatInfoScreen',
     params: {
+      headerTitle: 'Chat info',
       chatId,
       chatName, // for header to show
     },

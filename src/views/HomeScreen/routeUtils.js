@@ -36,12 +36,14 @@ export function resolveNavigationOptionsForScreen({ navigation }) {
   let headerTitle;
   let route;
   const { params, index } = navigation.state;
-  if (params && params.chatName) {
-    headerTitle = 'Chat info';
-    if (params.chatAvatarUrl) {
-      headerTitle = params.chatName;
-      route = 'ChatScreen';
-    }
+  // if (params && params.chatName) {
+  //   headerTitle = 'Chat info';
+  //   if (params.chatAvatarUrl) {
+  //     headerTitle = params.chatName;
+  //     route = 'ChatScreen';
+  //   }
+  if (params && params.headerTitle) {
+    headerTitle = params.headerTitle;
   } else if (index === undefined) {
     headerTitle = navigation.state.routeName;
     route = navigation.state.routeName;
