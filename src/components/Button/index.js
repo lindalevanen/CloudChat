@@ -5,7 +5,7 @@ import { withTheme } from '../ThemedWrapper';
 const styles = StyleSheet.create({
   container: {
     padding: 12,
-    borderRadius: 4,
+    borderRadius: 10,
     alignItems: 'center',
   },
   title: {

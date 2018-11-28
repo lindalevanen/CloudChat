@@ -130,23 +130,24 @@ export function pushChatEvent(firebaseRef, eventData, path) {
   return firebaseRef.push(path, eventData);
 }
 
-export function sendMessage(firebaseRef, messageString, chatId, userId) {
+export function sendMessage(firebaseRef, messageString, chatId, sender, attachment = null) {
   if (messageString === '') {
     return Promise.reject(new Error('Empty message not sent'));
   }
-  if (!chatId || !userId) {
-    return Promise.reject(new Error('chatId or userId missing'));
+  if (!chatId || !sender) {
+    return Promise.reject(new Error('chatId or sender userId missing'));
   }
   const messageEvent = {
     type: 'message',
     timestamp: Date.now(),
     payload: {
       body: messageString,
-      sender: userId,
-      // attachment: {},
+      sender,
+      attachment,
     },
   };
 
+  console.log(messageEvent);
   return pushChatEvent(firebaseRef, messageEvent, `chatEvents/${chatId}`);
 }
 

@@ -7,7 +7,7 @@ const styles = theme => ({
     backgroundColor: theme.inputBackground,
     color: theme.text1,
     padding: 12,
-    borderRadius: 4,
+    borderRadius: 10,
     fontSize: 16,
   },
 });
