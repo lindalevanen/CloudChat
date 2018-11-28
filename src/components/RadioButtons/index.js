@@ -32,7 +32,7 @@ const Checkbox = ({
         name={
         selected ? 'check-circle' : 'checkbox-blank-circle-outline'
       }
-        size="24"
+        size={24}
       />
     </TouchableOpacity>
   );
