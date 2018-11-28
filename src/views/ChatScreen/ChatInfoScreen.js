@@ -45,8 +45,11 @@ const ChatInfoScreen = ({ firebase, theme, chat, profileUid, navigation }) => {
       navigation.state.params.chatId,
       profileUid
     )
-    console.log(res)
     navigation.dispatch(StackActions.popToTop())
+  }
+
+  if(!chat || !chat.members) {  // without this the app crashes on leaving group
+    return <View />
   }
 
   return (
