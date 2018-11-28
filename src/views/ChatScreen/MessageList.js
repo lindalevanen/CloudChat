@@ -6,8 +6,9 @@ import Message from './Message';
 
 const styles = theme => ({
   container: {
-    flex: 1,
     backgroundColor: theme.backdrop,
+  },
+  content: {
     paddingVertical: 20,
     paddingHorizontal: 10,
   },
@@ -21,15 +22,23 @@ const MessageList = ({
   const themedStyle = styles(theme);
   return (
     <FlatList
+      style={themedStyle.container}
       data={messageList}
       keyExtractor={({ id }) => id}
-      style={[themedStyle.container, style]}
-      ref={(ref) => { scrollerRef = ref; }}
+      contentContainerStyle={[themedStyle.container, style]}
+      ref={(ref) => {
+        scrollerRef = ref;
+      }}
       onContentSizeChange={() => {
+        console.log('content size change');
         scrollerRef.scrollToEnd({ animated: true });
       }}
+      // keyboardDismissMode="on-drag"
       renderItem={({ item }) => (
-        <Message sender={{ id: item.sender, ...chat.members[item.sender] }} message={item} />
+        <Message
+          sender={{ id: item.sender, ...chat.members[item.sender] }}
+          message={item}
+        />
       )}
     />
   );

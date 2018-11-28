@@ -1,5 +1,5 @@
 import React from 'react';
-import { SafeAreaView } from 'react-native';
+import { KeyboardAvoidingView, SafeAreaView } from 'react-native';
 import { connect } from 'react-redux';
 import { compose, withState } from 'recompose';
 import { firebaseConnect, populate } from 'react-redux-firebase';
@@ -37,13 +37,19 @@ class ChatScreen extends React.Component {
     } = this.props;
     const messageList = _map(_get(chat, 'messages', {}), (message, id) => ({ id, ...message }));
     return (
-      <SafeAreaView style={{ flex: 1, backgroundColor: theme.backdrop }}>
-        <MessageList style={{ flex: 1 }} chat={chat} messageList={messageList} />
-        <MessageInput
-          messageString={messageString}
-          setMessageString={setMessageString}
-          sendMessage={this.sendAndClearMessage}
-        />
+      <SafeAreaView style={{ flex: 1, backgroundColor: theme.foreground }}>
+        <KeyboardAvoidingView
+          style={{ flex: 1 }}
+          behavior="padding"
+          keyboardVerticalOffset={90}
+        >
+          <MessageList chat={chat} messageList={messageList} />
+          <MessageInput
+            messageString={messageString}
+            setMessageString={setMessageString}
+            sendMessage={this.sendAndClearMessage}
+          />
+        </KeyboardAvoidingView>
       </SafeAreaView>
     );
   }

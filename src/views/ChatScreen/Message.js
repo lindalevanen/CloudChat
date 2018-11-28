@@ -15,8 +15,8 @@ const styles = theme => ({
   },
   messageBubble: {
     marginLeft: 10,
-    padding: 6,
-    paddingHorizontal: 10,
+    padding: 8,
+    paddingHorizontal: 14,
     backgroundColor: theme.messageBubble,
     borderRadius: 14,
     borderTopLeftRadius: 0,
@@ -33,7 +33,7 @@ const styles = theme => ({
     flexDirection: 'row-reverse',
   },
   ownBubble: {
-    margin: 0,
+    marginLeft: 0,
     marginRight: 10,
     borderTopLeftRadius: 14,
     borderBottomRightRadius: 0,
