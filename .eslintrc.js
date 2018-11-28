@@ -10,7 +10,8 @@ module.exports = {
       }
     ],
     "react/prop-types": 1,
-    "import/prefer-default-export": 0
+    "import/prefer-default-export": 0,
+    "no-nested-ternary": 0
   },
   env: {
     browser: true
