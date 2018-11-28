@@ -1,6 +1,7 @@
 import React from 'react';
 import { Text, View, TouchableOpacity } from 'react-native';
 import { withNavigation, StackActions } from 'react-navigation';
+import { connect } from 'react-redux';
 import { compose } from 'recompose';
 import { Ionicons } from '@expo/vector-icons';
 
@@ -20,7 +21,6 @@ const styles = theme => ({
   text: {
     fontSize: 16,
     fontWeight: 'bold',
-    color: theme.text1,
   },
   nameContainer: {
     flex: 1,
@@ -31,10 +31,11 @@ const styles = theme => ({
   },
 });
 
-const openUserInfoScreen = (navigation, userId) => navigation.dispatch(
+const openUserInfoScreen = (navigation, userId, username) => navigation.dispatch(
   StackActions.push({
     routeName: 'UserInfoScreen',
     params: {
+      headerTitle: username,
       userId,
     },
   }),
@@ -48,15 +49,17 @@ const User = ({
   onSelect,
   isSelected,
   onPress,
+  profileUid,
 }) => {
   const style = styles(theme);
+  const isOwnProfile = profileUid === user.id;
   const onPressedAction = () => {
     if (onSelect) {
       onSelect(user.id);
     } else if (onPress) {
       onPress(user.id);
-    } else {
-      openUserInfoScreen(navigation, user.id);
+    } else if (!isOwnProfile) {
+      openUserInfoScreen(navigation, user.id, user.username);
     }
   };
   return (
@@ -64,7 +67,7 @@ const User = ({
       <View style={style.container}>
         <Avatar url={user.avatarUrl} username={user.username} size={40} />
         <View style={style.nameContainer}>
-          <Text style={style.text}>{user.username}</Text>
+          <Text style={[style.text, { color: isOwnProfile ? theme.actionPrimary : theme.text1 }]}>{user.username}</Text>
           {selectable && isSelected(user.id) ? (
             <Ionicons
               name="md-checkmark-circle"
@@ -81,6 +84,7 @@ const User = ({
 const enhance = compose(
   withNavigation,
   withTheme,
+  connect(state => ({ profileUid: state.firebase.auth.uid })),
 );
 
 export default enhance(User);
