@@ -154,7 +154,7 @@ export function leaveChat(firebaseRef, chatId, userId) {
   if (!chatId || !userId) {
     return Promise.reject(new Error('chatId or userId missing'));
   }
-  const res = firebaseRef.remove(`chats/${chatId}/members/${userId}`, () => {
+  const res = firebaseRef.remove(`chatMetadata/${chatId}/members/${userId}`, () => {
     firebaseRef.remove(`users/${userId}/chats/${chatId}`);
   });
   return res;
