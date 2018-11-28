@@ -99,7 +99,7 @@ const ChatInfoScreen = ({
   );
 };
 
-const populates = [{ child: 'members', root: 'users' }];
+const populates = [{ child: 'members', root: 'users', populateByKey: true }];
 
 const mapStateToProps = ({ firebase }, { navigation }) => ({
   chatMetadata: populate(firebase, `chatMetadata/${navigation.state.params.chatId}`, populates),
