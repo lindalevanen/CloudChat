@@ -54,6 +54,7 @@ const VerticalButtons = ({
       <View style={[style, themedStyle.buttonContainer]}>
         {options.map(({ label, value }) => (
           <Checkbox
+            key={value}
             theme={theme}
             selected={selectedValue === value}
             onPress={onOptionSelected(value, onChange)}
