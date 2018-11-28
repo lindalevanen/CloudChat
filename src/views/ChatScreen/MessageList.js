@@ -33,7 +33,7 @@ const MessageList = ({
         onContentSizeChange={() => {
           scrollerRef.scrollToEnd({ animated: true });
         }}
-      // keyboardDismissMode="on-drag"
+        keyboardDismissMode="on-drag"
         renderItem={({ item }) => (
           <Message
             sender={{ id: item.payload.sender, ...chatMetadata.members[item.payload.sender] }}
