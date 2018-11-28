@@ -8,7 +8,7 @@ import {
 import { withNavigation } from 'react-navigation';
 import { connect } from 'react-redux';
 import { compose } from 'redux';
-import { isLoaded, firebaseConnect } from 'react-redux-firebase';
+import { isLoaded, withFirebase } from 'react-redux-firebase';
 
 import { withTheme } from '../../components/ThemedWrapper';
 import ChatList from './ChatList';
@@ -69,6 +69,6 @@ const mapStateToProps = state => ({
 export default compose(
   withNavigation,
   withTheme,
-  firebaseConnect(['chats']),
+  withFirebase,
   connect(mapStateToProps),
 )(Chats);

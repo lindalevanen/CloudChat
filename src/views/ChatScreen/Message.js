@@ -47,6 +47,7 @@ const Message = ({
 }) => {
   const style = styles(theme);
   const ownMessage = profileUid === sender.id;
+  const { body } = message.payload;
   return (
     <View style={[style.container, ownMessage && style.ownMessage]}>
       <AvatarWithProfileLink
@@ -57,9 +58,7 @@ const Message = ({
       />
       <View style={[style.messageBubble, ownMessage && style.ownBubble]}>
         <Text style={style.sender}>{sender.username}</Text>
-        <Text style={style.messageBody}>
-          {message.originalMessage || message.body}
-        </Text>
+        <Text style={style.messageBody}>{body}</Text>
       </View>
     </View>
   );

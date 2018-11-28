@@ -1,5 +1,5 @@
 import React from 'react';
-import { KeyboardAvoidingView, SafeAreaView } from 'react-native';
+import { KeyboardAvoidingView, SafeAreaView, Text } from 'react-native';
 import { connect } from 'react-redux';
 import { compose, withState } from 'recompose';
 import { firebaseConnect, populate } from 'react-redux-firebase';
@@ -33,9 +33,12 @@ class ChatScreen extends React.Component {
 
   render() {
     const {
-      theme, chat, messageString, setMessageString,
+      theme, chatMetadata, chatEvents, messageString, setMessageString,
     } = this.props;
-    const messageList = _map(_get(chat, 'messages', {}), (message, id) => ({ id, ...message }));
+    const messageList = _map(chatEvents, (message, id) => ({
+      id,
+      ...message,
+    }));
     return (
       <SafeAreaView style={{ flex: 1, backgroundColor: theme.foreground }}>
         <KeyboardAvoidingView
@@ -43,7 +46,7 @@ class ChatScreen extends React.Component {
           behavior="padding"
           keyboardVerticalOffset={90}
         >
-          <MessageList chat={chat} messageList={messageList} />
+          <MessageList chatMetadata={chatMetadata} messageList={messageList} />
           <MessageInput
             messageString={messageString}
             setMessageString={setMessageString}
@@ -58,10 +61,14 @@ class ChatScreen extends React.Component {
 const populates = [{ child: 'members', root: 'users' }];
 
 const mapStateToProps = ({ firebase }, { navigation }) => ({
-  chat: populate(
+  chatMetadata: populate(
     firebase,
-    `chats/${navigation.state.params.chatId}`,
+    `chatMetadata/${navigation.state.params.chatId}`,
     populates,
+  ),
+  chatEvents: populate(
+    firebase,
+    `chatEvents/${navigation.state.params.chatId}`,
   ),
   profileUid: firebase.auth.uid,
 });
@@ -70,7 +77,8 @@ const enhance = compose(
   withTheme,
   withState('messageString', 'setMessageString', ''),
   firebaseConnect(({ navigation }) => [
-    { path: `chats/${navigation.state.params.chatId}`, populates },
+    { path: `chatMetadata/${navigation.state.params.chatId}`, populates },
+    { path: `chatEvents/${navigation.state.params.chatId}` },
   ]),
   connect(mapStateToProps),
 );

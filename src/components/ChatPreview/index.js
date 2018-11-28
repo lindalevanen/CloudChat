@@ -54,7 +54,7 @@ const ChatPreview = ({ chat, theme, onPress }) => {
             {chat && chat.title ? chat.title : '-'}
           </Text>
           <Text style={[style.chatUpdatedText]}>
-            {prettyTimestamp(chat.timeModified)}
+            {prettyTimestamp(chat.createdAt)}
           </Text>
         </View>
         <Text style={[style.chatUpdatedText]}>{chat.lastMessage}</Text>

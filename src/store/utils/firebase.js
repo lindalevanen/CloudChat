@@ -23,7 +23,7 @@ export function initMiddleware() {
   return reactReduxFirebase(firebase, {
     userProfile: 'users',
     enableRedirectHandling: false,
-    profileParamsToPopulate: ['chats:chats'],
+    profileParamsToPopulate: ['chats:chatMetadata'],
     autoPopulateProfile: true,
   });
 }
@@ -36,13 +36,27 @@ export function loginChatUser(firebaseRef, credentials) {
   return firebase.login(credentials);
 }
 
-export function createChatRoom(firebaseRef, groupChat, profileUids, title, imageUrl) {
-  const keysAsValsUids = {};
-  profileUids.forEach((x) => { keysAsValsUids[x] = x; });
+export function addRoomToUsers(firebaseRef, roomId, userIds) {
+  userIds.forEach(userId => firebaseRef.set(`users/${userId}/chats/${roomId}`, roomId));
+}
+
+export function createChatRoom(
+  firebaseRef,
+  groupChat,
+  profileUids,
+  title,
+  imageUrl,
+) {
+  const members = {};
+  profileUids.forEach((id) => {
+    members[id] = id;/* {
+      id,
+      joined: Date.now(),
+    }; */
+  });
   const roomData = {
-    lastMessage: '',
-    timeModified: (new Date()).getTime(),
-    members: keysAsValsUids,
+    createdAt: Date.now(),
+    members,
     groupChat,
   };
   if (title) {
@@ -51,7 +65,8 @@ export function createChatRoom(firebaseRef, groupChat, profileUids, title, image
   if (imageUrl) {
     roomData.avatarUrl = imageUrl;
   }
-  const res = firebaseRef.push('chats/', roomData);
+  const res = firebaseRef.push('chatMetadata/', roomData);
+  console.log(res);
   const roomID = res.path.pieces_[1]; // very hacky, but these lines will be ultimately removed
 
   addRoomToUsers(firebaseRef, roomID, profileUids);
@@ -59,14 +74,13 @@ export function createChatRoom(firebaseRef, groupChat, profileUids, title, image
   return res;
 }
 
-/* TODO: this should be ultimately done with FB functions */
-export function addRoomToUsers(firebaseRef, roomId, userIds) {
-  for (i in userIds) {
-    firebaseRef.set(`users/${userIds[i]}/chats/${roomId}`, roomId);
-  }
-}
-
-function uploadImageWithMetadata(firebaseRef, file, filePath, fileName, fileOwner) {
+function uploadImageWithMetadata(
+  firebaseRef,
+  file,
+  filePath,
+  fileName,
+  fileOwner,
+) {
   const options = {
     name: fileName,
     metadataFactory: (uploadRes) => {
@@ -99,7 +113,7 @@ export function uploadImage(firebaseRef, file, profileUid) {
 
 function nameImage(quality = null) {
   const uid = generateUid();
-  const name = (quality !== 'original') ? `${quality}_${uid}` : uid;
+  const name = quality !== 'original' ? `${quality}_${uid}` : uid;
   return name;
 }
 
@@ -113,6 +127,10 @@ export function uploadAvatar(firebaseRef, file, profileUid, quality = null) {
   );
 }
 
+export function pushChatEvent(firebaseRef, eventData, path) {
+  return firebaseRef.push(path, eventData);
+}
+
 export function sendMessage(firebaseRef, messageString, chatId, userId) {
   if (messageString === '') {
     return Promise.reject(new Error('Empty message not sent'));
@@ -120,13 +138,17 @@ export function sendMessage(firebaseRef, messageString, chatId, userId) {
   if (!chatId || !userId) {
     return Promise.reject(new Error('chatId or userId missing'));
   }
-  const messageData = {
-    body: messageString,
-    createdAt: Date.now(),
-    sender: userId,
-    attachment: '',
+  const messageEvent = {
+    type: 'message',
+    timestamp: Date.now(),
+    payload: {
+      body: messageString,
+      sender: userId,
+      // attachment: {},
+    },
   };
-  return firebaseRef.push(`chats/${chatId}/messages`, messageData);
+
+  return pushChatEvent(firebaseRef, messageEvent, `chatEvents/${chatId}`);
 }
 
 export function leaveChat(firebaseRef, chatId, userId) {
@@ -134,7 +156,7 @@ export function leaveChat(firebaseRef, chatId, userId) {
     return Promise.reject(new Error('chatId or userId missing'));
   }
   const res = firebaseRef.remove(`chats/${chatId}/members/${userId}`, () => {
-    firebaseRef.remove(`users/${userId}/chats/${chatId}`)
-  })
+    firebaseRef.remove(`users/${userId}/chats/${chatId}`);
+  });
   return res;
 }

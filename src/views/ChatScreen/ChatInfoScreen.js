@@ -35,7 +35,9 @@ const infoStyles = theme => ({
   },
 });
 
-const ChatInfoScreen = ({ firebase, theme, chat, profileUid, navigation }) => {
+const ChatInfoScreen = ({
+  firebase, theme, chatMetadata, profileUid, navigation,
+}) => {
   const style = styles(theme);
   const infoStyle = infoStyles(theme);
 
@@ -43,19 +45,19 @@ const ChatInfoScreen = ({ firebase, theme, chat, profileUid, navigation }) => {
     const res = await leaveChat(
       firebase,
       navigation.state.params.chatId,
-      profileUid
-    )
-    navigation.dispatch(StackActions.popToTop())
-  }
+      profileUid,
+    );
+    navigation.dispatch(StackActions.popToTop());
+  };
 
-  if(!chat || !chat.members) {  // without this the app crashes on leaving group
-    return <View />
+  if (!chatMetadata || !chatMetadata.members) { // without this the app crashes on leaving group
+    return null;
   }
 
   return (
     <ScrollView style={style.view}>
       <View style={[infoStyle.topContainer, style.panel]}>
-        <Avatar url={chat.avatarUrl} username={chat.title} />
+        <Avatar url={chatMetadata.avatarUrl} username={chatMetadata.title} />
         <View>
           <Text
             style={[
@@ -63,10 +65,10 @@ const ChatInfoScreen = ({ firebase, theme, chat, profileUid, navigation }) => {
               { marginTop: 10, marginBottom: 5, fontWeight: 'bold' },
             ]}
           >
-            {chat.title}
+            {chatMetadata.title}
           </Text>
           <Text style={[infoStyle.profileText, { marginBottom: 10 }]}>
-            {`${Object.keys(chat.members).length} members`}
+            {`${Object.keys(chatMetadata.members).length} members`}
           </Text>
         </View>
       </View>
@@ -81,7 +83,7 @@ const ChatInfoScreen = ({ firebase, theme, chat, profileUid, navigation }) => {
       <View style={[style.section, style.panel]}>
         <UserList
           scrollEnabled={false}
-          users={_map(chat.members, (user, id) => ({ id, ...user }))}
+          users={_map(chatMetadata.members, (user, id) => ({ id, ...user }))}
         />
       </View>
       <View style={[style.section, style.panel]}>
@@ -100,7 +102,7 @@ const ChatInfoScreen = ({ firebase, theme, chat, profileUid, navigation }) => {
 const populates = [{ child: 'members', root: 'users' }];
 
 const mapStateToProps = ({ firebase }, { navigation }) => ({
-  chat: populate(firebase, `chats/${navigation.state.params.chatId}`, populates),
+  chatMetadata: populate(firebase, `chatMetadata/${navigation.state.params.chatId}`, populates),
   profileUid: firebase.auth.uid,
 });
 
@@ -108,7 +110,7 @@ const enhance = compose(
   withTheme,
   withNavigation,
   firebaseConnect(({ navigation }) => [
-    { path: `chats/${navigation.state.params.chatId}`, populates },
+    { path: `chatMetadata/${navigation.state.params.chatId}`, populates },
   ]),
   connect(mapStateToProps),
 );

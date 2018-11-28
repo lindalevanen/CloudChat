@@ -18,7 +18,7 @@ const styles = theme => ({
 let scrollerRef;
 
 const MessageList = ({
-  theme, style, chat, messageList,
+  theme, style, chatMetadata, messageList,
 }) => {
   const themedStyle = styles(theme);
   return (
@@ -36,7 +36,7 @@ const MessageList = ({
       // keyboardDismissMode="on-drag"
         renderItem={({ item }) => (
           <Message
-            sender={{ id: item.sender, ...chat.members[item.sender] }}
+            sender={{ id: item.payload.sender, ...chatMetadata.members[item.payload.sender] }}
             message={item}
           />
         )}
