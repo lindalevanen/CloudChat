@@ -51,7 +51,7 @@ const ChatInfoScreen = ({
   };
 
   if (!chatMetadata || !chatMetadata.members) { // without this the app crashes on leaving group
-    return null;
+    return <View />;
   }
 
   return (
