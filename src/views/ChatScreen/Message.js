@@ -59,7 +59,7 @@ const Message = ({
       />
       )}
       <View style={[style.messageBubble, ownMessage && style.ownBubble]}>
-        <Text style={style.sender}>{sender.username}</Text>
+        {!ownMessage && (<Text style={style.sender}>{sender.username}</Text>)}
         <Text style={style.messageBody}>{body}</Text>
       </View>
     </View>
