@@ -3,6 +3,7 @@ import { ScrollView, Text, View } from 'react-native';
 import { connect } from 'react-redux';
 import { compose } from 'recompose';
 import { firebaseConnect, populate } from 'react-redux-firebase';
+import { withNavigation, StackActions } from 'react-navigation';
 import _map from 'lodash/map';
 
 import { withTheme } from '../../components/ThemedWrapper';
@@ -10,6 +11,8 @@ import Avatar from '../../components/Avatar';
 import Button from '../../components/Button';
 import { styles } from '../../styles/form/style';
 import UserList from '../../components/UserList';
+import { leaveChat } from '../../store/utils/firebase';
+
 
 const infoStyles = theme => ({
   container: {
@@ -32,9 +35,23 @@ const infoStyles = theme => ({
   },
 });
 
-const ChatInfoScreen = ({ theme, chat }) => {
+const ChatInfoScreen = ({ firebase, theme, chat, profileUid, navigation }) => {
   const style = styles(theme);
   const infoStyle = infoStyles(theme);
+
+  const leaveRoom = async () => {
+    const res = await leaveChat(
+      firebase,
+      navigation.state.params.chatId,
+      profileUid
+    )
+    navigation.dispatch(StackActions.popToTop())
+  }
+
+  if(!chat || !chat.members) {  // without this the app crashes on leaving group
+    return <View />
+  }
+
   return (
     <ScrollView style={style.view}>
       <View style={[infoStyle.topContainer, style.panel]}>
@@ -73,6 +90,7 @@ const ChatInfoScreen = ({ theme, chat }) => {
           titleStyle={{ alignSelf: 'flex-start' }}
           color="transparent"
           titleColor={theme.actionHero}
+          onPress={leaveRoom}
         />
       </View>
     </ScrollView>
@@ -83,10 +101,12 @@ const populates = [{ child: 'members', root: 'users' }];
 
 const mapStateToProps = ({ firebase }, { navigation }) => ({
   chat: populate(firebase, `chats/${navigation.state.params.chatId}`, populates),
+  profileUid: firebase.auth.uid,
 });
 
 const enhance = compose(
   withTheme,
+  withNavigation,
   firebaseConnect(({ navigation }) => [
     { path: `chats/${navigation.state.params.chatId}`, populates },
   ]),
