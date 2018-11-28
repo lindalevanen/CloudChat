@@ -24,11 +24,14 @@ const createOpenChatCallback = navigation => (
 const ChatList = ({ chats, navigation }) => (
   <View>
     {_map(chats, (chat, key) => (
+      key !== 'exists'
+      && (
       <ChatPreview
         key={key}
         chat={{ id: key, ...chat }}
         onPress={createOpenChatCallback(navigation)}
       />
+      )
     ))}
   </View>
 );

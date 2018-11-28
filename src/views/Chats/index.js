@@ -3,13 +3,12 @@ import {
   View,
   Text,
   ScrollView,
-  StyleSheet,
   ActivityIndicator,
 } from 'react-native';
 import { withNavigation } from 'react-navigation';
 import { connect } from 'react-redux';
 import { compose } from 'redux';
-import { isLoaded, isEmpty, withFirebase } from 'react-redux-firebase';
+import { isLoaded, isEmpty, firebaseConnect } from 'react-redux-firebase';
 
 import { withTheme } from '../../components/ThemedWrapper';
 import ChatList from './ChatList';
@@ -39,20 +38,18 @@ const EmptyPlaceholder = ({ theme }) => (
 );
 
 const LoadingView = () => (
-  <View style={{ flex: 1, justifyContent: 'center', backgroundColor: 'blue' }}>
+  <View style={{ flex: 1, justifyContent: 'center' }}>
     <ActivityIndicator size="large" />
   </View>
 );
-
-const loadedCheck = value => value === undefined || isLoaded(value);
 
 const Chats = ({ theme, chats }) => {
   const style = styles(theme);
   return (
     <View style={style.container}>
-      {!loadedCheck(chats) ? (
+      {!isLoaded(chats) ? (
         <LoadingView />
-      ) : isEmpty(chats) ? (
+      ) : (isEmpty(chats) || chats.exists) ? (
         <EmptyPlaceholder theme={theme} />
       ) : (
         <ScrollView style={[style.list]}>
@@ -70,6 +67,6 @@ const mapStateToProps = state => ({
 export default compose(
   withNavigation,
   withTheme,
-  withFirebase,
+  firebaseConnect(['chats']),
   connect(mapStateToProps),
 )(Chats);

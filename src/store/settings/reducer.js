@@ -1,5 +1,6 @@
 const initialState = {
   useDarkTheme: false,
+  imageQuality: 'original',
 };
 
 export function settingsReducer(state = initialState, action) {
