@@ -1,9 +1,8 @@
 import React from 'react';
-import { KeyboardAvoidingView, SafeAreaView, Text } from 'react-native';
+import { KeyboardAvoidingView, SafeAreaView } from 'react-native';
 import { connect } from 'react-redux';
 import { compose, withState } from 'recompose';
 import { firebaseConnect, populate } from 'react-redux-firebase';
-import _get from 'lodash/get';
 import _map from 'lodash/map';
 
 import { withTheme } from '../../components/ThemedWrapper';
