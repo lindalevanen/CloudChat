@@ -25,7 +25,7 @@ const MessageList = ({
       style={themedStyle.container}
       data={messageList}
       keyExtractor={({ id }) => id}
-      contentContainerStyle={[themedStyle.container, style]}
+      contentContainerStyle={[themedStyle.content, style]}
       ref={(ref) => {
         scrollerRef = ref;
       }}
