@@ -1,6 +1,6 @@
 import React from 'react';
 import { format } from 'date-fns';
-import { TouchableOpacity, Text, View } from 'react-native';
+import { TouchableHighlight, Text, View } from 'react-native';
 
 import Avatar from '../Avatar';
 import { withTheme } from '../ThemedWrapper';
@@ -42,7 +42,11 @@ const ChatPreview = ({ chat, theme, onPress }) => {
   const style = styles(theme);
   const openChat = () => onPress(chat.id, chat.title, chat.avatarUrl);
   return (
-    <TouchableOpacity style={[style.chatPreview]} onPress={openChat}>
+    <TouchableHighlight
+      style={[style.chatPreview]}
+      onPress={openChat}
+      underlayColor={theme.backdrop}
+    >
       <View style={[style.chatContainer]}>
         <Avatar url={chat.avatarUrl} username={chat.title} />
         <View style={[style.summaryContainer]}>
@@ -53,11 +57,9 @@ const ChatPreview = ({ chat, theme, onPress }) => {
             {prettyTimestamp(chat.timeModified)}
           </Text>
         </View>
-        <Text style={[style.chatUpdatedText]}>
-          {chat.lastMessage}
-        </Text>
+        <Text style={[style.chatUpdatedText]}>{chat.lastMessage}</Text>
       </View>
-    </TouchableOpacity>
+    </TouchableHighlight>
   );
 };
 

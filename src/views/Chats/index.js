@@ -8,7 +8,7 @@ import {
 import { withNavigation } from 'react-navigation';
 import { connect } from 'react-redux';
 import { compose } from 'redux';
-import { isLoaded, isEmpty, firebaseConnect } from 'react-redux-firebase';
+import { isLoaded, firebaseConnect } from 'react-redux-firebase';
 
 import { withTheme } from '../../components/ThemedWrapper';
 import ChatList from './ChatList';
@@ -45,15 +45,17 @@ const LoadingView = () => (
 
 const Chats = ({ theme, chats }) => {
   const style = styles(theme);
+  const { exists, ...chatMap } = chats || { };
+  const isEmpty = exists && Object.keys(chatMap).length === 0;
   return (
     <View style={style.container}>
       {!isLoaded(chats) ? (
         <LoadingView />
-      ) : (isEmpty(chats) || chats.exists) ? (
+      ) : (isEmpty) ? (
         <EmptyPlaceholder theme={theme} />
       ) : (
         <ScrollView style={[style.list]}>
-          <ChatList chats={chats} />
+          <ChatList chats={chatMap} />
         </ScrollView>
       )}
     </View>

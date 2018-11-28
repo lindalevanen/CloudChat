@@ -21,6 +21,7 @@
     "react-native-image-progress": "^1.1.1",
     "react-native-progress": "^3.5.0",
     "react-native-step-indicator": "^0.0.9",
+    "react-native-swipeable": "^0.6.0",
     "react-navigation": "^2.18.2",
     "react-navigation-tabs": "^0.8.4",
     "react-redux": "^5.1.0",
