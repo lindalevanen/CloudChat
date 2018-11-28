@@ -11,6 +11,7 @@ import { compose } from 'redux';
 import { isLoaded, withFirebase } from 'react-redux-firebase';
 
 import { withTheme } from '../../components/ThemedWrapper';
+import EmptyPlaceholder from '../../components/EmptyPlaceholder';
 import ChatList from './ChatList';
 
 const styles = theme => ({
@@ -22,20 +23,6 @@ const styles = theme => ({
     flex: 1,
   },
 });
-
-const EmptyPlaceholder = ({ theme }) => (
-  <View
-    style={{
-      flex: 1,
-      justifyContent: 'center',
-      alignItems: 'center',
-    }}
-  >
-    <Text style={{ color: theme.text2, fontSize: 20 }}>
-      No chats yet, start messaging!
-    </Text>
-  </View>
-);
 
 const LoadingView = () => (
   <View style={{ flex: 1, justifyContent: 'center' }}>
@@ -52,7 +39,7 @@ const Chats = ({ theme, chats }) => {
       {!isLoaded(chats) ? (
         <LoadingView />
       ) : (isEmpty) ? (
-        <EmptyPlaceholder theme={theme} />
+        <EmptyPlaceholder text="No chats yet, start messaging!" />
       ) : (
         <ScrollView style={[style.list]}>
           <ChatList chats={chatMap} />
