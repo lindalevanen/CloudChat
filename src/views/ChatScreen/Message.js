@@ -20,6 +20,7 @@ const styles = theme => ({
     backgroundColor: theme.messageBubble,
     borderRadius: 14,
     borderTopLeftRadius: 0,
+    maxWidth: 240,
   },
   sender: {
     color: theme.messageSender,
