@@ -1,11 +1,11 @@
 import colors from './index';
 
 const palette = {
-  backdrop: colors.greyPurple,
-  foreground: colors.darkPurple,
-  topBar: colors.darkPurple,
+  backdrop: colors.hack0dark,
+  foreground: colors.hack0,
+  topBar: colors.hack0,
   headerTintColor: colors.white,
-  bottomBar: colors.darkPurple,
+  bottomBar: colors.hack0,
   barBorder: colors.grey,
   barIconActive: colors.blush,
   barIconInactive: colors.darkGrey,

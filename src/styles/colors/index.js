@@ -1,3 +1,5 @@
+import { darken, lighten } from 'polished';
+
 const colors = {
   black: '#000',
   white: '#fff',
@@ -19,6 +21,18 @@ const colors = {
   blush: '#ff1654',
   red: '#ff1654',
   orange: '#ff8a16',
+
+  hack0: '#20212e',
+  hack0dark: darken(0.02, '#20212e'),
+  hack0light: lighten(0.02, '#20212e'),
+
+  hack1: '#736df8',
+  hack2: '#9995fe',
+  hack3: '#fefefe',
+  hack4: '#8e919f',
+  hack5: '#ceccdb',
+  hack6: '#c6a88a',
+
 };
 
 export default colors;
