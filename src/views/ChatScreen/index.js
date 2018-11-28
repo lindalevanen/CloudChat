@@ -46,6 +46,7 @@ class ChatScreen extends React.Component {
           behavior="padding"
           keyboardVerticalOffset={90}
         >
+          <Text>{JSON.stringify(chatMetadata, '', 3)}</Text>
           <MessageList chatMetadata={chatMetadata} messageList={messageList} />
           <MessageInput
             messageString={messageString}
@@ -58,7 +59,7 @@ class ChatScreen extends React.Component {
   }
 }
 
-const populates = [{ child: 'members', root: 'users' }];
+const populates = [{ child: 'members', root: 'users', populateByKey: true }];
 
 const mapStateToProps = ({ firebase }, { navigation }) => ({
   chatMetadata: populate(

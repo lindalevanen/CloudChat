@@ -49,10 +49,10 @@ export function createChatRoom(
 ) {
   const members = {};
   profileUids.forEach((id) => {
-    members[id] = id;/* {
+    members[id] = {
       id,
       joined: Date.now(),
-    }; */
+    };
   });
   const roomData = {
     createdAt: Date.now(),
@@ -66,7 +66,6 @@ export function createChatRoom(
     roomData.avatarUrl = imageUrl;
   }
   const res = firebaseRef.push('chatMetadata/', roomData);
-  console.log(res);
   const roomID = res.path.pieces_[1]; // very hacky, but these lines will be ultimately removed
 
   addRoomToUsers(firebaseRef, roomID, profileUids);
