@@ -1,11 +1,12 @@
 import React from 'react';
-import { FlatList } from 'react-native';
+import { View, FlatList } from 'react-native';
 
 import { withTheme } from '../../components/ThemedWrapper';
 import Message from './Message';
 
 const styles = theme => ({
   container: {
+    flex: 1,
     backgroundColor: theme.backdrop,
   },
   content: {
@@ -21,26 +22,26 @@ const MessageList = ({
 }) => {
   const themedStyle = styles(theme);
   return (
-    <FlatList
-      style={themedStyle.container}
-      data={messageList}
-      keyExtractor={({ id }) => id}
-      contentContainerStyle={[themedStyle.content, style]}
-      ref={(ref) => {
-        scrollerRef = ref;
-      }}
-      onContentSizeChange={() => {
-        console.log('content size change');
-        scrollerRef.scrollToEnd({ animated: true });
-      }}
+    <View style={[themedStyle.container, style]}>
+      <FlatList
+        data={messageList}
+        keyExtractor={({ id }) => id}
+        contentContainerStyle={themedStyle.content}
+        ref={(ref) => {
+          scrollerRef = ref;
+        }}
+        onContentSizeChange={() => {
+          scrollerRef.scrollToEnd({ animated: true });
+        }}
       // keyboardDismissMode="on-drag"
-      renderItem={({ item }) => (
-        <Message
-          sender={{ id: item.sender, ...chat.members[item.sender] }}
-          message={item}
-        />
-      )}
-    />
+        renderItem={({ item }) => (
+          <Message
+            sender={{ id: item.sender, ...chat.members[item.sender] }}
+            message={item}
+          />
+        )}
+      />
+    </View>
   );
 };
 
