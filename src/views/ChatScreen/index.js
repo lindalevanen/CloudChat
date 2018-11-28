@@ -46,7 +46,6 @@ class ChatScreen extends React.Component {
           behavior="padding"
           keyboardVerticalOffset={90}
         >
-          <Text>{JSON.stringify(chatMetadata, '', 3)}</Text>
           <MessageList chatMetadata={chatMetadata} messageList={messageList} />
           <MessageInput
             messageString={messageString}
