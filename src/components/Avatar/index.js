@@ -27,7 +27,7 @@ const NoImageAvailable = ({ username, size }) => (
       { height: size, width: size, borderRadius: size / 2 },
     ]}
   >
-    <Text style={{ fontSize: size === 60 ? 22 : undefined, color: 'white' }}>
+    <Text style={{ fontSize: size === 60 && 22, color: 'white' }}>
       {username.substring(0, 2).toUpperCase()}
     </Text>
   </View>
