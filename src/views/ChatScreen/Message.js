@@ -50,12 +50,14 @@ const Message = ({
   const { body } = message.payload;
   return (
     <View style={[style.container, ownMessage && style.ownMessage]}>
+      {!ownMessage && (
       <AvatarWithProfileLink
         size={44}
         url={sender.avatarUrl}
         username={sender.username}
         userId={sender.id}
       />
+      )}
       <View style={[style.messageBubble, ownMessage && style.ownBubble]}>
         <Text style={style.sender}>{sender.username}</Text>
         <Text style={style.messageBody}>{body}</Text>
