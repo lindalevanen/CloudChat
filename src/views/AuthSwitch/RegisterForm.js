@@ -72,6 +72,9 @@ const ProfileForm = ({
           username,
           email,
           avatarUrl,
+          chats: {
+            exists: true,
+          },
         },
       );
       console.log('register result', result);
