@@ -2,6 +2,7 @@ import * as firebase from 'firebase';
 import { reactReduxFirebase } from 'react-redux-firebase';
 import omit from 'lodash/omit';
 import uuidv4 from 'uuid/v4';
+import { Permissions, Notifications } from 'expo';
 
 const config = {
   apiKey: 'AIzaSyDkeQYJzG9EDpiHKvkQyWPJ-MBOzRtFdg4',
@@ -40,6 +41,34 @@ export function addRoomToUsers(firebaseRef, roomId, userIds) {
   userIds.forEach(userId => firebaseRef.set(`users/${userId}/chats/${roomId}`, roomId));
 }
 
+export async function registerForPushNotificationsAsync(firebaseRef, user) {
+  const { status: existingStatus } = await Permissions.getAsync(
+    Permissions.NOTIFICATIONS,
+  );
+  let finalStatus = existingStatus;
+
+  // only ask if permissions have not already been determined, because
+  // iOS won't necessarily prompt the user a second time.
+  if (existingStatus !== 'granted') {
+    // Android remote notification permissions are granted during the app
+    // install, so this will only ask on iOS
+    const { status } = await Permissions.askAsync(Permissions.NOTIFICATIONS);
+    finalStatus = status;
+  }
+
+  // Stop here if the user did not grant permissions
+  if (finalStatus !== 'granted') {
+    return;
+  }
+
+  // Get the token that uniquely identifies this device
+  const token = await Notifications.getExpoPushTokenAsync();
+
+  const updates = {};
+  updates['/expoToken'] = token;
+  firebaseRef.update(`users/${user.uid}`, updates);
+}
+
 export function createChatRoom(
   firebaseRef,
   groupChat,
@@ -72,6 +101,7 @@ export function createChatRoom(
 
   return res;
 }
+
 
 function uploadImageWithMetadata(
   firebaseRef,

@@ -1,14 +1,79 @@
 const functions = require('firebase-functions');
 const admin = require('firebase-admin');
-const spawn = require('child-process-promise').spawn;
-const path = require('path');
-const os = require('os');
-const fs = require('fs');
-const glob = require('glob')
+var fetch = require('node-fetch')
 
 const region = 'europe-west1'
 admin.initializeApp();
 
+'use strict';
+
+exports.sendChatMessageNotification = functions.region(region).database.ref('/chats/{chatUid}/messages/{messageUid}')
+    .onCreate(async (snapshot, context) => {
+      const chatUid = context.params.chatUid;
+      const messageUid = context.params.messageUid;
+      const messageBody = snapshot.val().body
+
+      console.log('We have a new message UID:', messageUid, 'for chat:', chatUid);
+
+      // Get the list of users in chat.
+      var db = admin.database();
+      const chatMembers = [];
+      const getChatMembersPromise = await admin.database()
+        .ref(`/chats/${chatUid}/members`)
+        .once('value')
+        .then((results) => {
+          results.forEach((snapshot) => {
+            chatMembers.push(snapshot.val())
+          })
+          return results
+        });
+      console.log('getchatmembers', chatMembers)
+      // Get device tokens corresponding to members
+      const getDeviceTokensPromises = []
+      for(let key in chatMembers) {
+        if(chatMembers.hasOwnProperty(key)) {
+          getDeviceTokensPromises.push(
+            admin.database().ref(`/users/${key}/expoToken`).once('value').then((result) => {
+              return result.val()
+            })
+            )
+        }
+      }
+
+      const results = await Promise.all(getDeviceTokensPromises)
+      console.log("promise all devicetokens ", results)
+
+      // Check if there are any device tokens.
+      if (results.length === 0) {
+        return console.log('There are no notification tokens to send to.');
+      }
+      const messages = []
+      
+      responsePromises = []
+      for(deviceToken in results) {
+        if(deviceToken) {
+          console.log("this devicetoken: ", deviceToken)
+          messages.push({
+            "to": deviceToken,
+            "title": `New message from someone`,
+            "body": `${messageBody}`
+          })
+        }
+      }
+      console.log("all messages: ", messages)
+
+      fetch('https://exp.host/--/api/v2/push/send', {
+
+            method: 'POST',
+            headers: {
+              "Accept": "application/json",
+              "Content-Type": "application/json"
+            },
+            body: JSON.stringify(messages)
+          })
+    });
+
+/*
 function getFileName(key, tempName) {
   return `${key}_${tempName}`
 }
@@ -44,11 +109,12 @@ function deleteFiles(tempFilePath) {
     });
   });
 }
-
+*/
 /**
  * When an image is uploaded in the Storage bucket We generate a thumbnail automatically using
  * ImageMagick.
  */
+/*
 exports.createAvatarThumbnail = functions.region(region).storage.object().onFinalize(async (object) => {
   // Object metadata
   const fileBucket = object.bucket; // The Storage bucket that contains the file.
@@ -106,3 +172,4 @@ exports.createAvatarThumbnail = functions.region(region).storage.object().onFina
   console.log(`Deleted files ${files}`);
   return files
 });
+*/
