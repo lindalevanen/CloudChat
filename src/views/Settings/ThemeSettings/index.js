@@ -5,11 +5,13 @@ import {
 import { connect } from 'react-redux';
 import { compose } from 'recompose';
 import { withNavigation } from 'react-navigation';
+import { Ionicons } from '@expo/vector-icons';
 
 import { withTheme } from '../../../components/ThemedWrapper';
 import Switch from '../../../components/Switch';
 import { changeSetting } from '../../../store/settings/actions';
 import { styles } from '../../../styles/form/style';
+import colors from '../../../styles/colors';
 
 const ThemeSettings = ({
   theme,
@@ -24,7 +26,10 @@ const ThemeSettings = ({
   const style = styles(theme);
   return (
     <View style={[style.setting, style.container, styles.panel]}>
-      <Text style={[style.text]}>Use dark theme</Text>
+      <View style={style.settingTitle}>
+        <Ionicons style={style.settingIcon} name="md-moon" size={24} color={colors.hack1} />
+        <Text style={[style.text]}>Use dark theme</Text>
+      </View>
       <Switch value={useDarkTheme} onValueChange={setDarkMode} />
     </View>
   );

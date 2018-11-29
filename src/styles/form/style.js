@@ -19,11 +19,21 @@ export const styles = theme => ({
     borderColor: theme.separator,
     borderBottomWidth: 0.3,
   },
+  settingTitle: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  settingIcon: {
+    marginHorizontal: 6,
+    width: 30,
+  },
   setting: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
     minHeight: 56,
+    borderColor: theme.separator,
+    borderBottomWidth: 0.3,
   },
   section: {
     marginBottom: 18,
