@@ -43,56 +43,6 @@ const AvatarSelector = ({
   theme,
 }) => {
   const style = styles(theme);
-  /*const resizeImage = async (originalUri, resolution) => {
-    const { width, height } = resolution;
-    const actions = [{
-      resize: {
-        width,
-        height,
-      },
-    }];
-    const saveOptions = {
-      format: 'jpeg',
-    };
-    const resizedResult = await ImageManipulator.manipulateAsync(originalUri, actions, saveOptions);
-    const { uri } = resizedResult;
-    return uri;
-  };*/
-  /*const handleResult = async (result) => {
-    if (!result.cancelled) {
-      setLoading(true);
-      const { uri } = result;
-      const resolution = resolutions[imageQuality];
-      const finalUri = (resolution) ? await resizeImage(uri, resolution) : uri;
-      const file = await urlToBlob(finalUri);
-      const {
-        uploadTaskSnapshot: { ref },
-      } = await uploadAvatar(firebase, file, profileUid, imageQuality);
-      const downloadUrl = await ref.getDownloadURL();
-      await firebase.updateProfile({ avatarUrl: downloadUrl });
-      setLoading(false);
-    }
-  };
-  const takeFromCamera = async () => {
-    const { status } = await Permissions.askAsync(
-      Permissions.CAMERA,
-      Permissions.CAMERA_ROLL,
-    );
-    if (status !== 'granted') {
-      setError('Permission to access images not granted');
-    } else {
-      handleResult(await ImagePicker.launchCameraAsync(imgOptions));
-    }
-  };
-  const pickImage = async () => {
-    const { status } = await Permissions.askAsync(Permissions.CAMERA_ROLL);
-    if (status !== 'granted') {
-      setError('Permission to access images not granted');
-    } else {
-      handleResult(await ImagePicker.launchImageLibraryAsync(imgOptions));
-    }
-  };*/
-
   const handleFileReceived = async (file) => {
     const {
       uploadTaskSnapshot: { ref },
