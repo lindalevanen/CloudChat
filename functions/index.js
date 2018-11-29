@@ -6,8 +6,75 @@ const os = require('os');
 const fs = require('fs');
 const glob = require('glob')
 
+var fetch = require('node-fetch')
+
 const region = 'europe-west1'
 admin.initializeApp();
+
+'use strict';
+
+exports.sendChatMessageNotification = functions.region(region).database.ref('/chatEvents/{chatUid}/{messageUid}')
+    .onCreate(async (snapshot, context) => {
+      const chatUid = context.params.chatUid;
+      const messageUid = context.params.messageUid;
+      const messageBody = snapshot.val().payload.body;
+      const messageSenderId = snapshot.val().payload.sender;
+      const messageSender = await admin.database().ref(`/users/${messageSenderId}/username`).once('value')
+      //image or message or something else?
+      const messageType = snapshot.val().type;
+
+      console.log(`New ${messageType} UID:`, messageUid, 'for chat:', chatUid);
+
+      // Get the list of users in chat.
+      const chatMembers = [];
+      const getChatMembersPromise = await admin.database()
+        .ref(`/chatMetadata/${chatUid}/members`)
+        .once('value')
+        .then((results) => {
+          results.forEach((snapshot) => {
+            chatMembers.push(snapshot.val().id)
+          })
+          return results
+        });
+      console.log('Chat members', chatMembers)
+      // Get device tokens corresponding to members
+      const getDeviceTokensPromises = []
+
+      for(let key in chatMembers) {
+        if(chatMembers.hasOwnProperty(key)) {
+          getDeviceTokensPromises.push(admin.database().ref(`/users/${chatMembers[key]}/expoToken`).once('value'))
+        }
+      }
+
+      const results = await Promise.all(getDeviceTokensPromises)
+
+      // Check if there are any device tokens.
+      if (results.length === 0) {
+        return console.log('There are no notification tokens to send to.');
+      }
+      const notifications = []
+      
+      responsePromises = []
+      for (let i = 0; i < results.length; i++) {
+        if(results[i]) {
+          notifications.push({
+            "to": results[i].val(),
+            "title": `${messageSender.val()}`,
+            "body": `${messageBody}`
+          })
+        }
+      }
+      console.log("All notifications: ", notifications)
+
+      fetch('https://exp.host/--/api/v2/push/send', {
+        method: 'POST',
+        headers: {
+          "Accept": "application/json",
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(notifications)
+      })
+    });
 
 function getFileName(key, tempName) {
   return `${key}_${tempName}`
@@ -49,6 +116,7 @@ function deleteFiles(tempFilePath) {
  * When an image is uploaded in the Storage bucket We generate a thumbnail automatically using
  * ImageMagick.
  */
+
 exports.createAvatarThumbnail = functions.region(region).storage.object().onFinalize(async (object) => {
   // Object metadata
   const fileBucket = object.bucket; // The Storage bucket that contains the file.
