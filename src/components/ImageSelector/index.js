@@ -9,7 +9,6 @@ import { uploadAvatar } from '../../store/utils/firebase';
 import urlToBlob from '../../store/utils/urlToBlob';
 import Avatar from '../Avatar';
 import Button from '../Button';
-import ImageSelector from '../ImageSelector'
 import { withTheme } from '../ThemedWrapper';
 import { styles } from '../../styles/form/style';
 
@@ -31,19 +30,16 @@ const resolutions = {
   },
 };
 
-const AvatarSelector = ({
+const ImageSelector = ({
   firebase,
   profile,
   profileUid,
-  loading,
   setLoading,
-  error,
   setError,
   imageQuality,
-  theme,
+  onFileReceived
 }) => {
-  const style = styles(theme);
-  /*const resizeImage = async (originalUri, resolution) => {
+  const resizeImage = async (originalUri, resolution) => {
     const { width, height } = resolution;
     const actions = [{
       resize: {
@@ -57,20 +53,22 @@ const AvatarSelector = ({
     const resizedResult = await ImageManipulator.manipulateAsync(originalUri, actions, saveOptions);
     const { uri } = resizedResult;
     return uri;
-  };*/
-  /*const handleResult = async (result) => {
+  };
+  const handleResult = async (result) => {
     if (!result.cancelled) {
       setLoading(true);
       const { uri } = result;
       const resolution = resolutions[imageQuality];
       const finalUri = (resolution) ? await resizeImage(uri, resolution) : uri;
       const file = await urlToBlob(finalUri);
-      const {
+      onFileReceived(file)
+      /*const {
         uploadTaskSnapshot: { ref },
       } = await uploadAvatar(firebase, file, profileUid, imageQuality);
-      const downloadUrl = await ref.getDownloadURL();
-      await firebase.updateProfile({ avatarUrl: downloadUrl });
-      setLoading(false);
+      const downloadUrl = await ref.getDownloadURL();*/
+      //onDownloadUrlReceived(downloadUrl)
+      //await firebase.updateProfile({ avatarUrl: downloadUrl });
+      //setLoading(false);
     }
   };
   const takeFromCamera = async () => {
@@ -91,27 +89,11 @@ const AvatarSelector = ({
     } else {
       handleResult(await ImagePicker.launchImageLibraryAsync(imgOptions));
     }
-  };*/
-
-  const handleFileReceived = async (file) => {
-    const {
-      uploadTaskSnapshot: { ref },
-    } = await uploadAvatar(firebase, file, profileUid, imageQuality);
-    const downloadUrl = await ref.getDownloadURL();
-    await firebase.updateProfile({ avatarUrl: downloadUrl });
-    setLoading(false);
-  }
+  };
   return (
-    <View style={[style.view]}>
-      <View style={[style.container, style.setting]}>
-        <Text>{error}</Text>
-        <Avatar url={profile.avatarUrl} size={120} />
-        <ImageSelector
-          setError={setError}
-          setLoading={setLoading}
-          onFileReceived={handleFileReceived}
-        />
-      </View>
+    <View>
+      <Button title="Camera" onPress={takeFromCamera} type="Success" />
+      <Button title="Gallery" onPress={pickImage} type="Success" />
     </View>
   );
 };
@@ -125,9 +107,7 @@ const mapStateToProps = state => ({
 const enhancer = compose(
   withTheme,
   firebaseConnect(),
-  withState('error', 'setError', null),
-  withState('loading', 'setLoading', false),
   connect(mapStateToProps),
 );
 
-export default enhancer(AvatarSelector);
+export default enhancer(ImageSelector);
