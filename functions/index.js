@@ -76,7 +76,6 @@ exports.sendChatMessageNotification = functions.region(region).database.ref('/ch
       })
     });
 
-
 function getFileName(key, tempName) {
   return `${key}_${tempName}`
 }
