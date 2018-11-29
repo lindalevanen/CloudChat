@@ -1,35 +1,14 @@
 import React from 'react';
 import { Text, View } from 'react-native';
-import { ImagePicker, ImageManipulator, Permissions } from 'expo';
 import { compose, withState } from 'recompose';
 import { firebaseConnect } from 'react-redux-firebase';
 import { connect } from 'react-redux';
 
 import { uploadAvatar } from '../../store/utils/firebase';
-import urlToBlob from '../../store/utils/urlToBlob';
 import Avatar from '../Avatar';
-import Button from '../Button';
-import ImageSelector from '../ImageSelector'
+import ImageSelector from '../ImageSelector';
 import { withTheme } from '../ThemedWrapper';
 import { styles } from '../../styles/form/style';
-
-const imgOptions = {
-  mediaTypes: ImagePicker.MediaTypeOptions.Images,
-  allowsEditing: true,
-  aspect: [1, 1],
-  exif: false,
-};
-
-const resolutions = {
-  low: {
-    width: 640,
-    height: 480,
-  },
-  high: {
-    width: 1280,
-    height: 960,
-  },
-};
 
 const AvatarSelector = ({
   firebase,
