@@ -15,21 +15,50 @@ const styles = StyleSheet.create({
   },
 });
 
-const openChatInfoScreen = (navigation, chatId, chatName) => () => navigation.dispatch(
+const openInfoScreen = (routeName, navigation, params) => () => navigation.dispatch(
   StackActions.push({
-    routeName: 'ChatInfoScreen',
-    params: {
-      headerTitle: 'Chat info',
-      chatId,
-      chatName, // for header to show
-    },
+    routeName,
+    params,
   }),
 );
 
-const ChatScreenHeaderButton = ({ navigation }) => {
-  const { chatName, chatId, chatAvatarUrl } = navigation.state.params;
+export const OneToOneChatHeaderButton = ({ navigation }) => {
+  const { userId, username, avatarUrl } = navigation.state.params;
+  const screenParams = {
+    headerTitle: username,
+    userId,
+  };
   return (
-    <TouchableOpacity style={styles.container} onPress={openChatInfoScreen(navigation, chatId, chatName)}>
+    <TouchableOpacity
+      style={styles.container}
+      onPress={openInfoScreen('UserInfoScreen', navigation, screenParams)}
+    >
+      <Avatar size={30} url={avatarUrl} username={username} />
+    </TouchableOpacity>
+  );
+};
+
+const ChatScreenHeaderButton = ({ navigation }) => {
+  const {
+    chatName, chatId, chatAvatarUrl, isGroupChat, userId, userName, avatarUrl,
+  } = navigation.state.params;
+  console.log('render header action: ', navigation.state.params);
+  const routeName = isGroupChat ? 'ChatInfoScreen' : 'UserInfoScreen';
+  const screenParams = isGroupChat ? {
+    headerTitle: 'Chat info',
+    chatId,
+    chatName,
+  } : {
+    headerTitle: userName,
+    userId,
+    userName,
+    avatarUrl,
+  };
+  return (
+    <TouchableOpacity
+      style={styles.container}
+      onPress={openInfoScreen(routeName, navigation, screenParams)}
+    >
       <Avatar size={30} url={chatAvatarUrl} username={chatName} />
     </TouchableOpacity>
   );

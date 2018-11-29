@@ -1,14 +1,15 @@
 import React from 'react';
 import {
-  View,
-  Text,
-  ScrollView,
-  ActivityIndicator,
+  View, ScrollView, ActivityIndicator,
 } from 'react-native';
 import { withNavigation } from 'react-navigation';
 import { connect } from 'react-redux';
 import { compose } from 'redux';
-import { isLoaded, withFirebase } from 'react-redux-firebase';
+import {
+  isLoaded,
+  firebaseConnect,
+} from 'react-redux-firebase';
+import _map from 'lodash/map';
 
 import { withTheme } from '../../components/ThemedWrapper';
 import EmptyPlaceholder from '../../components/EmptyPlaceholder';
@@ -30,32 +31,48 @@ const LoadingView = () => (
   </View>
 );
 
-const Chats = ({ theme, chats }) => {
+const chatsWithUsers = (chats, users) => _map(chats, (chat, id) => {
+  const chatMembers = _map(chat.members, user => ({
+    ...user,
+    ...users[user.id],
+  }));
+  return {
+    ...chat,
+    id,
+    members: chatMembers,
+  };
+});
+
+const Chats = ({ theme, chats, users }) => {
   const style = styles(theme);
-  const { exists, ...chatMap } = chats || { };
+  const { exists, ...chatMap } = chats || {};
   const isEmpty = exists && Object.keys(chatMap).length === 0;
   return (
     <View style={style.container}>
       {!isLoaded(chats) ? (
         <LoadingView />
-      ) : (isEmpty) ? (
+      ) : isEmpty ? (
         <EmptyPlaceholder text="No chats yet, start messaging!" />
       ) : (
         <ScrollView style={[style.list]}>
-          <ChatList chats={chatMap} />
+          <ChatList chats={chatsWithUsers(chatMap, users)} />
         </ScrollView>
       )}
     </View>
   );
 };
 
-const mapStateToProps = state => ({
-  chats: state.firebase.profile.chats,
+const mapStateToProps = ({ firebase }) => ({
+  chats: firebase.profile.chats,
+  users: firebase.data.users,
+  profileUid: firebase.auth.uid,
 });
 
-export default compose(
+const enhance = compose(
   withNavigation,
   withTheme,
-  withFirebase,
   connect(mapStateToProps),
-)(Chats);
+  firebaseConnect([{ path: 'users' }]),
+);
+
+export default enhance(Chats);

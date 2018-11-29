@@ -16,6 +16,7 @@ import AvatarSelectorSheet from '../Settings/ProfileSettings/AvatarSelectorSheet
 import CreateChatSheet from '../Chats/CreateChatSheet';
 import CreateGroupSheet from '../Chats/CreateGroupSheet';
 import ChatScreen from '../ChatScreen';
+import OneToOneChat from '../ChatScreen/OneToOneChat';
 import ChatInfoScreen from '../ChatScreen/ChatInfoScreen';
 import UserInfoScreen from '../UserInfoScreen';
 
@@ -91,6 +92,12 @@ export default createStackNavigator({
   },
   ChatScreen: {
     screen: ChatScreen,
+    navigationOptions: {
+      header: ThemedHeaderComponent,
+    },
+  },
+  OneToOneChatScreen: {
+    screen: OneToOneChat,
     navigationOptions: {
       header: ThemedHeaderComponent,
     },

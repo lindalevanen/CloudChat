@@ -36,11 +36,13 @@ export function loginChatUser(firebaseRef, credentials) {
   return firebase.login(credentials);
 }
 
-export function addRoomToUsers(firebaseRef, roomId, userIds) {
-  userIds.forEach(userId => firebaseRef.set(`users/${userId}/chats/${roomId}`, roomId));
+export async function addRoomToUsers(firebaseRef, roomId, userIds) {
+  return Promise.all(
+    userIds.map(userId => firebaseRef.set(`users/${userId}/chats/${roomId}`, roomId)),
+  );
 }
 
-export function createChatRoom(
+export async function createChatRoom(
   firebaseRef,
   groupChat,
   profileUids,
@@ -65,10 +67,10 @@ export function createChatRoom(
   if (imageUrl) {
     roomData.avatarUrl = imageUrl;
   }
-  const res = firebaseRef.push('chatMetadata/', roomData);
+  const res = await firebaseRef.push('chatMetadata/', roomData);
   const roomID = res.path.pieces_[1]; // very hacky, but these lines will be ultimately removed
 
-  addRoomToUsers(firebaseRef, roomID, profileUids);
+  await addRoomToUsers(firebaseRef, roomID, profileUids);
 
   return res;
 }
@@ -130,7 +132,13 @@ export function pushChatEvent(firebaseRef, eventData, path) {
   return firebaseRef.push(path, eventData);
 }
 
-export function sendMessage(firebaseRef, messageString, chatId, sender, attachment = null) {
+export function sendMessage(
+  firebaseRef,
+  messageString,
+  chatId,
+  sender,
+  attachment = null,
+) {
   if (messageString === '') {
     return Promise.reject(new Error('Empty message not sent'));
   }
@@ -155,8 +163,11 @@ export function leaveChat(firebaseRef, chatId, userId) {
   if (!chatId || !userId) {
     return Promise.reject(new Error('chatId or userId missing'));
   }
-  const res = firebaseRef.remove(`chatMetadata/${chatId}/members/${userId}`, () => {
-    firebaseRef.remove(`users/${userId}/chats/${chatId}`);
-  });
+  const res = firebaseRef.remove(
+    `chatMetadata/${chatId}/members/${userId}`,
+    () => {
+      firebaseRef.remove(`users/${userId}/chats/${chatId}`);
+    },
+  );
   return res;
 }

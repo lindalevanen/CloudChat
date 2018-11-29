@@ -13,6 +13,17 @@ const CreateChatSheet = ({ theme, navigation }) => {
       routeName: 'CreateGroupSheetSheet',
     }),
   );
+  const openOneToOneChat = user => navigation.dispatch(
+    StackActions.push({
+      routeName: 'OneToOneChatScreen',
+      params: {
+        userId: user.id,
+        username: user.username,
+        headerTitle: user.username,
+        avatarUrl: user.avatarUrl,
+      },
+    }),
+  );
   return (
     <View style={{ flex: 1 }}>
       <View style={{ backgroundColor: theme.foreground }}>
@@ -24,9 +35,7 @@ const CreateChatSheet = ({ theme, navigation }) => {
           onPress={openGroupChatSheet}
         />
       </View>
-      <UserSearch
-        onUserPress={id => console.log(`start chat with person ${id}`)}
-      />
+      <UserSearch onUserPress={openOneToOneChat} />
     </View>
   );
 };

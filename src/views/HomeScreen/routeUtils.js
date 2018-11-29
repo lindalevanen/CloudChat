@@ -8,7 +8,7 @@ import darkTheme from '../../styles/colors/darkTheme';
 import colors from '../../styles/colors';
 import { getState } from '../../store';
 import HeaderButton from '../../components/HeaderButton';
-import ChatScreenHeaderButton from '../../components/ChatScreenHeaderButton';
+import ChatScreenHeaderButton, { OneToOneChatHeaderButton } from '../../components/ChatScreenHeaderButton';
 
 function getNavigationCallback(navigation, routeName) {
   return () => navigation.navigate(routeName);
@@ -27,6 +27,8 @@ function getHeaderActionForRoute(routeName, navigation) {
       );
     case 'ChatScreen':
       return <ChatScreenHeaderButton navigation={navigation} />;
+    case 'OneToOneChatScreen':
+      return <OneToOneChatHeaderButton navigation={navigation} />;
     default:
       return null;
   }

@@ -1,6 +1,8 @@
 import React from 'react';
 import { format } from 'date-fns';
 import { TouchableHighlight, Text, View } from 'react-native';
+import { connect } from 'react-redux';
+import { compose } from 'recompose';
 
 import Avatar from '../Avatar';
 import { withTheme } from '../ThemedWrapper';
@@ -38,9 +40,37 @@ const styles = theme => ({
   },
 });
 
-const ChatPreview = ({ chat, theme, onPress }) => {
+const ChatPreview = ({
+  chat, profileUid, theme, onPress,
+}) => {
   const style = styles(theme);
-  const openChat = () => onPress(chat.id, chat.title, chat.avatarUrl);
+
+  let contact;
+  if (!chat.groupChat && chat.members) {
+    contact = Object.values(chat.members).find(user => user.id !== profileUid);
+  }
+  const chatTitle = chat.groupChat
+    ? chat.title || 'Untitled groupchat'
+    : contact.username;
+  const avatarUrl = chat.groupChat ? chat.avatarUrl : contact.avatarUrl;
+
+  const openChat = () => {
+    if (chat.groupChat) {
+      onPress(chat.id, chatTitle, avatarUrl, true);
+    } else {
+      onPress(
+        chat.id,
+        chatTitle,
+        avatarUrl,
+        false,
+        contact.id,
+        contact.username,
+        contact.avatarUrl,
+      );
+    }
+  };
+
+  if (chat === undefined) return null;
   return (
     <TouchableHighlight
       style={[style.chatPreview]}
@@ -48,11 +78,9 @@ const ChatPreview = ({ chat, theme, onPress }) => {
       underlayColor={theme.backdrop}
     >
       <View style={[style.chatContainer]}>
-        <Avatar url={chat.avatarUrl} username={chat.title} />
+        <Avatar url={avatarUrl} username={chat.title} />
         <View style={[style.summaryContainer]}>
-          <Text style={[style.chatTitleText]}>
-            {chat && chat.title ? chat.title : '-'}
-          </Text>
+          <Text style={[style.chatTitleText]}>{chatTitle}</Text>
           <Text style={[style.chatUpdatedText]}>
             {prettyTimestamp(chat.createdAt)}
           </Text>
@@ -63,4 +91,13 @@ const ChatPreview = ({ chat, theme, onPress }) => {
   );
 };
 
-export default withTheme(ChatPreview);
+const mapStateToProps = ({ firebase }) => ({
+  profileUid: firebase.auth.uid,
+});
+
+const enhance = compose(
+  withTheme,
+  connect(mapStateToProps),
+);
+
+export default enhance(ChatPreview);

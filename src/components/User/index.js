@@ -57,7 +57,7 @@ const User = ({
     if (onSelect) {
       onSelect(user.id);
     } else if (onPress) {
-      onPress(user.id);
+      onPress(user);
     } else if (!isOwnProfile) {
       openUserInfoScreen(navigation, user.id, user.username);
     }

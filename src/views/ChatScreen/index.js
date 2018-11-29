@@ -1,5 +1,5 @@
 import React from 'react';
-import { KeyboardAvoidingView, SafeAreaView } from 'react-native';
+import { Text, KeyboardAvoidingView, SafeAreaView } from 'react-native';
 import { connect } from 'react-redux';
 import { compose, withState } from 'recompose';
 import { firebaseConnect, populate } from 'react-redux-firebase';
@@ -19,20 +19,35 @@ class ChatScreen extends React.Component {
       firebase,
       navigation,
       profileUid,
+      isDraft,
+      oneToOneContact,
+      createChatFromDraft,
     } = this.props;
+
+    let { chatId } = navigation.state.params;
+
+    if (isDraft && oneToOneContact) {
+      console.log(`unitialised chat with person ${oneToOneContact}`);
+      chatId = await createChatFromDraft();
+    }
+
     const messageBody = messageString;
     setMessageString('');
     await sendMessage(
       firebase,
       messageBody,
-      navigation.state.params.chatId,
+      chatId,
       profileUid,
     );
   };
 
   render() {
     const {
-      theme, chatMetadata, chatEvents, messageString, setMessageString,
+      theme,
+      chatMetadata,
+      chatEvents,
+      messageString,
+      setMessageString,
     } = this.props;
     const messageList = _map(chatEvents, (message, id) => ({
       id,
@@ -59,26 +74,29 @@ class ChatScreen extends React.Component {
 
 const populates = [{ child: 'members', root: 'users', populateByKey: true }];
 
-const mapStateToProps = ({ firebase }, { navigation }) => ({
-  chatMetadata: populate(
-    firebase,
-    `chatMetadata/${navigation.state.params.chatId}`,
-    populates,
-  ),
-  chatEvents: populate(
-    firebase,
-    `chatEvents/${navigation.state.params.chatId}`,
-  ),
+const mapStateToProps = ({ firebase }, { navigation, isDraft }) => ({
+  chatMetadata:
+    (isDraft && {})
+    || populate(
+      firebase,
+      `chatMetadata/${navigation.state.params.chatId}`,
+      populates,
+    ),
+  chatEvents:
+    (isDraft && {})
+    || populate(firebase, `chatEvents/${navigation.state.params.chatId}`),
   profileUid: firebase.auth.uid,
 });
 
 const enhance = compose(
   withTheme,
   withState('messageString', 'setMessageString', ''),
-  firebaseConnect(({ navigation }) => [
-    { path: `chatMetadata/${navigation.state.params.chatId}`, populates },
-    { path: `chatEvents/${navigation.state.params.chatId}` },
-  ]),
+  firebaseConnect(({ navigation, isDraft }) => (isDraft
+    ? []
+    : [
+      { path: `chatMetadata/${navigation.state.params.chatId}`, populates },
+      { path: `chatEvents/${navigation.state.params.chatId}` },
+    ])),
   connect(mapStateToProps),
 );
 

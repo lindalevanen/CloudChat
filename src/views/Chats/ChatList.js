@@ -26,9 +26,9 @@ const rightButtons = [
   <SwipeActionButton color="tomato" iconName="md-trash" />,
 ];
 
-const SwipeableChatPreview = ({ id, chat, onPress }) => (
+const SwipeableChatPreview = ({ chat, onPress }) => (
   <Swipeable rightButtons={rightButtons} rightActionActivationDistance={20}>
-    <ChatPreview chat={{ id, ...chat }} onPress={onPress} />
+    <ChatPreview chat={chat} onPress={onPress} />
   </Swipeable>
 );
 
@@ -36,24 +36,33 @@ const createOpenChatCallback = navigation => (
   chatId,
   chatName,
   chatAvatarUrl,
-) => navigation.dispatch(
-  StackActions.push({
-    routeName: 'ChatScreen',
-    params: {
-      headerTitle: chatName,
-      chatId,
-      chatName, // to pass these to the header component
-      chatAvatarUrl,
-    },
-  }),
-);
+  isGroupChat,
+  userId,
+  userName,
+  avatarUrl,
+) => {
+  navigation.dispatch(
+    StackActions.push({
+      routeName: 'ChatScreen',
+      params: {
+        headerTitle: chatName,
+        chatId,
+        chatName,
+        chatAvatarUrl,
+        isGroupChat,
+        userId,
+        userName,
+        avatarUrl,
+      },
+    }),
+  );
+};
 
 const ChatList = ({ chats, navigation }) => (
   <View>
-    {_map(chats, (chat, key) => (
+    {chats.map(chat => (
       <SwipeableChatPreview
-        key={key}
-        id={key}
+        key={chat.id}
         chat={chat}
         onPress={createOpenChatCallback(navigation)}
       />
