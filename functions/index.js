@@ -7,70 +7,67 @@ admin.initializeApp();
 
 'use strict';
 
-exports.sendChatMessageNotification = functions.region(region).database.ref('/chats/{chatUid}/messages/{messageUid}')
+exports.sendChatMessageNotification = functions.region(region).database.ref('/chatEvents/{chatUid}/{messageUid}')
     .onCreate(async (snapshot, context) => {
       const chatUid = context.params.chatUid;
       const messageUid = context.params.messageUid;
-      const messageBody = snapshot.val().body
+      const messageBody = snapshot.val().payload.body;
+      const messageSenderId = snapshot.val().payload.sender;
+      const messageSender = await admin.database().ref(`/users/${messageSenderId}/username`).once('value')
+      //image or message or something else?
+      const messageType = snapshot.val().type;
 
-      console.log('We have a new message UID:', messageUid, 'for chat:', chatUid);
+      console.log(`New ${messageType} UID:`, messageUid, 'for chat:', chatUid);
 
       // Get the list of users in chat.
-      var db = admin.database();
       const chatMembers = [];
       const getChatMembersPromise = await admin.database()
-        .ref(`/chats/${chatUid}/members`)
+        .ref(`/chatMetadata/${chatUid}/members`)
         .once('value')
         .then((results) => {
           results.forEach((snapshot) => {
-            chatMembers.push(snapshot.val())
+            chatMembers.push(snapshot.val().id)
           })
           return results
         });
-      console.log('getchatmembers', chatMembers)
+      console.log('Chat members', chatMembers)
       // Get device tokens corresponding to members
       const getDeviceTokensPromises = []
+
       for(let key in chatMembers) {
         if(chatMembers.hasOwnProperty(key)) {
-          getDeviceTokensPromises.push(
-            admin.database().ref(`/users/${key}/expoToken`).once('value').then((result) => {
-              return result.val()
-            })
-            )
+          getDeviceTokensPromises.push(admin.database().ref(`/users/${chatMembers[key]}/expoToken`).once('value'))
         }
       }
 
       const results = await Promise.all(getDeviceTokensPromises)
-      console.log("promise all devicetokens ", results)
 
       // Check if there are any device tokens.
       if (results.length === 0) {
         return console.log('There are no notification tokens to send to.');
       }
-      const messages = []
+      const notifications = []
       
       responsePromises = []
-      for(deviceToken in results) {
-        if(deviceToken) {
-          console.log("this devicetoken: ", deviceToken)
-          messages.push({
-            "to": deviceToken,
-            "title": `New message from someone`,
+      for (let i = 0; i < results.length; i++) {
+        if(results[i]) {
+          notifications.push({
+            "to": results[i].val(),
+            "title": `${messageSender.val()}`,
             "body": `${messageBody}`
           })
         }
       }
-      console.log("all messages: ", messages)
+      console.log("All notifications: ", notifications)
 
       fetch('https://exp.host/--/api/v2/push/send', {
-
-            method: 'POST',
-            headers: {
-              "Accept": "application/json",
-              "Content-Type": "application/json"
-            },
-            body: JSON.stringify(messages)
-          })
+        method: 'POST',
+        headers: {
+          "Accept": "application/json",
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(notifications)
+      })
     });
 
 /*
