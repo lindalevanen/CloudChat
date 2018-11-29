@@ -41,7 +41,7 @@ exports.sendChatMessageNotification = functions.region(region).database.ref('/ch
       const getDeviceTokensPromises = []
 
       for(let key in chatMembers) {
-        if(chatMembers.hasOwnProperty(key)) {
+        if(chatMembers.hasOwnProperty(key) && chatMembers[key] !== messageSenderId) {
           getDeviceTokensPromises.push(admin.database().ref(`/users/${chatMembers[key]}/expoToken`).once('value'))
         }
       }

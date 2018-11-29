@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "924342250338",
+    "firebase_url": "https://mcc-fall-2018-g20-223013.firebaseio.com",
+    "project_id": "mcc-fall-2018-g20-223013",
+    "storage_bucket": "mcc-fall-2018-g20-223013.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:924342250338:android:f61bafb7f4afd8fc",
+        "android_client_info": {
+          "package_name": "com.mccg20"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "924342250338-7ujktg4mnm1s7tslvep3dt4od7cadnku.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDx_ha_K8jRVFE3kl9jL33OBRUNhEdzj1A"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

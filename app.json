@@ -23,6 +23,10 @@
     "ios": {
       "bundleIdentifier": "fi.vaaraj.cloudchat",
       "supportsTablet": true
+    },
+    "android": {
+      "package": "com.mccg20",
+      "googleServicesFile": "./google-services.json"
     }
   }
 }
