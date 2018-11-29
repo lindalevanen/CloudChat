@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, FlatList } from 'react-native';
+import { View, FlatList, Keyboard } from 'react-native';
 
 import { withTheme } from '../../components/ThemedWrapper';
 import EmptyPlaceholder from '../../components/EmptyPlaceholder';
@@ -18,14 +18,27 @@ const styles = theme => ({
 
 let scrollerRef;
 
-const MessageList = ({
-  theme, style, chatMetadata, messageList,
-}) => {
-  const themedStyle = styles(theme);
-  return (
-    <View style={[themedStyle.container, style]}>
-      {messageList.length === 0 ? <EmptyPlaceholder text="No messages yet" />
-        : (
+class MessageList extends React.Component {
+  componentDidMount() {
+    this.keyboardDidShowListener = Keyboard.addListener('keyboardDidShow', () => scrollerRef.scrollToEnd({ animated: true }));
+    this.keyboardDidHideListener = Keyboard.addListener('keyboardDidHide', () => scrollerRef.scrollToEnd({ animated: true }));
+  }
+
+  componentWillUnmount() {
+    this.keyboardDidShowListener.remove();
+    this.keyboardDidHideListener.remove();
+  }
+
+  render() {
+    const {
+      theme, style, chatMetadata, messageList,
+    } = this.props;
+    const themedStyle = styles(theme);
+    return (
+      <View style={[themedStyle.container, style]}>
+        {messageList.length === 0 ? (
+          <EmptyPlaceholder text="No messages yet" />
+        ) : (
           <FlatList
             data={messageList}
             keyExtractor={({ id }) => id}
@@ -39,15 +52,18 @@ const MessageList = ({
             keyboardDismissMode="on-drag"
             renderItem={({ item }) => (
               <Message
-                sender={{ id: item.payload.sender, ...chatMetadata.members[item.payload.sender] }}
+                sender={{
+                  id: item.payload.sender,
+                  ...chatMetadata.members[item.payload.sender],
+                }}
                 message={item}
               />
             )}
           />
-        )
-        }
-    </View>
-  );
-};
+        )}
+      </View>
+    );
+  }
+}
 
 export default withTheme(MessageList);

@@ -2,7 +2,7 @@ import React from 'react';
 import { KeyboardAvoidingView, SafeAreaView } from 'react-native';
 import { connect } from 'react-redux';
 import { compose, withState } from 'recompose';
-import { firebaseConnect, populate } from 'react-redux-firebase';
+import { firebaseConnect, populate, isLoaded } from 'react-redux-firebase';
 import _map from 'lodash/map';
 
 import { withTheme } from '../../components/ThemedWrapper';
@@ -55,7 +55,10 @@ class ChatScreen extends React.Component {
           behavior="padding"
           keyboardVerticalOffset={90}
         >
-          <MessageList chatMetadata={chatMetadata} messageList={messageList} />
+          <MessageList
+            chatMetadata={chatMetadata}
+            messageList={messageList}
+          />
           <MessageInput
             messageString={messageString}
             setMessageString={setMessageString}

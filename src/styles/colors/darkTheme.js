@@ -24,10 +24,10 @@ const palette = {
   text2: colors.grey,
   text3: colors.white,
   text4: colors.white,
-  messageBubble: colors.blue,
-  ownMessageBubble: colors.blueGreen,
+  messageBubble: colors.hack2,
+  ownMessageBubble: colors.hack1,
   messageSender: colors.lightgrey,
-  messageBody: colors.black,
+  messageBody: colors.white,
 };
 
 export default palette;

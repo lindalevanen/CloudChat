@@ -11,7 +11,7 @@ const styles = theme => ({
     alignSelf: 'flex-start',
     flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: 16,
+    marginBottom: 6,
   },
   messageBubble: {
     marginLeft: 10,
@@ -19,7 +19,7 @@ const styles = theme => ({
     paddingHorizontal: 14,
     backgroundColor: theme.messageBubble,
     borderRadius: 14,
-    borderTopLeftRadius: 0,
+    borderTopLeftRadius: 2,
     maxWidth: 240,
   },
   sender: {
@@ -37,7 +37,7 @@ const styles = theme => ({
     marginLeft: 0,
     marginRight: 10,
     borderTopLeftRadius: 14,
-    borderBottomRightRadius: 0,
+    borderBottomRightRadius: 2,
     backgroundColor: theme.ownMessageBubble,
   },
 });

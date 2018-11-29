@@ -24,9 +24,9 @@ const palette = {
   text2: 'black',
   text3: 'black',
   text4: 'black',
-  messageBubble: colors.blue,
-  ownMessageBubble: colors.blueGreen,
-  messageSender: colors.grey,
+  messageBubble: colors.hack2,
+  ownMessageBubble: colors.hack1,
+  messageSender: colors.lightgrey,
   messageBody: colors.white,
 };
 
