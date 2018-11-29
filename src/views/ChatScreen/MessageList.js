@@ -20,8 +20,8 @@ let scrollerRef;
 
 class MessageList extends React.Component {
   componentDidMount() {
-    this.keyboardDidShowListener = Keyboard.addListener('keyboardDidShow', () => scrollerRef.scrollToEnd({ animated: true }));
-    this.keyboardDidHideListener = Keyboard.addListener('keyboardDidHide', () => scrollerRef.scrollToEnd({ animated: true }));
+    this.keyboardDidShowListener = Keyboard.addListener('keyboardDidShow', () => scrollerRef && scrollerRef.scrollToEnd({ animated: true }));
+    this.keyboardDidHideListener = Keyboard.addListener('keyboardDidHide', () => scrollerRef && scrollerRef.scrollToEnd({ animated: true }));
   }
 
   componentWillUnmount() {
