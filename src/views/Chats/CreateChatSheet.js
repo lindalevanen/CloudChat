@@ -14,7 +14,7 @@ const CreateChatSheet = ({ theme, navigation }) => {
     }),
   );
   const openOneToOneChat = user => navigation.dispatch(
-    StackActions.push({
+    StackActions.replace({
       routeName: 'OneToOneChatScreen',
       params: {
         userId: user.id,

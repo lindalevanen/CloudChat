@@ -40,7 +40,7 @@ export const OneToOneChatHeaderButton = ({ navigation }) => {
 
 const ChatScreenHeaderButton = ({ navigation }) => {
   const {
-    chatName, chatId, chatAvatarUrl, isGroupChat, userId, userName, avatarUrl,
+    headerTitle, chatName, chatId, chatAvatarUrl, isGroupChat, userId,
   } = navigation.state.params;
   console.log('render header action: ', navigation.state.params);
   const routeName = isGroupChat ? 'ChatInfoScreen' : 'UserInfoScreen';
@@ -49,10 +49,10 @@ const ChatScreenHeaderButton = ({ navigation }) => {
     chatId,
     chatName,
   } : {
-    headerTitle: userName,
+    headerTitle,
     userId,
-    userName,
-    avatarUrl,
+    chatName,
+    chatAvatarUrl,
   };
   return (
     <TouchableOpacity

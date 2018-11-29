@@ -1,5 +1,5 @@
 import React from 'react';
-import { Text, KeyboardAvoidingView, SafeAreaView } from 'react-native';
+import { KeyboardAvoidingView, SafeAreaView } from 'react-native';
 import { connect } from 'react-redux';
 import { compose, withState } from 'recompose';
 import { firebaseConnect, populate } from 'react-redux-firebase';
@@ -33,12 +33,7 @@ class ChatScreen extends React.Component {
 
     const messageBody = messageString;
     setMessageString('');
-    await sendMessage(
-      firebase,
-      messageBody,
-      chatId,
-      profileUid,
-    );
+    await sendMessage(firebase, messageBody, chatId, profileUid);
   };
 
   render() {

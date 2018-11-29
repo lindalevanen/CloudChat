@@ -3,6 +3,7 @@ import { format } from 'date-fns';
 import { TouchableHighlight, Text, View } from 'react-native';
 import { connect } from 'react-redux';
 import { compose } from 'recompose';
+import _find from 'lodash/find';
 
 import Avatar from '../Avatar';
 import { withTheme } from '../ThemedWrapper';
@@ -41,48 +42,42 @@ const styles = theme => ({
 });
 
 const ChatPreview = ({
-  chat, profileUid, theme, onPress,
+  theme, onPress, chat, profileUid,
 }) => {
   const style = styles(theme);
+  let imageUrl;
+  let chatTitle;
+  let timestamp;
 
   let contact;
-  if (!chat.groupChat && chat.members) {
-    contact = Object.values(chat.members).find(user => user.id !== profileUid);
-  }
-  const chatTitle = chat.groupChat
-    ? chat.title || 'Untitled groupchat'
-    : contact.username;
-  const avatarUrl = chat.groupChat ? chat.avatarUrl : contact.avatarUrl;
 
-  const openChat = () => {
-    if (chat.groupChat) {
-      onPress(chat.id, chatTitle, avatarUrl, true);
-    } else {
-      onPress(
-        chat.id,
-        chatTitle,
-        avatarUrl,
-        false,
-        contact.id,
-        contact.username,
-        contact.avatarUrl,
-      );
+  if (chat.groupChat) {
+    imageUrl = chat.avatarUrl;
+    chatTitle = chat.title;
+    timestamp = chat.createdAt; // should have preview message here
+  } else {
+    contact = _find(chat.members, user => user.id !== profileUid);
+    if (contact) {
+      imageUrl = contact.avatarUrl;
+      chatTitle = contact.username;
+      timestamp = chat.createdAt;
     }
-  };
+  }
 
-  if (chat === undefined) return null;
+  const onPressHandler = () => (chat.groupChat ? onPress(chat) : onPress(chat, contact));
+
   return (
     <TouchableHighlight
       style={[style.chatPreview]}
-      onPress={openChat}
+      onPress={onPressHandler}
       underlayColor={theme.backdrop}
     >
       <View style={[style.chatContainer]}>
-        <Avatar url={avatarUrl} username={chat.title} />
+        <Avatar url={imageUrl} username={chatTitle} />
         <View style={[style.summaryContainer]}>
           <Text style={[style.chatTitleText]}>{chatTitle}</Text>
           <Text style={[style.chatUpdatedText]}>
-            {prettyTimestamp(chat.createdAt)}
+            {prettyTimestamp(timestamp)}
           </Text>
         </View>
         <Text style={[style.chatUpdatedText]}>{chat.lastMessage}</Text>

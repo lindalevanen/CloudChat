@@ -31,17 +31,21 @@ const LoadingView = () => (
   </View>
 );
 
-const chatsWithUsers = (chats, users) => _map(chats, (chat, id) => {
-  const chatMembers = _map(chat.members, user => ({
-    ...user,
-    ...users[user.id],
-  }));
-  return {
-    ...chat,
-    id,
-    members: chatMembers,
-  };
-});
+const chatsWithUsers = (chats, users) => {
+  const qwe = _map(chats, (chat, id) => {
+    const chatMembers = _map(chat.members, user => ({
+      ...user,
+      ...users[user.id],
+    }));
+    return {
+      ...chat,
+      id,
+      members: chatMembers,
+    };
+  });
+  console.log(qwe);
+  return qwe;
+};
 
 const Chats = ({ theme, chats, users }) => {
   const style = styles(theme);

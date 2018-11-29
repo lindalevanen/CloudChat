@@ -33,29 +33,36 @@ const SwipeableChatPreview = ({ chat, onPress }) => (
 );
 
 const createOpenChatCallback = navigation => (
-  chatId,
-  chatName,
-  chatAvatarUrl,
-  isGroupChat,
-  userId,
-  userName,
-  avatarUrl,
+  chat, contact,
 ) => {
-  navigation.dispatch(
-    StackActions.push({
-      routeName: 'ChatScreen',
-      params: {
-        headerTitle: chatName,
-        chatId,
-        chatName,
-        chatAvatarUrl,
-        isGroupChat,
-        userId,
-        userName,
-        avatarUrl,
-      },
-    }),
-  );
+  if (chat.groupChat) {
+    navigation.dispatch(
+      StackActions.push({
+        routeName: 'ChatScreen',
+        params: {
+          headerTitle: chat.title,
+          chatId: chat.id,
+          chatName: chat.title,
+          chatAvatarUrl: chat.avatarUrl,
+          isGroupChat: true,
+        },
+      }),
+    );
+  } else if (contact) {
+    navigation.dispatch(
+      StackActions.push({
+        routeName: 'ChatScreen',
+        params: {
+          headerTitle: contact.username,
+          chatId: chat.id,
+          userId: contact.id,
+          chatName: contact.username,
+          chatAvatarUrl: contact.avatarUrl,
+          isGroupChat: false,
+        },
+      }),
+    );
+  }
 };
 
 const ChatList = ({ chats, navigation }) => (
