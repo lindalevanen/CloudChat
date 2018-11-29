@@ -1,5 +1,11 @@
 const functions = require('firebase-functions');
 const admin = require('firebase-admin');
+const spawn = require('child-process-promise').spawn;
+const path = require('path');
+const os = require('os');
+const fs = require('fs');
+const glob = require('glob')
+
 var fetch = require('node-fetch')
 
 const region = 'europe-west1'
@@ -73,7 +79,7 @@ exports.sendChatMessageNotification = functions.region(region).database.ref('/ch
           })
     });
 
-/*
+
 function getFileName(key, tempName) {
   return `${key}_${tempName}`
 }
@@ -109,12 +115,12 @@ function deleteFiles(tempFilePath) {
     });
   });
 }
-*/
+
 /**
  * When an image is uploaded in the Storage bucket We generate a thumbnail automatically using
  * ImageMagick.
  */
-/*
+
 exports.createAvatarThumbnail = functions.region(region).storage.object().onFinalize(async (object) => {
   // Object metadata
   const fileBucket = object.bucket; // The Storage bucket that contains the file.
@@ -172,4 +178,3 @@ exports.createAvatarThumbnail = functions.region(region).storage.object().onFina
   console.log(`Deleted files ${files}`);
   return files
 });
-*/
