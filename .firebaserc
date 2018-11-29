@@ -1,5 +1,6 @@
 {
   "projects": {
-    "default": "snazzy-narwhal-on-fire"
+    "default": "snazzy-narwhal-on-fire",
+    "project": "mcc-fall-2018-g20-223013"
   }
 }

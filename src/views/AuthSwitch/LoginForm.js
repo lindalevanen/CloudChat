@@ -8,7 +8,7 @@ import { compose, withState } from 'recompose';
 import Button from '../../components/Button';
 import TextInput from '../../components/TextInput';
 import Logo from '../../../assets/icon.png';
-import { loginChatUser } from '../../store/utils/firebase';
+import { loginChatUser, registerForPushNotificationsAsync } from '../../store/utils/firebase';
 
 const styles = StyleSheet.create({
   logo: {
@@ -32,7 +32,9 @@ const LoginForm = ({
   const onLoginPressed = async () => {
     try {
       const result = await loginChatUser(firebase, { email, password });
-      console.log('login result', result);
+      console.log('login result', result.user.user);
+      const setPushNotification = await registerForPushNotificationsAsync(firebase, result.user.user)
+      console.log('setting push notification result, ', setPushNotification)
       onLoggedIn();
     } catch (e) {
       console.log('User login failed:', e);
