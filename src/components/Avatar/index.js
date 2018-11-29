@@ -8,8 +8,6 @@ import ProgressBar from 'react-native-progress/Circle';
 
 const styles = StyleSheet.create({
   circle: {
-    borderColor: 'darkgrey',
-    borderWidth: 0.4,
     backgroundColor: 'white',
   },
   placeHolder: {
