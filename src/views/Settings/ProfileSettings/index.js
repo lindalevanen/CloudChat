@@ -5,6 +5,7 @@ import { connect } from 'react-redux';
 import { compose } from 'recompose';
 import { withNavigation, StackActions } from 'react-navigation';
 import { Ionicons } from '@expo/vector-icons';
+import { unsubscribePushNotificationsAsync } from '../../../store/utils/firebase';
 
 import Button from '../../../components/Button';
 import ProfileInfo from '../../../components/ProfileInfo';
@@ -12,8 +13,13 @@ import ProfileInfo from '../../../components/ProfileInfo';
 import { styles } from '../../../styles/form/style';
 import colors from '../../../styles/colors';
 
-const Preferences = ({ navigation, firebase, theme }) => {
+const Preferences = ({
+  navigation, firebase, theme, auth,
+}) => {
   const logout = async () => {
+    console.log('logging out');
+    console.log('id: ', auth.uid);
+    await unsubscribePushNotificationsAsync(firebase, auth.uid);
     await firebase.logout();
     navigation.navigate('Login');
   };
@@ -69,11 +75,11 @@ const Preferences = ({ navigation, firebase, theme }) => {
 };
 
 const ProfileSettings = ({
-  profile, navigation, firebase, theme,
+  profile, navigation, firebase, theme, auth,
 }) => (
   <View>
     <ProfileInfo profile={profile} theme={theme} />
-    <Preferences navigation={navigation} firebase={firebase} theme={theme} />
+    <Preferences navigation={navigation} firebase={firebase} theme={theme} auth={auth} />
   </View>
 );
 

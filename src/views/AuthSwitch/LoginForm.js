@@ -33,13 +33,11 @@ const LoginForm = ({
     try {
       const result = await loginChatUser(firebase, { email, password });
       console.log('login result', result.user.user);
-      let setPushNotification = '';
       try {
-        setPushNotification = await registerForPushNotificationsAsync(firebase, result.user.user);
+        registerForPushNotificationsAsync(firebase, result.user.user);
       } catch (e) {
         console.log('fetching token failed:', e);
       }
-      console.log('setting push notification result, ', setPushNotification);
       onLoggedIn();
     } catch (e) {
       console.log('User login failed:', e);

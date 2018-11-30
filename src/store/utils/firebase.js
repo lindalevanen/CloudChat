@@ -71,6 +71,10 @@ export async function registerForPushNotificationsAsync(firebaseRef, user) {
   firebaseRef.update(`users/${user.uid}`, updates);
 }
 
+export async function unsubscribePushNotificationsAsync(firebaseRef, userId) {
+  firebaseRef.remove(`users/${userId}/expoToken`);
+}
+
 export async function createChatRoom(
   firebaseRef,
   groupChat,
