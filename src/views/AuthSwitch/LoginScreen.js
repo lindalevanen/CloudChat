@@ -4,7 +4,7 @@ import {
 } from 'react-native';
 import { withState, compose } from 'recompose';
 import { firebaseConnect } from 'react-redux-firebase';
-
+import { registerForPushNotificationsAsync } from '../../store/utils/firebase';
 import Button from '../../components/Button';
 import LoginForm from './LoginForm';
 import RegisterForm from './RegisterForm';
@@ -30,10 +30,18 @@ const enhancer = compose(
 );
 
 const LoginScreen = ({
-  theme, isRegistering, setIsRegistering, navigation,
+  theme, isRegistering, setIsRegistering, navigation, firebase,
 }) => {
   const getToggleActionTitle = () => (isRegistering ? 'Login to existing account' : 'Register new account');
-  const onLoggedIn = () => navigation.navigate('App');
+  const onLoggedIn = async () => {
+    const newId = firebase.auth().currentUser.uid;
+    try {
+      registerForPushNotificationsAsync(firebase, newId);
+    } catch (e) {
+      console.log(e);
+    }
+    navigation.navigate('App');
+  };
   const style = styles(theme);
   return (
     <View style={style.container}>
