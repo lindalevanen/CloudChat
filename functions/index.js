@@ -13,8 +13,17 @@ admin.initializeApp();
 
 'use strict';
 
+exports.deleteGroupsThatHaveNoUser = functions.region(region).database.ref('chatMetadata/{chatUid}/members/')
+  .onDelete(async (snapshot, context) => {
+    const chatUid = context.params.chatUid
+    console.log(`Deleting chat ${chatUid} because last member left`)
+    const ref = await admin.database().ref(`chatMetadata/${chatUid}`)
+    await ref.remove()
+  });
+
 exports.sendChatMessageNotification = functions.region(region).database.ref('/chatEvents/{chatUid}/{messageUid}')
     .onCreate(async (snapshot, context) => {
+      //todo clean this up by moving parts of code to functions
       const chatUid = context.params.chatUid;
       const messageUid = context.params.messageUid;
       const messageBody = snapshot.val().payload.body;
