@@ -13,6 +13,51 @@ admin.initializeApp();
 
 'use strict';
 
+function findUrlFromStrings(stringArr) {
+  const regexUrl = /(https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|www\.[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9]\.[^\s]{2,}|www\.[a-zA-Z0-9]\.[^\s]{2,})/;
+  let result = ''
+  for (i in stringArr) {
+    if (regexUrl.test(stringArr[i])) {
+      result = stringArr[i];
+      break;
+    }
+  }
+  return result;
+}
+
+exports.createUrlPreview = functions.region(region).database.ref('chatEvents/{chatUid}/{messageUid}')
+  .onCreate(async (snapshot, context) => {
+    const messageType = snapshot.val().type;
+    if (messageType !== 'message') {
+      console.log("Not a message")
+      return null
+    }
+
+    const chatUid = context.params.chatUid;
+    const messageUid = context.params.messageUid;
+    const messageBody = snapshot.val().payload.body;
+
+    const foundUrl = findUrlFromStrings(messageBody.split(" "))
+    if (!foundUrl) {
+      console.log("No URL in message")
+      return null
+    }
+
+    console.log(`${foundUrl} seems to be a URL! fetching for preview metadata`)
+    const linkPreviewAPIKey = '5c04023cb90a8e4a43d1e77d9026029040b88571813db'
+    const linkPreviewURL = 'http://api.linkpreview.net/?key=' + linkPreviewAPIKey + '&q=' + foundUrl
+
+    const previewData = await fetch(linkPreviewURL)
+      .then((response) => {
+        return response.json();
+      })
+
+    const updates = {};
+    updates['/previewDataOfURL'] = previewData;
+
+    return admin.database().ref(`chatEvents/${chatUid}/${messageUid}/payload`).update(updates)
+  });
+
 exports.deleteGroupsThatHaveNoUser = functions.region(region).database.ref('chatMetadata/{chatUid}/members/')
   .onDelete(async (snapshot, context) => {
     const chatUid = context.params.chatUid
