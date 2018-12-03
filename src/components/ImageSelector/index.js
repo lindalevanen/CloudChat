@@ -1,5 +1,5 @@
 import React from 'react';
-import { View } from 'react-native';
+import { View, StyleSheet } from 'react-native';
 import { ImagePicker, ImageManipulator, Permissions } from 'expo';
 import { compose } from 'recompose';
 import { firebaseConnect } from 'react-redux-firebase';
@@ -9,13 +9,6 @@ import urlToBlob from '../../store/utils/urlToBlob';
 import Button from '../Button';
 import { withTheme } from '../ThemedWrapper';
 import { styles } from '../../styles/form/style';
-
-const imgOptions = {
-  mediaTypes: ImagePicker.MediaTypeOptions.Images,
-  allowsEditing: true,
-  aspect: [1, 1],
-  exif: false,
-};
 
 const resolutions = {
   low: {
@@ -32,8 +25,12 @@ const ImageSelector = ({
   setLoading,
   setError,
   imageQuality,
+  imageOptions,
   onFileReceived,
+  theme,
+  buttonStyle,
 }) => {
+  const style = styles(theme);
   const resizeImage = async (originalUri, resolution) => {
     const { width, height } = resolution;
     const actions = [{
@@ -56,7 +53,12 @@ const ImageSelector = ({
       const resolution = resolutions[imageQuality];
       const finalUri = (resolution) ? await resizeImage(uri, resolution) : uri;
       const file = await urlToBlob(finalUri);
-      onFileReceived(file);
+      const fileData = {
+        file,
+        width: result.width,
+        height: result.height,
+      };
+      onFileReceived(fileData);
     }
   };
   const takeFromCamera = async () => {
@@ -67,7 +69,7 @@ const ImageSelector = ({
     if (status !== 'granted') {
       setError('Permission to access images not granted');
     } else {
-      handleResult(await ImagePicker.launchCameraAsync(imgOptions));
+      handleResult(await ImagePicker.launchCameraAsync(imageOptions));
     }
   };
   const pickImage = async () => {
@@ -75,13 +77,13 @@ const ImageSelector = ({
     if (status !== 'granted') {
       setError('Permission to access images not granted');
     } else {
-      handleResult(await ImagePicker.launchImageLibraryAsync(imgOptions));
+      handleResult(await ImagePicker.launchImageLibraryAsync(imageOptions));
     }
   };
   return (
-    <View>
-      <Button title="Camera" onPress={takeFromCamera} type="Success" />
-      <Button title="Gallery" onPress={pickImage} type="Success" />
+    <View style={[style.sameSizedChildren]}>
+      <Button style={{ ...buttonStyle, backgroundColor: theme.actionHero }} title="Camera" onPress={takeFromCamera} type="Success" />
+      <Button style={{ ...buttonStyle, backgroundColor: theme.actionHero }} title="Gallery" onPress={pickImage} type="Success" />
     </View>
   );
 };

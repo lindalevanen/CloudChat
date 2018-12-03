@@ -3,12 +3,20 @@ import { Text, View } from 'react-native';
 import { compose, withState } from 'recompose';
 import { firebaseConnect } from 'react-redux-firebase';
 import { connect } from 'react-redux';
+import { ImagePicker } from 'expo';
 
 import { uploadAvatar } from '../../store/utils/firebase';
 import Avatar from '../Avatar';
 import ImageSelector from '../ImageSelector';
 import { withTheme } from '../ThemedWrapper';
 import { styles } from '../../styles/form/style';
+
+const imgOptions = {
+  mediaTypes: ImagePicker.MediaTypeOptions.Images,
+  allowsEditing: true,
+  aspect: [1, 1],
+  exif: false,
+};
 
 const AvatarSelector = ({
   firebase,
@@ -22,10 +30,10 @@ const AvatarSelector = ({
   theme,
 }) => {
   const style = styles(theme);
-  const handleFileReceived = async (file) => {
+  const handleFileReceived = async (data) => {
     const {
       uploadTaskSnapshot: { ref },
-    } = await uploadAvatar(firebase, file, profileUid, imageQuality);
+    } = await uploadAvatar(firebase, data.file, profileUid, imageQuality);
     const downloadUrl = await ref.getDownloadURL();
     await firebase.updateProfile({ avatarUrl: downloadUrl });
     setLoading(false);
@@ -39,6 +47,8 @@ const AvatarSelector = ({
           setError={setError}
           setLoading={setLoading}
           onFileReceived={handleFileReceived}
+          imageOptions={imgOptions}
+          buttonStyle={{ marginLeft: 10 }}
         />
       </View>
     </View>

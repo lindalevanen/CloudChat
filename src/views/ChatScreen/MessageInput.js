@@ -15,7 +15,11 @@ const styles = theme => ({
     flex: 1,
   },
   button: {
-    paddingHorizontal: 10,
+    paddingRight: 10,
+    paddingLeft: 15,
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'center',
     minWidth: 50,
     alignItems: 'center',
   },
@@ -26,16 +30,16 @@ const SendAction = ({ theme, style, sendMessage }) => (
     style={style}
     onPress={sendMessage}
   >
-    <Ionicons name="ios-send" color={theme.actionHero} size={40} />
+    <Ionicons name="ios-send" color={theme.actionHero} size={30} />
   </TouchableOpacity>
 );
 
-const AttachAction = ({ theme, style, sendMessage }) => (
+const AttachAction = ({ theme, style, chooseFile }) => (
   <TouchableOpacity
     style={style}
-    onPress={sendMessage}
+    onPress={chooseFile}
   >
-    <Ionicons name="ios-attach" color={theme.actionHero} size={40} />
+    <Ionicons name="ios-attach" color={theme.actionHero} size={30} />
   </TouchableOpacity>
 );
 
@@ -44,6 +48,7 @@ const MessageInput = ({
   messageString,
   setMessageString,
   sendMessage,
+  chooseFile,
 }) => {
   const style = styles(theme);
   return (
@@ -59,7 +64,7 @@ const MessageInput = ({
       {messageString.length > 0 ? (
         <SendAction theme={theme} style={style.button} sendMessage={sendMessage} />
       ) : (
-        <AttachAction theme={theme} style={style.button} sendMessage={sendMessage} />
+        <AttachAction theme={theme} style={style.button} chooseFile={chooseFile} />
       )}
     </View>
   );

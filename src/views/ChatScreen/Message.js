@@ -1,7 +1,9 @@
 import React from 'react';
-import { Text, View } from 'react-native';
+import { Text, View, Dimensions } from 'react-native';
 import { connect } from 'react-redux';
 import { compose } from 'recompose';
+import Image from 'react-native-image-progress';
+import ProgressBar from 'react-native-progress/Circle';
 
 import { AvatarWithProfileLink } from '../../components/Avatar';
 import { withTheme } from '../../components/ThemedWrapper';
@@ -40,6 +42,13 @@ const styles = theme => ({
     borderBottomRightRadius: 2,
     backgroundColor: theme.ownMessageBubble,
   },
+  chatImage: {
+    flex: 1,
+    width: null,
+    height: null,
+    resizeMode: 'contain',
+    borderRadius: 10,
+  },
 });
 
 const Message = ({
@@ -47,7 +56,12 @@ const Message = ({
 }) => {
   const style = styles(theme);
   const ownMessage = profileUid === sender.id;
-  const { body } = message.payload;
+  const { body, attachment } = message.payload;
+
+  const dimensions = Dimensions.get('window');
+  const maxWidth = dimensions.width / 3 * 2;
+  const maxHeight = 200;
+
   return (
     <View style={[style.container, ownMessage && style.ownMessage]}>
       {!ownMessage && (
@@ -58,10 +72,18 @@ const Message = ({
         userId={sender.id}
       />
       )}
-      <View style={[style.messageBubble, ownMessage && style.ownBubble]}>
-        {!ownMessage && (<Text style={style.sender}>{sender.username}</Text>)}
-        <Text style={style.messageBody}>{body}</Text>
-      </View>
+      {attachment ? (
+        <Image
+          style={{ height: maxHeight, width: maxWidth }}
+          imageStyle={style.chatImage}
+          source={{ uri: attachment }}
+          indicator={ProgressBar}
+        />) : (
+          <View style={[style.messageBubble, ownMessage && style.ownBubble]}>
+            {!ownMessage && (<Text style={style.sender}>{sender.username}</Text>)}
+            <Text style={style.messageBody}>{body}</Text>
+          </View>)
+      }
     </View>
   );
 };

@@ -35,6 +35,11 @@ export const styles = theme => ({
     borderColor: theme.separator,
     borderBottomWidth: 0.3,
   },
+  sameSizedChildren: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    minHeight: 56,
+  },
   section: {
     marginBottom: 18,
   },
