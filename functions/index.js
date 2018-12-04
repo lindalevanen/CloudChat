@@ -18,11 +18,16 @@ exports.deleteImagesFromDeletedGroups = functions.region(region).database.ref('c
     const chatUid = context.params.chatUid
     console.log(`Chat ${chatUid} deleted, proceeding to delete its images`)
 
-    const ref = await admin.database().ref(`storageMetadata/chatImages/${chatUid}`)
-
     const promises = {};
+    const ref = await admin.database().ref(`storageMetadata/chatImages/${chatUid}`)
     await ref.once('value').then(snapshot => {
       snapshot.forEach((child) => {
+        console.log("this image: ", child)
+        try{
+          console.log("this images name:", child.name)
+        } catch (e) {
+          console.log(e)
+        }
         const bucket = child.bucket;
         const fileName = child.name;
         promises.push(admin.storage().bucket(bucket).file(fileName).delete());
