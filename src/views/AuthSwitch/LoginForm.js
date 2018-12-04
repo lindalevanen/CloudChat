@@ -35,12 +35,10 @@ const LoginForm = ({
 }) => {
   const onLoginPressed = async () => {
     try {
-      const result = await loginChatUser(firebase, { email, password });
-      console.log('login result', result.user.user);
+      await loginChatUser(firebase, { email, password });
       onLoggedIn();
     } catch (e) {
       const errorMessage = 'Invalid email or password';
-      // or use store/utils/firebaseauthErroMessage(e.code) for detailed errors
       setError(errorMessage);
     }
   };

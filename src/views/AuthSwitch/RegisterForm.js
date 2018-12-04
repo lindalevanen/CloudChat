@@ -1,10 +1,10 @@
 import React from 'react';
-import { View, StyleSheet } from 'react-native';
+import { View, StyleSheet, Text } from 'react-native';
 import { compose, withState } from 'recompose';
 import StepIndicator from 'react-native-step-indicator';
 
 import { withFirebase } from 'react-redux-firebase';
-import { createChatUser } from '../../store/utils/firebase';
+import { createChatUser, authErrorMessage } from '../../store/utils/firebase';
 
 import TextInput from '../../components/TextInput';
 import Avatar from '../../components/Avatar';
@@ -27,10 +27,14 @@ const styles = StyleSheet.create({
   stepIndicatorContainer: {
     marginBottom: 200,
   },
+  error: {
+    textAlign: 'center',
+    color: 'red',
+  },
 });
 
 const AccountForm = ({
-  email, setEmail, password, setPassword, setStep,
+  email, setEmail, password, setPassword,
 }) => (
   <View>
     <TextInput
@@ -58,7 +62,8 @@ const ProfileForm = ({
   password,
   username,
   setUsername,
-  setStep,
+  error,
+  setError,
   firebase,
   onLoggedIn,
 }) => {
@@ -81,6 +86,8 @@ const ProfileForm = ({
       onLoggedIn();
     } catch (e) {
       console.log('User login failed:', e);
+      const errorMessage = authErrorMessage(e);
+      setError(errorMessage);
     }
   };
   return (
@@ -97,6 +104,7 @@ const ProfileForm = ({
         onChangeText={setUsername}
       />
       <Button onPress={onRegisterPressed} title="Register" titleColor="white" />
+      <Text key="error" style={[styles.error]}>{error}</Text>
     </View>
   );
 };
@@ -107,6 +115,7 @@ const enhance = compose(
   withState('email', 'setEmail', ''),
   withState('password', 'setPassword', ''),
   withState('username', 'setUsername', ''),
+  withState('error', 'setError', ''),
 );
 
 const RegisterForm = ({

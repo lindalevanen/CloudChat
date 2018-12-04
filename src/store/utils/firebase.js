@@ -34,12 +34,11 @@ export function createChatUser(firebaseRef, credentials, profile) {
 }
 
 export function loginChatUser(firebaseRef, credentials) {
-  const { email, password } = credentials;
-  return firebase.auth().signInWithEmailAndPassword(email, password);
+  return firebase.login(credentials);
 }
 
 export function authErrorMessage(e) {
-  switch (e) {
+  switch (e.code) {
     case 'auth/invalid-email':
       return 'Email address is badly formatted';
     case 'auth/user-disabled':
@@ -47,6 +46,8 @@ export function authErrorMessage(e) {
     case 'auth/user-not-found':
     case 'auth/wrong-password':
       return 'Invalid email or password';
+    case 'auth/weak-password':
+      return e.message;
     default:
       return 'Error logging in';
   }
