@@ -13,6 +13,33 @@ admin.initializeApp();
 
 'use strict';
 
+exports.deleteImagesFromDeletedGroups = functions.region(region).database.ref('chatMetadata/{chatUid}')
+  .onDelete(async (snapshot, context) => {
+    const chatUid = context.params.chatUid
+    console.log(`Chat ${chatUid} deleted, proceeding to delete its images`)
+
+    const promises = [];
+    const ref = await admin.database().ref(`storageMetadata/chatImages/${chatUid}`)
+    await ref.once('value').then(snapshot => {
+      snapshot.forEach((childSnapshot) => {
+        const child = childSnapshot.val();
+        const bucket = child.bucket;
+        const fileName = child.name;
+        const preFix = `chatImages/${chatUid}/${fileName}`
+        promises.push(admin.storage().bucket(bucket).file(preFix).delete());
+      });
+    return;
+    });
+
+    Promise.all(promises).then(result => {
+      console.log(`Successfully removed ${result.length} images`);
+      return;
+    })
+    .catch(error => {
+      console.log(error.message)
+    })
+  });
+
 function findUrlFromStrings(stringArr) {
   const regexUrl = /(https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|www\.[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9]\.[^\s]{2,}|www\.[a-zA-Z0-9]\.[^\s]{2,})/;
   let result = ''
