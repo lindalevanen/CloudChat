@@ -34,7 +34,22 @@ export function createChatUser(firebaseRef, credentials, profile) {
 }
 
 export function loginChatUser(firebaseRef, credentials) {
-  return firebase.login(credentials);
+  const { email, password } = credentials;
+  return firebase.auth().signInWithEmailAndPassword(email, password);
+}
+
+export function authErrorMessage(e) {
+  switch (e) {
+    case 'auth/invalid-email':
+      return 'Email address is badly formatted';
+    case 'auth/user-disabled':
+      return 'Account has been disabled';
+    case 'auth/user-not-found':
+    case 'auth/wrong-password':
+      return 'Invalid email or password';
+    default:
+      return 'Error logging in';
+  }
 }
 
 export async function addRoomToUsers(firebaseRef, roomId, userIds) {
