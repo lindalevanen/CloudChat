@@ -21,7 +21,7 @@ exports.deleteImagesFromDeletedGroups = functions.region(region).database.ref('c
     const promises = {};
     const ref = await admin.database().ref(`storageMetadata/chatImages/${chatUid}`)
     await ref.once('value').then(snapshot => {
-      snapshot.forEach((child) => {
+      snapshot.val().forEach((child) => {
         console.log("this image: ", child)
         try{
           console.log("this images name:", child.name)
