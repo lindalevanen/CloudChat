@@ -26,11 +26,6 @@ exports.deleteImagesFromDeletedGroups = functions.region(region).database.ref('c
         const bucket = child.bucket;
         const fileName = child.name;
         const preFix = `chatImages/${chatUid}/${fileName}`
-        const fullPath = `${bucket}/${preFix}`
-        console.log(bucket)
-        console.log(fileName)
-        console.log(preFix)
-        console.log(fullPath)
         promises.push(admin.storage().bucket(bucket).file(preFix).delete());
       });
     return;
