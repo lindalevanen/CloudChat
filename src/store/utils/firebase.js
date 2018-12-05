@@ -116,9 +116,13 @@ function uploadImageWithMetadata(
   filePath,
   fileName,
   fileOwner,
+  imageWidth = null,
+  imageHeight = null,
 ) {
   const options = {
     name: fileName,
+    width: imageWidth,
+    height: imageHeight,
     metadataFactory: (uploadRes) => {
       const { metadata } = uploadRes;
       const cleanMeta = omit({ ...metadata, fileOwner }, [
@@ -163,35 +167,62 @@ export function uploadAvatar(firebaseRef, file, profileUid, quality = null) {
   );
 }
 
+export function uploadChatImage(firebaseRef, data, chatId, profileUid, quality = null) {
+  return uploadImageWithMetadata(
+    firebaseRef,
+    data.file,
+    `chatImages/${chatId}`,
+    `${nameImage(quality)}.jpg`,
+    profileUid,
+    data.width,
+    data.height,
+  );
+}
+
 export function pushChatEvent(firebaseRef, eventData, path) {
   return firebaseRef.push(path, eventData);
 }
 
-export function sendMessage(
+export async function sendMessage(
   firebaseRef,
   messageString,
   chatId,
   sender,
   attachment = null,
+  data = null,
 ) {
-  if (messageString === '') {
+  if (attachment === null && messageString === '') {
     return Promise.reject(new Error('Empty message not sent'));
   }
   if (!chatId || !sender) {
     return Promise.reject(new Error('chatId or sender userId missing'));
   }
   const messageEvent = {
-    type: 'message',
+    type: attachment ? 'image' : 'message',
     timestamp: Date.now(),
     payload: {
       body: messageString,
+      dimensions: null,
       sender,
       attachment,
     },
   };
-
-  console.log(messageEvent);
+  if (data) {
+    messageEvent.payload.dimensions = {
+      width: data.width,
+      height: data.height,
+    };
+  }
   return pushChatEvent(firebaseRef, messageEvent, `chatEvents/${chatId}`);
+}
+
+export function setDownloadUrl(firebaseRef, chatId, messageId, url, metadataId) {
+  const res = firebaseRef.set(
+    `storageMetadata/chatImages/${chatId}/${metadataId}/url`, url, () => {
+      firebaseRef.set(`chatEvents/${chatId}/${messageId}/payload/attachment`, url);
+    },
+  );
+  return res;
 }
 
 export function leaveChat(firebaseRef, chatId, userId) {

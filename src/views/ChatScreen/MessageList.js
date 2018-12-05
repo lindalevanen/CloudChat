@@ -29,6 +29,15 @@ class MessageList extends React.Component {
     this.keyboardDidHideListener.remove();
   }
 
+  itemOkToRender = (item) => {
+    const { chatMetadata } = this.props
+    return (
+      item && item.payload && item.payload.sender &&
+      chatMetadata && chatMetadata.members &&
+      chatMetadata.members[item.payload.sender]
+    )
+  }
+
   render() {
     const {
       theme, style, chatMetadata, messageList,
@@ -51,13 +60,15 @@ class MessageList extends React.Component {
             }}
             keyboardDismissMode="on-drag"
             renderItem={({ item }) => (
-              <Message
-                sender={{
-                  id: item.payload.sender,
-                  ...chatMetadata.members[item.payload.sender],
-                }}
-                message={item}
-              />
+              this.itemOkToRender(item) && (
+                <Message
+                  sender={{
+                    id: item.payload.sender,
+                    ...chatMetadata.members[item.payload.sender],
+                  }}
+                  message={item}
+                />
+              )
             )}
           />
         )}

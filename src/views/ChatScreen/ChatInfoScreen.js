@@ -42,12 +42,12 @@ const ChatInfoScreen = ({
   const infoStyle = infoStyles(theme);
 
   const leaveRoom = async () => {
-    const res = await leaveChat(
+    navigation.dispatch(StackActions.popToTop());
+    await leaveChat(
       firebase,
       navigation.state.params.chatId,
       profileUid,
     );
-    navigation.dispatch(StackActions.popToTop());
   };
 
   if (!chatMetadata || !chatMetadata.members) { // without this the app crashes on leaving group
