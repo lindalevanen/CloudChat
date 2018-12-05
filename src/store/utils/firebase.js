@@ -216,8 +216,13 @@ export async function sendMessage(
   return pushChatEvent(firebaseRef, messageEvent, `chatEvents/${chatId}`);
 }
 
-export function setDownloadUrl(firebaseRef, chatId, messageId, url) {
-  return firebaseRef.set(`chatEvents/${chatId}/${messageId}/payload/attachment`, url)
+export function setDownloadUrl(firebaseRef, chatId, messageId, url, metadataId) {
+  const res = firebaseRef.set(
+    `storageMetadata/chatImages/${chatId}/${metadataId}/url`, url, () => {
+      firebaseRef.set(`chatEvents/${chatId}/${messageId}/payload/attachment`, url);
+    },
+  );
+  return res;
 }
 
 export function leaveChat(firebaseRef, chatId, userId) {

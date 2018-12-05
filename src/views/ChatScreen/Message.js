@@ -43,10 +43,11 @@ const styles = theme => ({
     backgroundColor: theme.ownMessageBubble,
   },
   chatImageWrapper: {
+    marginLeft: 10,
     backgroundColor: theme.messageBubble,
     padding: 8,
     borderRadius: 14,
-    borderBottomRightRadius: 2,
+    borderTopLeftRadius: 2,
   },
 });
 
@@ -92,7 +93,9 @@ const Message = ({
             ownMessage && style.ownBubble,
           ]}
         >
-          {!ownMessage && (<Text style={style.sender}>{sender.username}</Text>)}
+          {!ownMessage && (
+            <Text style={[style.sender, { paddingBottom: 5 }]}>{sender.username}</Text>
+          )}
           <Image
             style={{ height, width }}
             source={{ uri: attachment }}

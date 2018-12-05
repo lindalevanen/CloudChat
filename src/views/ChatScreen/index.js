@@ -46,10 +46,10 @@ class ChatScreen extends React.Component {
     const snapshot = await sendMessage(firebase, '', chatId, profileUid, 'placeholder', data);
     const messageId = snapshot.path.pieces_[2];
     const {
-      uploadTaskSnapshot: { ref },
+      uploadTaskSnapshot: { ref }, key,
     } = await uploadChatImage(firebase, data, chatId, profileUid, imageQuality);
     const downloadUrl = await ref.getDownloadURL();
-    await setDownloadUrl(firebase, chatId, messageId, downloadUrl);
+    await setDownloadUrl(firebase, chatId, messageId, downloadUrl, key);
     setLoading(false);
   }
 
