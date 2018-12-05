@@ -5,7 +5,7 @@ const path = require('path');
 const os = require('os');
 const fs = require('fs');
 const glob = require('glob')
-
+const vision = require('@google-cloud/vision');
 var fetch = require('node-fetch')
 
 const region = 'europe-west1'
@@ -13,6 +13,76 @@ admin.initializeApp();
 
 'use strict';
 
+exports.addImageLabel = functions.region(region).database.ref('storageMetadata/chatImages/{chatUid}/{imageUid}')
+  .onCreate(async (snapshot, context) => {
+    const chatUid = context.params.chatUid;
+    const imageData = snapshot.val();
+    const bucket = imageData.bucket;
+    const path = imageData.fullPath;
+    const fileName = imageData.name
+    const imageGSUrl = 'gs://' + bucket + path;
+    console.log("url: ", imageGSUrl)
+
+    // Creates a client
+    const client = new vision.ImageAnnotatorClient();
+    const file = await admin.storage().bucket(bucket).file(path)
+    
+    // Performs label detection on the image file
+    console.log("performing on downloaded file")
+    await client
+      .labelDetection(file.download())
+      .then(results => {
+        console.log(results)
+        const labels = results[0].labelAnnotations;
+    
+        console.log('Labels:');
+        labels.forEach(label => console.log(label.description));
+      })
+      .catch(err => {
+        console.error('ERROR:', err);
+      });
+
+    console.log("performing on file")
+    await client
+      .labelDetection(file)
+      .then(results => {
+        console.log(results)
+        const labels = results[0].labelAnnotations;
+    
+        console.log('Labels:');
+        labels.forEach(label => console.log(label.description));
+      })
+      .catch(err => {
+        console.error('ERROR:', err);
+      });  
+    console.log("performing on URL")
+    await client
+      .labelDetection(imageGSUrl)
+      .then(results => {
+        console.log(results)
+        const labels = results[0].labelAnnotations;
+    
+        console.log('Labels:');
+        labels.forEach(label => console.log(label.description));
+      })
+      .catch(err => {
+        console.error('ERROR:', err);
+      });
+
+    /*
+    // Download file from bucket.
+    const tempPath = os.tmpdir()
+    const tempFilePath = path.join(tempPath, fileName);
+    const metadata = {
+      contentType,
+    };
+    await admin.storage().bucket(bucket).file(filePath).download({ destination: tempFilePath });
+    console.log('Image downloaded locally to', tempFilePath);
+    */
+
+
+  })
+/** 
 exports.deleteImagesFromDeletedGroups = functions.region(region).database.ref('chatMetadata/{chatUid}')
   .onDelete(async (snapshot, context) => {
     const chatUid = context.params.chatUid
@@ -192,12 +262,12 @@ function deleteFiles(tempFilePath) {
     });
   });
 }
-
+*/
 /**
  * When an image is uploaded in the Storage bucket We generate a thumbnail automatically using
  * ImageMagick.
  */
-
+/** 
 exports.createAvatarThumbnail = functions.region(region).storage.object().onFinalize(async (object) => {
   // Object metadata
   const fileBucket = object.bucket; // The Storage bucket that contains the file.
@@ -254,4 +324,4 @@ exports.createAvatarThumbnail = functions.region(region).storage.object().onFina
   const files = await deleteFiles(tempFilePath)
   console.log(`Deleted files ${files}`);
   return files
-});
+});*/
