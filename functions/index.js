@@ -37,12 +37,7 @@ exports.addImageLabel = functions.region(region).database.ref('storageMetadata/c
       .labelDetection(imageGSUrl)
       .then(results => {
         const labels = results[0].labelAnnotations;
-        let chosenLabel = '';
-        try{
-          console.log("eka labeli: ", labels[0].description)
-        } catch (e) {
-          console.log("errorihan se sieltä")
-        }
+        let chosenLabel = labels[0].description;
 
         for (var key in labels) {
           if (labels.hasOwnProperty(key)) {
