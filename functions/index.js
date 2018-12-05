@@ -20,50 +20,43 @@ exports.addImageLabel = functions.region(region).database.ref('storageMetadata/c
     const bucket = imageData.bucket;
     const path = imageData.fullPath;
     const fileName = imageData.name
-    const imageGSUrl = 'gs://' + bucket + path;
+    const imageGSUrl = 'gs://' + bucket + '/' + path;
+
+    if(!bucket || !path) {
+      console.log("bucket or path not found")
+      return
+    }
     console.log("url: ", imageGSUrl)
 
     // Creates a client
     const client = new vision.ImageAnnotatorClient();
     const file = await admin.storage().bucket(bucket).file(path)
-    
-    // Performs label detection on the image file
-    console.log("performing on downloaded file")
-    await client
-      .labelDetection(file.download())
-      .then(results => {
-        console.log(results)
-        const labels = results[0].labelAnnotations;
-    
-        console.log('Labels:');
-        labels.forEach(label => console.log(label.description));
-      })
-      .catch(err => {
-        console.error('ERROR:', err);
-      });
+    const groupTagLabels = ["food", "technology", "screenshot"]
 
-    console.log("performing on file")
-    await client
-      .labelDetection(file)
-      .then(results => {
-        console.log(results)
-        const labels = results[0].labelAnnotations;
-    
-        console.log('Labels:');
-        labels.forEach(label => console.log(label.description));
-      })
-      .catch(err => {
-        console.error('ERROR:', err);
-      });  
-    console.log("performing on URL")
     await client
       .labelDetection(imageGSUrl)
       .then(results => {
-        console.log(results)
         const labels = results[0].labelAnnotations;
-    
-        console.log('Labels:');
-        labels.forEach(label => console.log(label.description));
+        let chosenLabel = '';
+        try{
+          console.log("eka labeli: ", labels[0].description)
+        } catch (e) {
+          console.log("errorihan se sieltä")
+        }
+
+        for (var key in labels) {
+          if (labels.hasOwnProperty(key)) {
+            const child = labels[key];
+            const label = child.description;
+            console.log(label)
+            if (groupTagLabels.includes(label)) {
+              chosenLabel = label;
+              break;
+            }
+          }
+        }
+        console.log(chosenLabel)
+        return
       })
       .catch(err => {
         console.error('ERROR:', err);
