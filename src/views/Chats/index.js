@@ -43,7 +43,6 @@ const chatsWithUsers = (chats, users) => {
       members: chatMembers,
     };
   });
-  console.log(qwe);
   return qwe;
 };
 

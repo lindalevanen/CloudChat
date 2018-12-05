@@ -2,7 +2,7 @@ import React from 'react';
 import { KeyboardAvoidingView, SafeAreaView } from 'react-native';
 import { connect } from 'react-redux';
 import { compose, withState } from 'recompose';
-import { firebaseConnect, populate, isLoaded } from 'react-redux-firebase';
+import { firebaseConnect, populate } from 'react-redux-firebase';
 import _map from 'lodash/map';
 import { ImagePicker } from 'expo';
 
@@ -11,7 +11,7 @@ import MessageList from './MessageList';
 import MessageInput from './MessageInput';
 import ImageSelector from '../../components/ImageSelector';
 
-import { sendMessage, uploadChatImage } from '../../store/utils/firebase';
+import { sendMessage, uploadChatImage, setDownloadUrl } from '../../store/utils/firebase';
 
 const imageOptions = {
   mediaTypes: ImagePicker.MediaTypeOptions.Images,
@@ -43,11 +43,13 @@ class ChatScreen extends React.Component {
     } = this.props;
     const chatId = await this.getChatId();
 
+    const snapshot = await sendMessage(firebase, '', chatId, profileUid, 'placeholder', data);
+    const messageId = snapshot.path.pieces_[2];
     const {
       uploadTaskSnapshot: { ref },
     } = await uploadChatImage(firebase, data, chatId, profileUid, imageQuality);
     const downloadUrl = await ref.getDownloadURL();
-    await sendMessage(firebase, '', chatId, profileUid, downloadUrl);
+    await setDownloadUrl(firebase, chatId, messageId, downloadUrl);
     setLoading(false);
   }
 

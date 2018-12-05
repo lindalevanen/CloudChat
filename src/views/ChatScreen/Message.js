@@ -42,12 +42,11 @@ const styles = theme => ({
     borderBottomRightRadius: 2,
     backgroundColor: theme.ownMessageBubble,
   },
-  chatImage: {
-    flex: 1,
-    width: null,
-    height: null,
-    resizeMode: 'contain',
-    borderRadius: 10,
+  chatImageWrapper: {
+    backgroundColor: theme.messageBubble,
+    padding: 8,
+    borderRadius: 14,
+    borderBottomRightRadius: 2,
   },
 });
 
@@ -56,29 +55,53 @@ const Message = ({
 }) => {
   const style = styles(theme);
   const ownMessage = profileUid === sender.id;
-  const { body, attachment } = message.payload;
+  const { body, attachment, dimensions } = message.payload;
 
-  const dimensions = Dimensions.get('window');
-  const maxWidth = dimensions.width / 3 * 2;
+  const winDimensions = Dimensions.get('window');
+  const maxWidth = winDimensions.width / 3 * 2;
   const maxHeight = 200;
+
+  let width = 0;
+  let height = 0;
+  if (dimensions) {
+    const w = dimensions.width;
+    const h = dimensions.height;
+    if (w > h) {
+      width = maxWidth;
+      height = h / w * maxWidth;
+    } else {
+      height = maxHeight;
+      width = w / h * maxHeight;
+    }
+  }
 
   return (
     <View style={[style.container, ownMessage && style.ownMessage]}>
       {!ownMessage && (
-      <AvatarWithProfileLink
-        size={44}
-        url={sender.avatarUrl}
-        username={sender.username}
-        userId={sender.id}
-      />
+        <AvatarWithProfileLink
+          size={44}
+          url={sender.avatarUrl}
+          username={sender.username}
+          userId={sender.id}
+        />
       )}
       {attachment ? (
-        <Image
-          style={{ height: maxHeight, width: maxWidth }}
-          imageStyle={style.chatImage}
-          source={{ uri: attachment }}
-          indicator={ProgressBar}
-        />) : (
+        <View
+          style={[
+            style.chatImageWrapper,
+            ownMessage && style.ownBubble,
+          ]}
+        >
+          {!ownMessage && (<Text style={style.sender}>{sender.username}</Text>)}
+          <Image
+            style={{ height, width }}
+            source={{ uri: attachment }}
+            indicator={ProgressBar}
+            indicatorProps={{
+              color: 'white',
+            }}
+          />
+        </View>) : (
           <View style={[style.messageBubble, ownMessage && style.ownBubble]}>
             {!ownMessage && (<Text style={style.sender}>{sender.username}</Text>)}
             <Text style={style.messageBody}>{body}</Text>

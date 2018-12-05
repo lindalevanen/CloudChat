@@ -183,12 +183,13 @@ export function pushChatEvent(firebaseRef, eventData, path) {
   return firebaseRef.push(path, eventData);
 }
 
-export function sendMessage(
+export async function sendMessage(
   firebaseRef,
   messageString,
   chatId,
   sender,
   attachment = null,
+  data = null,
 ) {
   if (attachment === null && messageString === '') {
     return Promise.reject(new Error('Empty message not sent'));
@@ -201,11 +202,22 @@ export function sendMessage(
     timestamp: Date.now(),
     payload: {
       body: messageString,
+      dimensions: null,
       sender,
       attachment,
     },
   };
+  if (data) {
+    messageEvent.payload.dimensions = {
+      width: data.width,
+      height: data.height,
+    };
+  }
   return pushChatEvent(firebaseRef, messageEvent, `chatEvents/${chatId}`);
+}
+
+export function setDownloadUrl(firebaseRef, chatId, messageId, url) {
+  return firebaseRef.set(`chatEvents/${chatId}/${messageId}/payload/attachment`, url)
 }
 
 export function leaveChat(firebaseRef, chatId, userId) {
