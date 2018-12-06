@@ -46,20 +46,34 @@ const styles = theme => ({
 });
 
 function getLastEvent(chat, profileUid) {
-  if (!chat.lastEvent) {
+  if (!chat.lastEvent || !chat.lastEvent.type) {
     return null;
   }
   const { sender: senderId, body } = _get(chat, 'lastEvent.payload', {});
   let sender = _find(chat.members, user => user.id === senderId);
+  if (!sender) {
+    return null;
+  }
   if (sender.id === profileUid) {
     sender = {
       username: 'You',
     };
   }
-  return {
-    body: `${body.length > 30 ? (`${body.slice(0, 30)}...`) : body}`,
-    sender,
-  };
+
+  switch (chat.lastEvent.type) {
+    case 'message':
+      return {
+        body: `${body.length > 30 ? (`${body.slice(0, 30)}...`) : body}`,
+        sender,
+      };
+    case 'image':
+      return {
+        body: 'Photo',
+        sender,
+      };
+    default:
+      return null;
+  }
 }
 
 const ChatPreview = ({
