@@ -15,7 +15,7 @@ const palette = {
   actionSuccess: colors.green,
   actionWarning: colors.orange,
   actionDanger: colors.red,
-  switchActive: colors.purple,
+  switchActive: colors.blueGreen,
   switchInactive: colors.grey,
   separator: colors.greyPurple,
   inputBackground: colors.blueGrey,
