@@ -1,10 +1,13 @@
 import React from 'react';
 import { View, TouchableOpacity } from 'react-native';
-import _map from 'lodash/map';
 import { withNavigation, StackActions } from 'react-navigation';
 import Swipeable from 'react-native-swipeable';
 import { Ionicons } from '@expo/vector-icons';
+import { connect } from 'react-redux';
+import { compose } from 'recompose';
 
+import { withFirebase } from 'react-redux-firebase';
+import { leaveChat } from '../../store/utils/firebase';
 import ChatPreview from '../../components/ChatPreview';
 
 const SwipeActionButton = ({ color, iconName, onPress }) => (
@@ -21,20 +24,32 @@ const SwipeActionButton = ({ color, iconName, onPress }) => (
   </TouchableOpacity>
 );
 
-const rightButtons = [
-  <SwipeActionButton color="indigo" iconName="md-notifications-off" />,
-  <SwipeActionButton color="tomato" iconName="md-trash" />,
-];
+const LeaveChatButton = ({ firebase, chatId, profileUid }) => (
+  <SwipeActionButton
+    color="tomato"
+    iconName="md-trash"
+    onPress={() => leaveChat(firebase, chatId, profileUid)}
+  />
+);
 
-const SwipeableChatPreview = ({ chat, onPress }) => (
-  <Swipeable rightButtons={rightButtons} rightActionActivationDistance={20}>
+const SwipeableChatPreview = ({
+  firebase, chat, profileUid, onPress,
+}) => (
+  <Swipeable
+    rightButtons={[
+      <LeaveChatButton
+        chatId={chat.id}
+        profileUid={profileUid}
+        firebase={firebase}
+      />,
+    ]}
+    rightActionActivationDistance={20}
+  >
     <ChatPreview chat={chat} onPress={onPress} />
   </Swipeable>
 );
 
-const createOpenChatCallback = navigation => (
-  chat, contact,
-) => {
+const createOpenChatCallback = navigation => (chat, contact) => {
   if (chat.groupChat) {
     navigation.dispatch(
       StackActions.push({
@@ -65,11 +80,15 @@ const createOpenChatCallback = navigation => (
   }
 };
 
-const ChatList = ({ chats, navigation }) => (
+const ChatList = ({
+  firebase, chats, navigation, profileUid,
+}) => (
   <View>
     {chats.map(chat => (
       <SwipeableChatPreview
         key={chat.id}
+        firebase={firebase}
+        profileUid={profileUid}
         chat={chat}
         onPress={createOpenChatCallback(navigation)}
       />
@@ -77,4 +96,10 @@ const ChatList = ({ chats, navigation }) => (
   </View>
 );
 
-export default withNavigation(ChatList);
+const enhance = compose(
+  withFirebase,
+  connect(({ firebase }) => ({ profileUid: firebase.auth.uid })),
+  withNavigation,
+);
+
+export default enhance(ChatList);
