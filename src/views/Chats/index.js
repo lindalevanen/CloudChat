@@ -3,8 +3,11 @@ import { View, ActivityIndicator } from 'react-native';
 import { withNavigation } from 'react-navigation';
 import { connect } from 'react-redux';
 import { compose } from 'redux';
+import { setDisplayName } from 'recompose';
 import { isLoaded, firebaseConnect } from 'react-redux-firebase';
 import _map from 'lodash/map';
+import _get from 'lodash/get';
+import _filter from 'lodash/filter';
 
 import { withTheme } from '../../components/ThemedWrapper';
 import EmptyPlaceholder from '../../components/EmptyPlaceholder';
@@ -23,46 +26,60 @@ const LoadingView = () => (
   </View>
 );
 
-const chatsWithUsers = (chats, users) => _map(chats, (chat, id) => {
-  const chatMembers = _map(chat.members, user => ({
+const chatsWithUsers = (chats, users) => _map(chats, chat => ({
+  ...chat,
+  id: chat.id,
+  members: _map(chat.members, user => ({
     ...user,
     ...users[user.id],
-  }));
-  return {
-    ...chat,
-    id,
-    members: chatMembers,
-  };
-});
+  })),
+}));
 
-const Chats = ({ theme, chats, users }) => {
+const Chats = ({
+  theme, chats, updatedChats, users,
+}) => {
   const style = styles(theme);
-  const { exists, ...chatMap } = chats || {};
-  const isEmpty = exists && Object.keys(chatMap).length === 0;
+  const { exists } = chats || {};
+  const isEmpty = exists && Object.keys(updatedChats).length === 0;
   return (
     <View style={style.container}>
-      {!isLoaded(chats) ? (
+      {!(isLoaded(chats) && isLoaded(users)) ? (
         <LoadingView />
       ) : isEmpty ? (
         <EmptyPlaceholder text="No chats yet, start messaging!" />
       ) : (
-        <ChatList chats={chatsWithUsers(chatMap, users)} />
+        <ChatList chats={chatsWithUsers(updatedChats, users)} />
       )}
     </View>
   );
 };
 
+function selectUpdatedChats(state, userChats) {
+  const { exists, ...chatMap } = userChats || {};
+  return _map(chatMap, (chat, id) => ({
+    ..._get(state, ['chatMetadata', id]),
+    id,
+  }));
+}
+
 const mapStateToProps = ({ firebase }) => ({
+  updatedChats: selectUpdatedChats(firebase.data, firebase.profile.chats),
   chats: firebase.profile.chats,
   users: firebase.data.users,
   profileUid: firebase.auth.uid,
 });
 
 const enhance = compose(
+  setDisplayName('Chats'),
   withNavigation,
   withTheme,
   connect(mapStateToProps),
-  firebaseConnect(['users']),
+  firebaseConnect(({ chats }) => _filter(
+    [{ path: 'users' }].concat(
+      _map(chats, (chat, id) => ({ path: `chatMetadata/${id}` })),
+    ),
+    ({ path }) => path !== 'chatMetadata/exists',
+  )),
 );
 
 export default enhance(Chats);

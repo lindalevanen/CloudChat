@@ -1,10 +1,10 @@
 import React from 'react';
-import { FlatList, View, TouchableOpacity } from 'react-native';
+import { FlatList, TouchableOpacity } from 'react-native';
 import { withNavigation, StackActions } from 'react-navigation';
 import Swipeable from 'react-native-swipeable';
 import { Ionicons } from '@expo/vector-icons';
 import { connect } from 'react-redux';
-import { compose } from 'recompose';
+import { compose, setDisplayName } from 'recompose';
 import _orderBy from 'lodash/orderBy';
 import _get from 'lodash/get';
 
@@ -106,6 +106,7 @@ const ChatList = ({
 );
 
 const enhance = compose(
+  setDisplayName('ChatList'),
   withFirebase,
   connect(({ firebase }) => ({ profileUid: firebase.auth.uid })),
   withNavigation,
