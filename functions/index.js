@@ -16,6 +16,7 @@ admin.initializeApp();
 exports.addImageLabel = functions.region(region).database.ref('storageMetadata/chatImages/{chatUid}/{imageUid}')
   .onCreate(async (snapshot, context) => {
     const chatUid = context.params.chatUid;
+    const imageUid = context.params.imageUid;
     const imageData = snapshot.val();
     const bucket = imageData.bucket;
     const path = imageData.fullPath;
@@ -26,7 +27,6 @@ exports.addImageLabel = functions.region(region).database.ref('storageMetadata/c
       console.log("bucket or path not found")
       return
     }
-    console.log("url: ", imageGSUrl)
 
     // Creates a client
     const client = new vision.ImageAnnotatorClient();
@@ -37,40 +37,27 @@ exports.addImageLabel = functions.region(region).database.ref('storageMetadata/c
       .labelDetection(imageGSUrl)
       .then(results => {
         const labels = results[0].labelAnnotations;
-        let chosenLabel = labels[0].description;
+        let chosenLabel = labels[0].description; //initialize as the strongest label found
 
         for (var key in labels) {
           if (labels.hasOwnProperty(key)) {
             const child = labels[key];
             const label = child.description;
-            console.log(label)
             if (groupTagLabels.includes(label)) {
-              chosenLabel = label;
+              chosenLabel = label; //setting one of the groupTagLabels
               break;
             }
           }
         }
-        console.log(chosenLabel)
-        return
+        const updates = {}
+        updates['/imageLabel'] = chosenLabel
+        return admin.database().ref(`storageMetadata/chatImages/${chatUid}/${imageUid}`).update(updates)
       })
       .catch(err => {
         console.error('ERROR:', err);
       });
-
-    /*
-    // Download file from bucket.
-    const tempPath = os.tmpdir()
-    const tempFilePath = path.join(tempPath, fileName);
-    const metadata = {
-      contentType,
-    };
-    await admin.storage().bucket(bucket).file(filePath).download({ destination: tempFilePath });
-    console.log('Image downloaded locally to', tempFilePath);
-    */
-
-
   })
-/** 
+
 exports.deleteImagesFromDeletedGroups = functions.region(region).database.ref('chatMetadata/{chatUid}')
   .onDelete(async (snapshot, context) => {
     const chatUid = context.params.chatUid
@@ -250,12 +237,12 @@ function deleteFiles(tempFilePath) {
     });
   });
 }
-*/
+
 /**
  * When an image is uploaded in the Storage bucket We generate a thumbnail automatically using
  * ImageMagick.
  */
-/** 
+
 exports.createAvatarThumbnail = functions.region(region).storage.object().onFinalize(async (object) => {
   // Object metadata
   const fileBucket = object.bucket; // The Storage bucket that contains the file.
@@ -312,4 +299,4 @@ exports.createAvatarThumbnail = functions.region(region).storage.object().onFina
   const files = await deleteFiles(tempFilePath)
   console.log(`Deleted files ${files}`);
   return files
-});*/
+});
