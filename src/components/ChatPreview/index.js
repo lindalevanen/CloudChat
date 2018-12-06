@@ -28,7 +28,7 @@ const styles = theme => ({
     flex: 1,
     flexDirection: 'row',
     justifyContent: 'space-between',
-    alignItems: 'baseline',
+    alignItems: 'center',
     marginLeft: 10,
   },
   chatTitleText: {
