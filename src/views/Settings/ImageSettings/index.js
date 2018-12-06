@@ -9,7 +9,6 @@ import RadioButtons from '../../../components/RadioButtons';
 import { changeSetting } from '../../../store/settings/actions';
 
 import { styles } from '../../../styles/form/style';
-import colors from '../../../styles/colors';
 
 const options = [
   {
@@ -31,7 +30,7 @@ const ImageSettings = ({ theme, imageQuality, setImageQuality }) => {
   return (
     <View style={[style.setting, style.container, styles.panel]}>
       <View style={style.settingTitle}>
-        <Ionicons style={style.settingIcon} name="md-image" size={24} color={colors.blue} />
+        <Ionicons style={style.settingIcon} name="md-image" size={24} color="tomato" />
         <Text style={[style.text]}>Image quality</Text>
       </View>
       <RadioButtons

@@ -11,7 +11,6 @@ import { withTheme } from '../../../components/ThemedWrapper';
 import Switch from '../../../components/Switch';
 import { changeSetting } from '../../../store/settings/actions';
 import { styles } from '../../../styles/form/style';
-import colors from '../../../styles/colors';
 
 const ThemeSettings = ({
   theme,
@@ -27,7 +26,7 @@ const ThemeSettings = ({
   return (
     <View style={[style.setting, style.container, styles.panel]}>
       <View style={style.settingTitle}>
-        <Ionicons style={style.settingIcon} name="md-moon" size={24} color={colors.hack1} />
+        <Ionicons style={style.settingIcon} name="md-moon" size={24} color="gold" />
         <Text style={[style.text]}>Use dark theme</Text>
       </View>
       <Switch value={useDarkTheme} onValueChange={setDarkMode} />
