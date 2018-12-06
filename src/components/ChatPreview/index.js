@@ -41,16 +41,23 @@ const styles = theme => ({
     color: theme.text1,
   },
   chatPreviewText: {
+    marginTop: 4,
     color: theme.text2,
   },
 });
 
 function getLastEvent(chat, profileUid) {
-  if (!chat.lastEvent || !chat.lastEvent.type || !chat.lastEvent.payload) {
+  if (
+    !chat.lastEvent
+    || !chat.lastEvent.type
+    || !chat.lastEvent.payload
+    || !chat.lastEvent.timestamp
+  ) {
     return null;
   }
   const { sender: senderId, body } = _get(chat, 'lastEvent.payload', {});
   let sender = _find(chat.members, user => user.id === senderId);
+  const { timestamp } = chat.lastEvent;
   if (!sender) {
     return null;
   }
@@ -65,11 +72,13 @@ function getLastEvent(chat, profileUid) {
       return {
         body: `${body.length > 30 ? `${body.slice(0, 30)}...` : body}`,
         sender,
+        timestamp,
       };
     case 'image':
       return {
         body: 'Photo',
         sender,
+        timestamp,
       };
     default:
       return null;
@@ -82,7 +91,7 @@ const ChatPreview = ({
   const style = styles(theme);
   let imageUrl;
   let chatTitle;
-  let timestamp;
+  let timestampToUse;
   let lastEventText;
 
   let contact;
@@ -90,18 +99,24 @@ const ChatPreview = ({
   if (chat.groupChat) {
     imageUrl = chat.avatarUrl;
     chatTitle = chat.title;
-    timestamp = chat.createdAt; // should have preview message here
+    timestampToUse = chat.createdAt; // should have preview message here
     const lastEvent = getLastEvent(chat, profileUid);
     lastEventText = lastEvent
       ? `${lastEvent.sender.username}: ${lastEvent.body}`
       : null;
+    if (lastEvent.timestamp) {
+      timestampToUse = lastEvent.timestamp;
+    }
   } else {
     contact = _find(chat.members, user => user.id !== profileUid);
     if (contact) {
       imageUrl = contact.avatarUrl;
       chatTitle = contact.username;
-      timestamp = chat.createdAt;
+      timestampToUse = chat.createdAt;
       const lastEvent = getLastEvent(chat, profileUid);
+      if (lastEvent.timestamp) {
+        timestampToUse = lastEvent.timestamp;
+      }
       lastEventText = lastEvent
         ? lastEvent.sender.username !== 'You'
           ? lastEvent.body
@@ -128,7 +143,7 @@ const ChatPreview = ({
             ) : null}
           </View>
           <Text style={[style.chatUpdatedText]}>
-            {prettyTimestamp(timestamp)}
+            {prettyTimestamp(timestampToUse)}
           </Text>
         </View>
         <Text style={[style.chatUpdatedText]}>{chat.lastMessage}</Text>
