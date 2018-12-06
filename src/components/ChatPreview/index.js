@@ -104,7 +104,7 @@ const ChatPreview = ({
     lastEventText = lastEvent
       ? `${lastEvent.sender.username}: ${lastEvent.body}`
       : null;
-    if (lastEvent.timestamp) {
+    if (lastEvent && lastEvent.timestamp) {
       timestampToUse = lastEvent.timestamp;
     }
   } else {
