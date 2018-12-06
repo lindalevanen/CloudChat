@@ -26,7 +26,7 @@ const options = [
   },
 ];
 
-const ThemeSettings = ({ theme, imageQuality, setImageQuality }) => {
+const ImageSettings = ({ theme, imageQuality, setImageQuality }) => {
   const style = styles(theme);
   return (
     <View style={[style.setting, style.container, styles.panel]}>
@@ -60,4 +60,4 @@ const enhance = compose(
   ),
 );
 
-export default enhance(ThemeSettings);
+export default enhance(ImageSettings);
