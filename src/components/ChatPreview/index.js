@@ -40,6 +40,9 @@ const styles = theme => ({
     fontSize: 12,
     color: theme.text1,
   },
+  chatPreviewText: {
+    color: theme.text2,
+  },
 });
 
 function getLastEvent(chat, profileUid) {
@@ -54,7 +57,7 @@ function getLastEvent(chat, profileUid) {
     };
   }
   return {
-    body,
+    body: `${body.length > 30 ? (`${body.slice(0, 30)}...`) : body}`,
     sender,
   };
 }
@@ -96,7 +99,14 @@ const ChatPreview = ({
         <View style={[style.summaryContainer]}>
           <View>
             <Text style={[style.chatTitleText]}>{chatTitle}</Text>
-            {lastEvent ? <Text>{`${lastEvent.sender.username}: ${lastEvent.body}`}</Text> : null}
+            {lastEvent ? (
+              <Text style={style.chatPreviewText}>
+                {`${
+                  lastEvent.sender.username
+                }: ${lastEvent.body}`}
+
+              </Text>
+            ) : null}
           </View>
           <Text style={[style.chatUpdatedText]}>
             {prettyTimestamp(timestamp)}
