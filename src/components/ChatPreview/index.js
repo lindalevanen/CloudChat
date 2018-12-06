@@ -2,7 +2,7 @@ import React from 'react';
 import { format } from 'date-fns';
 import { TouchableHighlight, Text, View } from 'react-native';
 import { connect } from 'react-redux';
-import { compose } from 'recompose';
+import { compose, setDisplayName } from 'recompose';
 import _find from 'lodash/find';
 import _get from 'lodash/get';
 
@@ -46,7 +46,7 @@ const styles = theme => ({
 });
 
 function getLastEvent(chat, profileUid) {
-  if (!chat.lastEvent || !chat.lastEvent.type) {
+  if (!chat.lastEvent || !chat.lastEvent.type || !chat.lastEvent.payload) {
     return null;
   }
   const { sender: senderId, body } = _get(chat, 'lastEvent.payload', {});
@@ -63,7 +63,7 @@ function getLastEvent(chat, profileUid) {
   switch (chat.lastEvent.type) {
     case 'message':
       return {
-        body: `${body.length > 30 ? (`${body.slice(0, 30)}...`) : body}`,
+        body: `${body.length > 30 ? `${body.slice(0, 30)}...` : body}`,
         sender,
       };
     case 'image':
@@ -91,16 +91,22 @@ const ChatPreview = ({
     imageUrl = chat.avatarUrl;
     chatTitle = chat.title;
     timestamp = chat.createdAt; // should have preview message here
-    const { sender, body } = getLastEvent(chat, profileUid);
-    lastEventText = `${sender.username}: ${body}`;
+    const lastEvent = getLastEvent(chat, profileUid);
+    lastEventText = lastEvent
+      ? `${lastEvent.sender.username}: ${lastEvent.body}`
+      : null;
   } else {
     contact = _find(chat.members, user => user.id !== profileUid);
     if (contact) {
       imageUrl = contact.avatarUrl;
       chatTitle = contact.username;
       timestamp = chat.createdAt;
-      const { sender, body } = getLastEvent(chat, profileUid);
-      lastEventText = sender.username !== 'You' ? body : `${sender.username}: ${body}`;
+      const lastEvent = getLastEvent(chat, profileUid);
+      lastEventText = lastEvent
+        ? lastEvent.sender.username !== 'You'
+          ? lastEvent.body
+          : `${lastEvent.sender.username}: ${lastEvent.body}`
+        : null;
     }
   }
 
@@ -118,9 +124,7 @@ const ChatPreview = ({
           <View>
             <Text style={[style.chatTitleText]}>{chatTitle}</Text>
             {lastEventText ? (
-              <Text style={style.chatPreviewText}>
-                {lastEventText}
-              </Text>
+              <Text style={style.chatPreviewText}>{lastEventText}</Text>
             ) : null}
           </View>
           <Text style={[style.chatUpdatedText]}>
@@ -139,6 +143,7 @@ const mapStateToProps = ({ firebase }) => ({
 
 const enhance = compose(
   withTheme,
+  setDisplayName('ChatPreview'),
   connect(mapStateToProps),
 );
 
