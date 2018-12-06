@@ -166,10 +166,10 @@ export function uploadImage(firebaseRef, file, profileUid) {
   );
 }
 
-function nameImage(quality = null) {
+function nameImage() {
   const uid = generateUid();
-  const name = quality !== 'original' ? `${quality}_${uid}` : uid;
-  return name;
+  // const name = quality !== 'original' ? `${quality}_${uid}` : uid;
+  return uid;
 }
 
 export function uploadAvatar(firebaseRef, file, profileUid, quality = null) {
