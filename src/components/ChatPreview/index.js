@@ -69,6 +69,7 @@ const ChatPreview = ({
   let imageUrl;
   let chatTitle;
   let timestamp;
+  let lastEventText;
 
   let contact;
 
@@ -76,15 +77,18 @@ const ChatPreview = ({
     imageUrl = chat.avatarUrl;
     chatTitle = chat.title;
     timestamp = chat.createdAt; // should have preview message here
+    const { sender, body } = getLastEvent(chat, profileUid);
+    lastEventText = `${sender.username}: ${body}`;
   } else {
     contact = _find(chat.members, user => user.id !== profileUid);
     if (contact) {
       imageUrl = contact.avatarUrl;
       chatTitle = contact.username;
       timestamp = chat.createdAt;
+      const { sender, body } = getLastEvent(chat, profileUid);
+      lastEventText = sender.username !== 'You' ? body : `${sender.username}: ${body}`;
     }
   }
-  const lastEvent = getLastEvent(chat, profileUid);
 
   const onPressHandler = () => (chat.groupChat ? onPress(chat) : onPress(chat, contact));
 
@@ -99,12 +103,9 @@ const ChatPreview = ({
         <View style={[style.summaryContainer]}>
           <View>
             <Text style={[style.chatTitleText]}>{chatTitle}</Text>
-            {lastEvent ? (
+            {lastEventText ? (
               <Text style={style.chatPreviewText}>
-                {`${
-                  lastEvent.sender.username
-                }: ${lastEvent.body}`}
-
+                {lastEventText}
               </Text>
             ) : null}
           </View>
