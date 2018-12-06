@@ -22,7 +22,7 @@ function getHeaderActionForRoute(routeName, navigation) {
           navigation={navigation}
           onPress={getNavigationCallback(navigation, 'CreateChatSheet')}
         >
-          <MaterialCommunityIcons name="lead-pencil" size={24} color={colors.blush} />
+          <MaterialCommunityIcons name="plus" size={24} color={colors.blush} />
         </HeaderButton>
       );
     case 'ChatScreen':
