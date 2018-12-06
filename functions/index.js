@@ -5,13 +5,58 @@ const path = require('path');
 const os = require('os');
 const fs = require('fs');
 const glob = require('glob')
-
+const vision = require('@google-cloud/vision');
 var fetch = require('node-fetch')
 
 const region = 'europe-west1'
 admin.initializeApp();
 
 'use strict';
+
+exports.addImageLabel = functions.region(region).database.ref('storageMetadata/chatImages/{chatUid}/{imageUid}')
+  .onCreate(async (snapshot, context) => {
+    const chatUid = context.params.chatUid;
+    const imageUid = context.params.imageUid;
+    const imageData = snapshot.val();
+    const bucket = imageData.bucket;
+    const path = imageData.fullPath;
+    const fileName = imageData.name
+    const imageGSUrl = 'gs://' + bucket + '/' + path;
+
+    if(!bucket || !path) {
+      console.log("bucket or path not found")
+      return
+    }
+
+    // Creates a client
+    const client = new vision.ImageAnnotatorClient();
+    const file = await admin.storage().bucket(bucket).file(path)
+    const groupTagLabels = ["food", "technology", "screenshot"]
+
+    await client
+      .labelDetection(imageGSUrl)
+      .then(results => {
+        const labels = results[0].labelAnnotations;
+        let chosenLabel = labels[0].description; //initialize as the strongest label found
+
+        for (var key in labels) {
+          if (labels.hasOwnProperty(key)) {
+            const child = labels[key];
+            const label = child.description;
+            if (groupTagLabels.includes(label)) {
+              chosenLabel = label; //setting one of the groupTagLabels
+              break;
+            }
+          }
+        }
+        const updates = {}
+        updates['/imageLabel'] = chosenLabel
+        return admin.database().ref(`storageMetadata/chatImages/${chatUid}/${imageUid}`).update(updates)
+      })
+      .catch(err => {
+        console.error('ERROR:', err);
+      });
+  })
 
 exports.deleteImagesFromDeletedGroups = functions.region(region).database.ref('chatMetadata/{chatUid}')
   .onDelete(async (snapshot, context) => {
