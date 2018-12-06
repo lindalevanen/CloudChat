@@ -24,7 +24,7 @@ const Checkbox = ({
   theme, selected, onPress, style, color,
 }) => {
   const themedStyle = styles(theme);
-  const colorToUse = color || theme.actionHero;
+  const colorToUse = color || theme.checkBox;
   return (
     <TouchableOpacity onPress={onPress} style={[themedStyle.checkbox, style]}>
       <MaterialCommunityIcons
