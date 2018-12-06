@@ -1,6 +1,8 @@
 import {
   applyMiddleware, createStore, combineReducers, compose,
 } from 'redux';
+import Reactotron from 'reactotron-react-native';
+import { reactotronRedux } from 'reactotron-redux';
 
 import thunkMiddleware from 'redux-thunk';
 
@@ -16,6 +18,11 @@ import { initMiddleware as initFirebaseMiddleware } from './utils/firebase';
 import { appStatusReducer } from './appStatus/reducer';
 import { chatReducer } from './chat/reducer';
 import { settingsReducer } from './settings/reducer';
+
+const reactotron = Reactotron.configure()
+  .use(reactotronRedux())
+  .useReactNative()
+  .connect();
 
 const persistConfig = {
   key: 'root',
@@ -42,7 +49,8 @@ export default function configureStore(preloadedState) {
     initFirebaseMiddleware(),
     middlewareEnhancer,
   );
-  store = createStore(persistedReducer, preloadedState, enhancers);
+
+  store = reactotron.createStore(persistedReducer, preloadedState, enhancers);
   const persistor = persistStore(store);
 
   return { store, persistor };
