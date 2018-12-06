@@ -1,14 +1,9 @@
 import React from 'react';
-import {
-  View, ScrollView, ActivityIndicator,
-} from 'react-native';
+import { View, ActivityIndicator } from 'react-native';
 import { withNavigation } from 'react-navigation';
 import { connect } from 'react-redux';
 import { compose } from 'redux';
-import {
-  isLoaded,
-  firebaseConnect,
-} from 'react-redux-firebase';
+import { isLoaded, firebaseConnect } from 'react-redux-firebase';
 import _map from 'lodash/map';
 
 import { withTheme } from '../../components/ThemedWrapper';
@@ -20,9 +15,6 @@ const styles = theme => ({
     flex: 1,
     backgroundColor: theme.backdrop,
   },
-  list: {
-    flex: 1,
-  },
 });
 
 const LoadingView = () => (
@@ -31,20 +23,17 @@ const LoadingView = () => (
   </View>
 );
 
-const chatsWithUsers = (chats, users) => {
-  const qwe = _map(chats, (chat, id) => {
-    const chatMembers = _map(chat.members, user => ({
-      ...user,
-      ...users[user.id],
-    }));
-    return {
-      ...chat,
-      id,
-      members: chatMembers,
-    };
-  });
-  return qwe;
-};
+const chatsWithUsers = (chats, users) => _map(chats, (chat, id) => {
+  const chatMembers = _map(chat.members, user => ({
+    ...user,
+    ...users[user.id],
+  }));
+  return {
+    ...chat,
+    id,
+    members: chatMembers,
+  };
+});
 
 const Chats = ({ theme, chats, users }) => {
   const style = styles(theme);
@@ -57,9 +46,7 @@ const Chats = ({ theme, chats, users }) => {
       ) : isEmpty ? (
         <EmptyPlaceholder text="No chats yet, start messaging!" />
       ) : (
-        <ScrollView style={[style.list]}>
-          <ChatList chats={chatsWithUsers(chatMap, users)} />
-        </ScrollView>
+        <ChatList chats={chatsWithUsers(chatMap, users)} />
       )}
     </View>
   );
@@ -75,7 +62,7 @@ const enhance = compose(
   withNavigation,
   withTheme,
   connect(mapStateToProps),
-  firebaseConnect([{ path: 'users' }]),
+  firebaseConnect(['users']),
 );
 
 export default enhance(Chats);

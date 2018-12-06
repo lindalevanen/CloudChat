@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, TouchableOpacity } from 'react-native';
+import { FlatList, View, TouchableOpacity } from 'react-native';
 import { withNavigation, StackActions } from 'react-navigation';
 import Swipeable from 'react-native-swipeable';
 import { Ionicons } from '@expo/vector-icons';
@@ -90,17 +90,19 @@ function orderByLatest(chats) {
 const ChatList = ({
   firebase, chats, navigation, profileUid,
 }) => (
-  <View>
-    {orderByLatest(chats).map(chat => (
+  <FlatList
+    data={orderByLatest(chats)}
+    keyExtractor={({ id }) => id}
+    style={{ flex: 1 }}
+    renderItem={({ item }) => (
       <SwipeableChatPreview
-        key={chat.id}
         firebase={firebase}
         profileUid={profileUid}
-        chat={chat}
+        chat={item}
         onPress={createOpenChatCallback(navigation)}
       />
-    ))}
-  </View>
+    )}
+  />
 );
 
 const enhance = compose(

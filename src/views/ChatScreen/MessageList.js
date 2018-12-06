@@ -30,12 +30,12 @@ class MessageList extends React.Component {
   }
 
   itemOkToRender = (item) => {
-    const { chatMetadata } = this.props
+    const { chatMetadata } = this.props;
     return (
-      item && item.payload && item.payload.sender &&
-      chatMetadata && chatMetadata.members &&
-      chatMetadata.members[item.payload.sender]
-    )
+      item && item.payload && item.payload.sender
+      && chatMetadata && chatMetadata.members
+      && chatMetadata.members[item.payload.sender]
+    );
   }
 
   render() {
