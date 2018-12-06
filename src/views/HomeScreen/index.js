@@ -87,7 +87,7 @@ export default createStackNavigator({
     screen: CreateGroupSheet,
     navigationOptions: {
       header: ThemedHeaderComponent,
-      headerTitle: 'New group',
+      headerTitle: 'Select group members',
     },
   },
   ChatScreen: {
