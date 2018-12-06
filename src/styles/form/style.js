@@ -8,8 +8,7 @@ export const styles = theme => ({
   },
   title: {
     fontSize: 20,
-    marginBottom: 20,
-    textAlign: 'center',
+    alignSelf: 'center',
   },
   input: {
     marginBottom: 10,

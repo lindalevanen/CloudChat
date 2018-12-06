@@ -13,17 +13,29 @@ import { withTheme } from '../ThemedWrapper';
 
 const UserListComponent = ({
   theme, users, onSelectionDone, onUserPress,
-}) => (onSelectionDone
-  ? <SelectableUserList theme={theme} users={users} onSelectionDone={onSelectionDone} />
-  : <UserList theme={theme} users={users} onUserPress={onUserPress} />);
+}) => (onSelectionDone ? (
+  <SelectableUserList
+    theme={theme}
+    users={users}
+    onSelectionDone={onSelectionDone}
+  />
+) : (
+  <UserList theme={theme} users={users} onUserPress={onUserPress} />
+));
 
 const UserSearch = ({
-  style, onSelectionDone, onUserPress, theme, searchString, setSearchString, users,
+  style,
+  onSelectionDone,
+  onUserPress,
+  theme,
+  searchString,
+  setSearchString,
+  users,
 }) => {
   const loading = !isLoaded(users);
   const hasUsers = !loading && !isEmpty(users);
   return (
-    <View style={[{ flex: 1, backgroundColor: theme.backdrop }, style]}>
+    <View style={[{ backgroundColor: theme.backdrop }, style]}>
       <View style={{ padding: 10, backgroundColor: theme.foreground }}>
         <TextInput
           placeholder="Search users"
@@ -34,7 +46,12 @@ const UserSearch = ({
         />
       </View>
       {hasUsers ? (
-        <UserListComponent theme={theme} users={users} onUserPress={onUserPress} onSelectionDone={onSelectionDone} />
+        <UserListComponent
+          theme={theme}
+          users={users}
+          onUserPress={onUserPress}
+          onSelectionDone={onSelectionDone}
+        />
       ) : (
         <Text>no users</Text>
       )}
