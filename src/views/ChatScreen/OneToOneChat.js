@@ -15,7 +15,6 @@ class OneToOneChatScreen extends React.Component {
   createChat = async () => {
     const { firebase, navigation, profileUid } = this.props;
     const { userId } = navigation.state.params;
-    console.log('creating chat with person ', userId);
     const res = await createChatRoom(firebase, false, [profileUid, userId]);
     const chatId = res.path.pieces_[1];
     navigation.setParams({ chatId });

@@ -42,7 +42,7 @@ const ChatScreenHeaderButton = ({ navigation }) => {
   const {
     headerTitle, chatName, chatId, chatAvatarUrl, isGroupChat, userId,
   } = navigation.state.params;
-  console.log('render header action: ', navigation.state.params);
+
   const routeName = isGroupChat ? 'ChatInfoScreen' : 'UserInfoScreen';
   const screenParams = isGroupChat ? {
     headerTitle: 'Chat info',

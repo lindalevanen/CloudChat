@@ -63,7 +63,6 @@ class ChatScreen extends React.Component {
     let { chatId } = navigation.state.params;
 
     if (isDraft && oneToOneContact) {
-      console.log(`unitialised chat with person ${oneToOneContact}`);
       chatId = await createChatFromDraft();
     }
     return chatId;

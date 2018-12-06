@@ -6,7 +6,7 @@ import { compose } from 'recompose';
 import ProfileInfo from '../../components/ProfileInfo';
 
 const UserInfoScreen = ({ navigation, profile }) => (
-  <ProfileInfo profile={profile} asd={console.log(navigation.state)} />
+  <ProfileInfo profile={profile} />
 );
 
 const enhance = compose(

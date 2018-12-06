@@ -17,8 +17,6 @@ const Preferences = ({
   navigation, firebase, theme, auth,
 }) => {
   const logout = async () => {
-    console.log('logging out');
-    console.log('id: ', auth.uid);
     await unsubscribePushNotificationsAsync(firebase, auth.uid);
     await firebase.logout();
     navigation.navigate('Login');

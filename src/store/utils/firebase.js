@@ -60,7 +60,6 @@ export async function addRoomToUsers(firebaseRef, roomId, userIds) {
 }
 
 export async function registerForPushNotificationsAsync(firebaseRef, userId) {
-  console.log('setting token to: ', userId);
   const { status: existingStatus } = await Permissions.getAsync(
     Permissions.NOTIFICATIONS,
   );

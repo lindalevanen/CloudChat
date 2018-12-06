@@ -29,14 +29,13 @@ const CreateGroupSheet = ({
 }) => {
   const onCreateGroupPressed = async () => {
     if (groupName && userIds) {
-      const chatRoomResult = await createChatRoom(
+      await createChatRoom(
         firebase,
         true,
         [...userIds, profileId],
         groupName,
         logoUrl,
       );
-      console.log(chatRoomResult);
       navigation.dispatch(StackActions.popToTop());
     } else {
       setError("Please fill at least group name and friend's user id");
