@@ -13,6 +13,7 @@
     "node": "8"
   },
   "dependencies": {
+    "@google-cloud/translate": "^1.1.0",
     "@google-cloud/vision": "^0.23.0",
     "child-process-promise": "^2.2.1",
     "firebase-admin": "~6.0.0",

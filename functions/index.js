@@ -6,12 +6,72 @@ const os = require('os');
 const fs = require('fs');
 const glob = require('glob')
 const vision = require('@google-cloud/vision');
+const translate = require('@google-cloud/translate')();
 var fetch = require('node-fetch')
 
 const region = 'europe-west1'
 admin.initializeApp();
 
 'use strict';
+
+// Translate an incoming message.
+exports.translate = functions.region(region).database.ref('/chatEvents/{chatID}/{messageID}')
+.onCreate(
+    async(snapshot, context) => {
+
+      const LANGUAGES = ['en', 'it', 'es', 'hi', 'fi']
+      
+      const chatID = context.params.chatID;
+      const messageID = context.params.messageID;
+      const message = snapshot.val().payload.body
+      const messageType = snapshot.val().type
+      if(messageType !== 'message') {
+        return
+      }
+
+      detectLanguage = await translate.detect(message)
+      let detectedLanguage = detectLanguage[0].language
+
+      if(detectedLanguage) {
+        console.log(`Detected language: ${detectedLanguage} . Proceeding to translates`)
+      } else {
+        console.log('Language not detected, not proceeding with translation')
+        return null
+      }
+
+      const promises = [];
+      LANGUAGES.forEach((targetLanguage) => {
+        if(targetLanguage !== detectedLanguage) {
+          promises.push(translate.translate(message, {from: detectedLanguage, to: targetLanguage}))
+        }
+      });
+
+      Promise.all(promises).then(translations => {
+        const results = translations
+        const result = {}
+        
+        /**
+         * if original message was in one of the translation languages, it was not translated again
+         * but we want it into translations also in case someone wants to translate into this language
+         */
+        
+        const originalLangIndex = LANGUAGES.indexOf(detectedLanguage)
+        if(originalLangIndex >= 0) {
+          results.splice(originalLangIndex, 0, [message])
+        }
+
+        for (let i = 0; i < results.length; i++) {
+          const lang = LANGUAGES[i]
+          const value = results[i][0]
+          result[lang] = value
+        }
+
+        console.log("Translations done")
+        return admin.database().ref(`/chatEvents/${chatID}/${messageID}/payload/translations`).set(result)
+      }).catch( (error) => {
+        return Promise.reject(error);
+      });
+  })
 
 exports.addImageLabel = functions.region(region).database.ref('storageMetadata/chatImages/{chatUid}/{imageUid}')
   .onCreate(async (snapshot, context) => {
