@@ -1,5 +1,5 @@
 import React from 'react';
-import { Text, View, Dimensions } from 'react-native';
+import { Text, View, Dimensions, TouchableOpacity } from 'react-native';
 import { connect } from 'react-redux';
 import { compose } from 'recompose';
 import Image from 'react-native-image-progress';
@@ -7,6 +7,7 @@ import ProgressBar from 'react-native-progress/Circle';
 
 import { AvatarWithProfileLink } from '../../components/Avatar';
 import { withTheme } from '../../components/ThemedWrapper';
+import OpenImageWrapper from '../../components/OpenImageWrapper';
 
 const styles = theme => ({
   container: {
@@ -87,24 +88,28 @@ const Message = ({
         />
       )}
       {attachment ? (
-        <View
-          style={[
-            style.chatImageWrapper,
-            ownMessage && style.ownBubble,
-          ]}
+        <OpenImageWrapper
+          imageUrl={attachment}
         >
-          {!ownMessage && (
-            <Text style={[style.sender, { paddingBottom: 5 }]}>{sender.username}</Text>
-          )}
-          <Image
-            style={{ height, width }}
-            source={{ uri: attachment }}
-            indicator={ProgressBar}
-            indicatorProps={{
-              color: 'white',
-            }}
-          />
-        </View>) : (
+          <View
+            style={[
+              style.chatImageWrapper,
+              ownMessage && style.ownBubble,
+            ]}
+          >
+            {!ownMessage && (
+              <Text style={[style.sender, { paddingBottom: 5 }]}>{sender.username}</Text>
+            )}
+            <Image
+              style={{ height, width }}
+              source={{ uri: attachment }}
+              indicator={ProgressBar}
+              indicatorProps={{
+                color: 'white',
+              }}
+            />
+          </View>
+        </OpenImageWrapper>) : (
           <View style={[style.messageBubble, ownMessage && style.ownBubble]}>
             {!ownMessage && (<Text style={style.sender}>{sender.username}</Text>)}
             <Text style={style.messageBody}>{body}</Text>
