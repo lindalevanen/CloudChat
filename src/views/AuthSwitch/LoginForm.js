@@ -8,7 +8,7 @@ import { compose, withState } from 'recompose';
 import Button from '../../components/Button';
 import TextInput from '../../components/TextInput';
 import Logo from '../../../assets/icon.png';
-import { loginChatUser, registerForPushNotificationsAsync } from '../../store/utils/firebase';
+import { loginChatUser } from '../../store/utils/firebase';
 
 const styles = StyleSheet.create({
   logo: {
@@ -24,18 +24,22 @@ const styles = StyleSheet.create({
   input: {
     marginBottom: 10,
   },
+  error: {
+    textAlign: 'center',
+    color: 'red',
+  },
 });
 
 const LoginForm = ({
-  theme, email, setEmail, password, setPassword, firebase, onLoggedIn,
+  theme, email, setEmail, password, setPassword, error, setError, firebase, onLoggedIn,
 }) => {
   const onLoginPressed = async () => {
     try {
-      const result = await loginChatUser(firebase, { email, password });
-      console.log('login result', result.user.user);
+      await loginChatUser(firebase, { email, password });
       onLoggedIn();
     } catch (e) {
-      console.log('User login failed:', e);
+      const errorMessage = 'Invalid email or password';
+      setError(errorMessage);
     }
   };
   return (
@@ -63,9 +67,9 @@ const LoginForm = ({
         disabled={!email || !password}
         title="Login"
         type="Hero"
-        titleColor="white"
         onPress={onLoginPressed}
       />
+      <Text key="error" style={[styles.error]}>{error}</Text>
     </View>
   );
 };
@@ -74,6 +78,7 @@ const enhance = compose(
   withFirebase,
   withState('email', 'setEmail', ''),
   withState('password', 'setPassword', ''),
+  withState('error', 'setError', ''),
 );
 
 export default enhance(LoginForm);

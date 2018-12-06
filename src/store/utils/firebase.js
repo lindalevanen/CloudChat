@@ -37,6 +37,22 @@ export function loginChatUser(firebaseRef, credentials) {
   return firebase.login(credentials);
 }
 
+export function authErrorMessage(e) {
+  switch (e.code) {
+    case 'auth/invalid-email':
+      return 'Email address is badly formatted';
+    case 'auth/user-disabled':
+      return 'Account has been disabled';
+    case 'auth/user-not-found':
+    case 'auth/wrong-password':
+      return 'Invalid email or password';
+    case 'auth/weak-password':
+      return e.message;
+    default:
+      return 'Error logging in';
+  }
+}
+
 export async function addRoomToUsers(firebaseRef, roomId, userIds) {
   return Promise.all(
     userIds.map(userId => firebaseRef.set(`users/${userId}/chats/${roomId}`, roomId)),
