@@ -1,5 +1,7 @@
 import React from 'react';
-import { FlatList, TouchableOpacity } from 'react-native';
+import {
+  FlatList, Text, View, TouchableOpacity,
+} from 'react-native';
 import { withNavigation, StackActions } from 'react-navigation';
 import Swipeable from 'react-native-swipeable';
 import { Ionicons } from '@expo/vector-icons';
@@ -12,17 +14,22 @@ import { withFirebase } from 'react-redux-firebase';
 import { leaveChat } from '../../store/utils/firebase';
 import ChatPreview from '../../components/ChatPreview';
 
-const SwipeActionButton = ({ color, iconName, onPress }) => (
+const SwipeActionButton = ({
+  color, text, iconName, onPress,
+}) => (
   <TouchableOpacity
     style={{
       backgroundColor: color,
       flex: 1,
       justifyContent: 'center',
-      paddingHorizontal: 26,
+      paddingHorizontal: 18,
     }}
     onPress={onPress}
   >
-    <Ionicons name={iconName} color="white" size={34} />
+    <View style={{ alignItems: 'center', width: 40 }}>
+      <Ionicons name={iconName} color="white" size={34} />
+      {text ? <Text style={{ color: 'white' }}>{text}</Text> : null}
+    </View>
   </TouchableOpacity>
 );
 
@@ -30,6 +37,7 @@ const LeaveChatButton = ({ firebase, chatId, profileUid }) => (
   <SwipeActionButton
     color="tomato"
     iconName="md-trash"
+    text="Leave"
     onPress={() => leaveChat(firebase, chatId, profileUid)}
   />
 );
