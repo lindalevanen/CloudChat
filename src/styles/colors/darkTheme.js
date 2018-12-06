@@ -28,7 +28,7 @@ const palette = {
   ownMessageBubble: colors.hack1,
   messageSender: colors.lightgrey,
   messageBody: colors.white,
-  checkBox: colors.blueBlack,
+  checkBox: colors.white,
 };
 
 export default palette;
