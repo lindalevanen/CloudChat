@@ -5,6 +5,8 @@ import Swipeable from 'react-native-swipeable';
 import { Ionicons } from '@expo/vector-icons';
 import { connect } from 'react-redux';
 import { compose } from 'recompose';
+import _orderBy from 'lodash/orderBy';
+import _get from 'lodash/get';
 
 import { withFirebase } from 'react-redux-firebase';
 import { leaveChat } from '../../store/utils/firebase';
@@ -80,11 +82,16 @@ const createOpenChatCallback = navigation => (chat, contact) => {
   }
 };
 
+function orderByLatest(chats) {
+  const timeStampComparison = a => _get(a, 'lastEvent.timestamp', -1);
+  return _orderBy(chats, [timeStampComparison, 'createdAt'], ['desc', 'desc']);
+}
+
 const ChatList = ({
   firebase, chats, navigation, profileUid,
 }) => (
   <View>
-    {chats.map(chat => (
+    {orderByLatest(chats).map(chat => (
       <SwipeableChatPreview
         key={chat.id}
         firebase={firebase}

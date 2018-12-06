@@ -4,6 +4,7 @@ import { TouchableHighlight, Text, View } from 'react-native';
 import { connect } from 'react-redux';
 import { compose } from 'recompose';
 import _find from 'lodash/find';
+import _get from 'lodash/get';
 
 import Avatar from '../Avatar';
 import { withTheme } from '../ThemedWrapper';
@@ -41,6 +42,23 @@ const styles = theme => ({
   },
 });
 
+function getLastEvent(chat, profileUid) {
+  if (!chat.lastEvent) {
+    return null;
+  }
+  const { sender: senderId, body } = _get(chat, 'lastEvent.payload', {});
+  let sender = _find(chat.members, user => user.id === senderId);
+  if (sender.id === profileUid) {
+    sender = {
+      username: 'You',
+    };
+  }
+  return {
+    body,
+    sender,
+  };
+}
+
 const ChatPreview = ({
   theme, onPress, chat, profileUid,
 }) => {
@@ -63,6 +81,7 @@ const ChatPreview = ({
       timestamp = chat.createdAt;
     }
   }
+  const lastEvent = getLastEvent(chat, profileUid);
 
   const onPressHandler = () => (chat.groupChat ? onPress(chat) : onPress(chat, contact));
 
@@ -75,7 +94,10 @@ const ChatPreview = ({
       <View style={[style.chatContainer]}>
         <Avatar url={imageUrl} username={chatTitle} />
         <View style={[style.summaryContainer]}>
-          <Text style={[style.chatTitleText]}>{chatTitle}</Text>
+          <View>
+            <Text style={[style.chatTitleText]}>{chatTitle}</Text>
+            {lastEvent ? <Text>{`${lastEvent.sender.username}: ${lastEvent.body}`}</Text> : null}
+          </View>
           <Text style={[style.chatUpdatedText]}>
             {prettyTimestamp(timestamp)}
           </Text>
