@@ -45,9 +45,9 @@ const styles = theme => ({
   chatImageWrapper: {
     marginLeft: 10,
     backgroundColor: theme.messageBubble,
-    padding: 8,
     borderRadius: 14,
     borderTopLeftRadius: 2,
+    overflow: 'hidden',
   },
 });
 
