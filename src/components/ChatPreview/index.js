@@ -114,7 +114,7 @@ const ChatPreview = ({
       chatTitle = contact.username;
       timestampToUse = chat.createdAt;
       const lastEvent = getLastEvent(chat, profileUid);
-      if (lastEvent.timestamp) {
+      if (lastEvent && lastEvent.timestamp) {
         timestampToUse = lastEvent.timestamp;
       }
       lastEventText = lastEvent

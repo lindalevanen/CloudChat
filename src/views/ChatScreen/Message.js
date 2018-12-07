@@ -1,5 +1,5 @@
 import React from 'react';
-import { Text, View, Dimensions } from 'react-native';
+import { Text, View, Dimensions, TouchableOpacity } from 'react-native';
 import { connect } from 'react-redux';
 import { compose } from 'recompose';
 import Image from 'react-native-image-progress';
@@ -7,6 +7,7 @@ import ProgressBar from 'react-native-progress/Circle';
 
 import { AvatarWithProfileLink } from '../../components/Avatar';
 import { withTheme } from '../../components/ThemedWrapper';
+import OpenImageWrapper from '../../components/OpenImageWrapper';
 
 const styles = theme => ({
   container: {
@@ -26,6 +27,10 @@ const styles = theme => ({
   },
   sender: {
     color: theme.messageSender,
+  },
+  senderTextImage: {
+    padding: 8,
+    paddingVertical: 5,
   },
   messageBody: {
     color: theme.messageBody,
@@ -94,16 +99,20 @@ const Message = ({
           ]}
         >
           {!ownMessage && (
-            <Text style={[style.sender, { paddingBottom: 5 }]}>{sender.username}</Text>
+            <Text style={[style.sender, style.senderTextImage]}>{sender.username}</Text>
           )}
-          <Image
-            style={{ height, width }}
-            source={{ uri: attachment }}
-            indicator={ProgressBar}
-            indicatorProps={{
-              color: 'white',
-            }}
-          />
+          <OpenImageWrapper
+            imageUrl={attachment}
+          >
+            <Image
+              style={{ height, width }}
+              source={{ uri: attachment }}
+              indicator={ProgressBar}
+              indicatorProps={{
+                color: 'white',
+              }}
+            />
+          </OpenImageWrapper>
         </View>) : (
           <View style={[style.messageBubble, ownMessage && style.ownBubble]}>
             {!ownMessage && (<Text style={style.sender}>{sender.username}</Text>)}
