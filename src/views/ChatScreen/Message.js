@@ -88,18 +88,18 @@ const Message = ({
         />
       )}
       {attachment ? (
-        <OpenImageWrapper
-          imageUrl={attachment}
+        <View
+          style={[
+            style.chatImageWrapper,
+            ownMessage && style.ownBubble,
+          ]}
         >
-          <View
-            style={[
-              style.chatImageWrapper,
-              ownMessage && style.ownBubble,
-            ]}
+          {!ownMessage && (
+            <Text style={[style.sender, { paddingBottom: 5 }]}>{sender.username}</Text>
+          )}
+          <OpenImageWrapper
+            imageUrl={attachment}
           >
-            {!ownMessage && (
-              <Text style={[style.sender, { paddingBottom: 5 }]}>{sender.username}</Text>
-            )}
             <Image
               style={{ height, width }}
               source={{ uri: attachment }}
@@ -108,8 +108,8 @@ const Message = ({
                 color: 'white',
               }}
             />
-          </View>
-        </OpenImageWrapper>) : (
+          </OpenImageWrapper>
+        </View>) : (
           <View style={[style.messageBubble, ownMessage && style.ownBubble]}>
             {!ownMessage && (<Text style={style.sender}>{sender.username}</Text>)}
             <Text style={style.messageBody}>{body}</Text>
