@@ -50,6 +50,15 @@ const ChatInfoScreen = ({
     );
   };
 
+  const navigateToGallery = () => {
+    navigation.dispatch(StackActions.push({
+      routeName: 'GalleryScreen',
+      params: {
+        chatId: navigation.state.params.chatId,
+      },
+    }));
+  };
+
   if (!chatMetadata || !chatMetadata.members) { // without this the app crashes on leaving group
     return <View />;
   }
@@ -77,6 +86,7 @@ const ChatInfoScreen = ({
           title="Chat gallery"
           titleStyle={{ alignSelf: 'flex-start' }}
           color="transparent"
+          onPress={() => navigateToGallery()}
           titleColor={theme.actionPrimary}
         />
       </View>

@@ -22,6 +22,7 @@ import UserInfoScreen from '../UserInfoScreen';
 
 import ThemedHeaderComponent from '../../components/ThemedHeaderComponent';
 import { resolveNavigationOptionsForScreen } from './routeUtils';
+import Gallery from '../ChatScreen/Gallery';
 
 const Test = ({ text }) => (
   <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
@@ -110,6 +111,9 @@ export default createStackNavigator({
   },
   UserInfoScreen: {
     screen: UserInfoScreen,
+  },
+  GalleryScreen: {
+    screen: Gallery,
   },
 }, {
   // mode: 'modal',
