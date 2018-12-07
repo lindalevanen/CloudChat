@@ -16,19 +16,7 @@ const styles = theme => ({
   },
 });
 
-let scrollerRef;
-
 class MessageList extends React.Component {
-  componentDidMount() {
-    //this.keyboardDidShowListener = Keyboard.addListener('keyboardDidShow', () => scrollerRef && scrollerRef.scrollToEnd({ animated: true }));
-    //this.keyboardDidHideListener = Keyboard.addListener('keyboardDidHide', () => scrollerRef && scrollerRef.scrollToEnd({ animated: true }));
-  }
-
-  componentWillUnmount() {
-    //this.keyboardDidShowListener.remove();
-    //this.keyboardDidHideListener.remove();
-  }
-
   itemOkToRender = (item) => {
     const { chatMetadata } = this.props;
     return (
@@ -53,12 +41,6 @@ class MessageList extends React.Component {
             data={messageList.reverse()}
             keyExtractor={({ id }) => id}
             contentContainerStyle={themedStyle.content}
-            ref={(ref) => {
-              scrollerRef = ref;
-            }}
-            onContentSizeChange={() => {
-              //scrollerRef.scrollToEnd({ animated: true });
-            }}
             keyboardDismissMode="on-drag"
             renderItem={({ item }) => (
               this.itemOkToRender(item) && (
