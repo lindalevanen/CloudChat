@@ -20,13 +20,13 @@ let scrollerRef;
 
 class MessageList extends React.Component {
   componentDidMount() {
-    this.keyboardDidShowListener = Keyboard.addListener('keyboardDidShow', () => scrollerRef && scrollerRef.scrollToEnd({ animated: true }));
-    this.keyboardDidHideListener = Keyboard.addListener('keyboardDidHide', () => scrollerRef && scrollerRef.scrollToEnd({ animated: true }));
+    //this.keyboardDidShowListener = Keyboard.addListener('keyboardDidShow', () => scrollerRef && scrollerRef.scrollToEnd({ animated: true }));
+    //this.keyboardDidHideListener = Keyboard.addListener('keyboardDidHide', () => scrollerRef && scrollerRef.scrollToEnd({ animated: true }));
   }
 
   componentWillUnmount() {
-    this.keyboardDidShowListener.remove();
-    this.keyboardDidHideListener.remove();
+    //this.keyboardDidShowListener.remove();
+    //this.keyboardDidHideListener.remove();
   }
 
   itemOkToRender = (item) => {
@@ -49,14 +49,15 @@ class MessageList extends React.Component {
           <EmptyPlaceholder text="No messages yet" />
         ) : (
           <FlatList
-            data={messageList}
+            inverted
+            data={messageList.reverse()}
             keyExtractor={({ id }) => id}
             contentContainerStyle={themedStyle.content}
             ref={(ref) => {
               scrollerRef = ref;
             }}
             onContentSizeChange={() => {
-              scrollerRef.scrollToEnd({ animated: true });
+              //scrollerRef.scrollToEnd({ animated: true });
             }}
             keyboardDismissMode="on-drag"
             renderItem={({ item }) => (
