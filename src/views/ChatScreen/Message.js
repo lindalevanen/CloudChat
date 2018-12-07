@@ -28,6 +28,10 @@ const styles = theme => ({
   sender: {
     color: theme.messageSender,
   },
+  senderTextImage: {
+    padding: 8,
+    paddingVertical: 5,
+  },
   messageBody: {
     color: theme.messageBody,
     fontSize: 16,
@@ -95,7 +99,7 @@ const Message = ({
           ]}
         >
           {!ownMessage && (
-            <Text style={[style.sender, { paddingBottom: 5 }]}>{sender.username}</Text>
+            <Text style={[style.sender, style.senderTextImage]}>{sender.username}</Text>
           )}
           <OpenImageWrapper
             imageUrl={attachment}
