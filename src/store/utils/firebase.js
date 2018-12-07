@@ -97,6 +97,7 @@ export async function createChatRoom(
   profileUids,
   title,
   imageUrl,
+  creator,
 ) {
   const members = {};
   profileUids.forEach((id) => {
@@ -115,6 +116,9 @@ export async function createChatRoom(
   }
   if (imageUrl) {
     roomData.avatarUrl = imageUrl;
+  }
+  if (creator) {
+    roomData.creator = creator;
   }
   const res = await firebaseRef.push('chatMetadata/', roomData);
   const roomID = res.path.pieces_[1]; // very hacky, but these lines will be ultimately removed

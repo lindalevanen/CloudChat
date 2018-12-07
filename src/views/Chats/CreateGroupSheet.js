@@ -35,6 +35,7 @@ const CreateGroupSheet = ({
         [...userIds, profileId],
         groupName,
         logoUrl,
+        profileId,
       );
       navigation.dispatch(StackActions.popToTop());
     } else {
