@@ -1,7 +1,6 @@
 import React from 'react';
 import { TouchableOpacity, Modal } from 'react-native';
 import { compose, withState } from 'recompose';
-import { firebaseConnect } from 'react-redux-firebase';
 import { connect } from 'react-redux';
 
 import ImageViewer from 'react-native-image-zoom-viewer';
@@ -9,14 +8,15 @@ import ImageViewer from 'react-native-image-zoom-viewer';
 import { withTheme } from '../ThemedWrapper';
 
 const OpenImageWrapper = ({
-  imageUrl,
+  imageUrl = '',
+  attachment,
   children,
   modalOpen,
   index = 0,
   setModalOpen,
 }) => {
   const images = [{
-    url: imageUrl,
+    url: (attachment && attachment.downloadUrl) ? attachment.downloadUrl : imageUrl,
   }];
   return (
     <TouchableOpacity
@@ -28,7 +28,7 @@ const OpenImageWrapper = ({
           imageUrls={images}
           index={index}
           onSwipeDown={() => { setModalOpen(false); }}
-          onSave={() => console.log("TODO: Implement saving")}
+          onSave={() => console.log('TODO: Implement saving')}
           enableSwipeDown
         />
       </Modal>
