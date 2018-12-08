@@ -1,5 +1,5 @@
 import React from 'react';
-import { Text, TouchableOpacity } from 'react-native';
+import { TouchableOpacity } from 'react-native';
 
 import { withTheme } from '../ThemedWrapper';
 
@@ -21,7 +21,6 @@ const styles = theme => ({
 const ImageSelectorButton = ({
   theme,
   onPress,
-  name,
   icon,
   style,
 }) => {
@@ -29,7 +28,6 @@ const ImageSelectorButton = ({
   return (
     <TouchableOpacity style={[ownStyles.option, style]} onPress={onPress}>
       {icon}
-      {/* <Text style={ownStyles.text}>{name}</Text> */}
     </TouchableOpacity>
   );
 };
