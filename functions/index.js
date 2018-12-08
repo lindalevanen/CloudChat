@@ -26,6 +26,7 @@ exports.translate = functions.region(region).database.ref('/chatEvents/{chatID}/
       const message = snapshot.val().payload.body
       const messageType = snapshot.val().type
       if(messageType !== 'message') {
+        console.log('Not a message')
         return
       }
 
@@ -71,6 +72,16 @@ exports.translate = functions.region(region).database.ref('/chatEvents/{chatID}/
       }).catch( (error) => {
         return Promise.reject(error);
       });
+  })
+
+exports.addLatestChatEvent = functions.region(region).database.ref('chatEvents/{chatUid}/{messageUid}')
+  .onCreate(async (snapshot, context) => {
+    const chatUid = context.params.chatUid;
+    const chatEvent = snapshot.val();
+
+    const updates = {}
+    updates['/lastEvent'] = chatEvent
+    return admin.database().ref(`chatMetadata/${chatUid}`).update(updates)
   })
 
 exports.addImageLabel = functions.region(region).database.ref('storageMetadata/chatImages/{chatUid}/{imageUid}')
@@ -183,6 +194,10 @@ exports.createUrlPreview = functions.region(region).database.ref('chatEvents/{ch
       .then((response) => {
         return response.json();
       })
+    
+    if (previewData.error) {
+      return Promise.reject(previewData.error);
+    }
 
     const updates = {};
     updates['/previewDataOfURL'] = previewData;
@@ -197,6 +212,62 @@ exports.deleteGroupsThatHaveNoUser = functions.region(region).database.ref('chat
     const ref = await admin.database().ref(`chatMetadata/${chatUid}`)
     await ref.remove()
   });
+
+exports.sendNotificationOnCreateGroup = functions.region(region).database.ref('/chatMetadata/{chatUid}')
+  .onCreate(async (snapshot, context) => {
+    const chatUid = context.params.chatUid;
+    const original = snapshot.val();
+    const groupChat = original.groupChat;
+    if(!groupChat) {
+      return
+    }
+    const members = original.members;
+    const title = original.title;
+    const creator = original.creator;
+    const membersToNotify = [];
+
+    for (var key in members) {
+      if (members.hasOwnProperty(key)) {
+        membersToNotify.push(members[key].id)
+      }
+    }
+
+    // Get device tokens corresponding to members
+    const getDeviceTokensPromises = []
+
+    for(let key in membersToNotify) {
+      if(membersToNotify.hasOwnProperty(key) && membersToNotify[key] !== creator) {
+        getDeviceTokensPromises.push(admin.database().ref(`/users/${membersToNotify[key]}/expoToken`).once('value'))
+      }
+    }
+
+    const results = await Promise.all(getDeviceTokensPromises)
+    if(results.length === 0) {
+      return;
+    }
+
+    const notifications = []
+      
+    for (let i = 0; i < results.length; i++) {
+      if(results[i]) {
+        notifications.push({
+          "to": results[i].val(),
+          "title": title,
+          "body": 'You were added into a group chat'
+        })
+      }
+    }
+
+    await fetch('https://exp.host/--/api/v2/push/send', {
+      method: 'POST',
+      headers: {
+        "Accept": "application/json",
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(notifications)
+    })
+
+  })
 
 exports.sendChatMessageNotification = functions.region(region).database.ref('/chatEvents/{chatUid}/{messageUid}')
     .onCreate(async (snapshot, context) => {
@@ -239,19 +310,18 @@ exports.sendChatMessageNotification = functions.region(region).database.ref('/ch
         return console.log('There are no notification tokens to send to.');
       }
       const notifications = []
+      const notificationBody = messageType === 'message' ? messageBody : 'Image'
       
-      responsePromises = []
       for (let i = 0; i < results.length; i++) {
         if(results[i]) {
           notifications.push({
             "to": results[i].val(),
             "title": `${messageSender.val()}`,
-            "body": `${messageBody}`
+            "body": `${notificationBody}`
           })
         }
       }
-      console.log("All notifications: ", notifications)
-
+      
       fetch('https://exp.host/--/api/v2/push/send', {
         method: 'POST',
         headers: {
@@ -260,6 +330,7 @@ exports.sendChatMessageNotification = functions.region(region).database.ref('/ch
         },
         body: JSON.stringify(notifications)
       })
+      
     });
 
 function getFileName(key, tempName) {
