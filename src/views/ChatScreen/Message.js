@@ -64,6 +64,7 @@ const Message = ({
 }) => {
   const style = styles(theme);
   const ownMessage = profileUid === sender.id;
+  const { timestamp } = message
   const {
     body, attachment, dimensions, previewDataOfURL,
   } = message.payload;
@@ -105,7 +106,13 @@ const Message = ({
               {sender.username}
             </Text>
           )}
-          <OpenImageWrapper imageUrl={attachment} attachment={attachment}>
+          <OpenImageWrapper
+            imageData={[{
+              url: attachment,
+              sender: sender.username,
+              time: new Date(timestamp).toString(),
+            }]}
+          >
             {hasFancyImage ? (
               <ImageWithQuality
                 style={{ height, width }}

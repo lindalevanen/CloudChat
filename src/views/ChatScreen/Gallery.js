@@ -1,63 +1,104 @@
 import React from 'react';
-import { Text, View, Dimensions, TouchableOpacity, FlatList, StyleSheet } from 'react-native';
+import { Text, View, Dimensions, TouchableOpacity, FlatList, StyleSheet, SectionList } from 'react-native';
 import { connect } from 'react-redux';
-import { compose } from 'recompose';
+import { compose, withState } from 'recompose';
 import { firebaseConnect, populate } from 'react-redux-firebase';
 import Image from 'react-native-image-progress';
 import ProgressBar from 'react-native-progress/Circle';
+import _map from 'lodash/map';
+import Picker from 'react-native-picker-select';
+import { Ionicons } from '@expo/vector-icons';
 
 import { withTheme } from '../../components/ThemedWrapper';
 import OpenImageWrapper from '../../components/OpenImageWrapper';
+import { styles } from '../../styles/form/style';
+import ImageGrid from '../../components/ImageGrid';
 
-const styles = StyleSheet.create({
-  list: {
-    justifyContent: 'center',
-    flexDirection: 'row',
-    flexWrap: 'wrap',
+
+const columnAmount = 3;
+const imageMargin = 2;
+
+// TODO: get the thumbnail url (just add _thumb in the filename part in the url)
+const thumbOf = url => url;
+
+const formatDate = (date) => {
+  var day = date.getDate();
+  var monthIndex = date.getMonth();
+  var year = date.getFullYear();
+
+  return day + ' ' + monthNames[monthIndex] + ' ' + year;
+}
+
+export const options = [
+  {
+    value: 'date',
+    key: '0',
+    label: 'Date',
   },
-});
-
-const ImageThumb = () => {
-  return (
-    <View />
-  );
-};
+  {
+    value: 'group',
+    key: '1',
+    label: 'Group',
+  },
+];
 
 const Gallery = ({
-  navigation,
+  imageMetadata,
+  listType,
+  setListType,
+  theme,
 }) => {
-  const {
-    chatId,
-  } = navigation.state.params;
-
-  return (
-    <FlatList
-      contentContainerStyle={styles.list}
-    >
-      {}
-    </FlatList>
-  );
+  const style = styles(theme);
+  const arr = _map(imageMetadata, (data, key) => ({
+    ...data,
+    key,
+  }));
+  const imageData = _map(arr, data => ({
+    url: data.url,
+    sender: data.fileOwner ? data.fileOwner.username : '',
+    time: (new Date(data.timeCreated).toLocaleDateString()),
+  }));
+  const screenWidth = Dimensions.get('window').width;
+  const imageWidth = screenWidth / columnAmount;
+  if (imageMetadata) {
+    return (
+      <View>
+        <View style={style.settingTitle}>
+          <Ionicons style={style.settingIcon} name="ios-globe" size={24} color="deepskyblue" />
+          <Text style={[style.text]}>Sort by:</Text>
+        </View>
+        <Picker
+          placeholderTextColor={theme.inputPlaceholder}
+          items={options}
+          useNativeAndroidPickerStyle={false}
+          value={listType}
+          onValueChange={setListType}
+          placeholder={{ value: null, label: 'Original' }}
+        />
+        
+      </View>
+    );
+  }
+  return <View />;
 };
 
-const populates = [{ child: 'members', root: 'users', populateByKey: true }];
+const populates = [{ child: 'fileOwner', root: 'users' }];
 
 const mapStateToProps = ({ firebase, settings }, { navigation }) => ({
-  chatMetadata:
+  imageMetadata:
     populate(
       firebase,
-      `chatMetadata/${navigation.state.params.chatId}`,
+      `storageMetadata/chatImages/${navigation.state.params.chatId}`,
       populates,
     ),
-  chatEvents:
-    (isDraft && {})
-    || populate(firebase, `chatEvents/${navigation.state.params.chatId}`),
   imageQuality: settings.imageQuality,
 });
 
 const enhance = compose(
   withTheme,
+  withState('listType', 'setListType', 'date'),
   firebaseConnect(({ navigation }) => [
-    { path: `chatMetadata/${navigation.state.params.chatId}`, populates },
+    { path: `storageMetadata/chatImages/${navigation.state.params.chatId}`, populates },
   ]),
   connect(mapStateToProps),
 );
