@@ -11,6 +11,7 @@ class ImageWithQuality extends React.Component {
   state = {
     imageSource: placeholder,
     error: undefined,
+    resizeMode: 'center',
   };
 
   componentDidMount() {
@@ -21,6 +22,7 @@ class ImageWithQuality extends React.Component {
       .getDownloadURL()
       .then(uri => this.setState({
         imageSource: { uri, cache: 'force-cache' },
+        resizeMode: 'cover',
       }))
       .catch((error) => {
         console.log(error);
@@ -32,12 +34,12 @@ class ImageWithQuality extends React.Component {
     const {
       style, attachment, imageQuality, imageRef, ...props
     } = this.props;
-    const { imageSource, error } = this.state;
+    const { imageSource, error, resizeMode } = this.state;
     return error ? null : (
       <Image
         {...props}
         style={style}
-        imageStyle={[style, { resizeMode: 'center' }]}
+        imageStyle={[style, { resizeMode }]}
         source={imageSource}
         indicator={ProgressBar}
         indicatorProps={{
