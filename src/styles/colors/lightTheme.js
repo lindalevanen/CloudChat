@@ -29,6 +29,7 @@ const palette = {
   messageSender: colors.lightgrey,
   messageBody: colors.white,
   checkBox: colors.blueBlack,
+  quoteSeparator: colors.white,
 };
 
 export default palette;

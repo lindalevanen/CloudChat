@@ -1,5 +1,5 @@
 import React from 'react';
-import { Text, View, Dimensions, TouchableOpacity } from 'react-native';
+import { Text, View, Dimensions } from 'react-native';
 import { connect } from 'react-redux';
 import { compose } from 'recompose';
 import Image from 'react-native-image-progress';
@@ -8,6 +8,7 @@ import ProgressBar from 'react-native-progress/Circle';
 import { AvatarWithProfileLink } from '../../components/Avatar';
 import { withTheme } from '../../components/ThemedWrapper';
 import OpenImageWrapper from '../../components/OpenImageWrapper';
+import UrlPreview from '../../components/UrlPreview';
 
 const styles = theme => ({
   container: {
@@ -18,17 +19,17 @@ const styles = theme => ({
   },
   messageBubble: {
     marginLeft: 10,
-    padding: 8,
-    paddingHorizontal: 14,
+    padding: 6,
+    paddingHorizontal: 8,
     backgroundColor: theme.messageBubble,
-    borderRadius: 14,
+    borderRadius: 8,
     borderTopLeftRadius: 2,
     maxWidth: 240,
   },
   sender: {
     color: theme.messageSender,
   },
-  senderTextImage: {
+  senderTextWithImage: {
     padding: 8,
     paddingVertical: 5,
   },
@@ -50,7 +51,7 @@ const styles = theme => ({
   chatImageWrapper: {
     marginLeft: 10,
     backgroundColor: theme.messageBubble,
-    borderRadius: 14,
+    borderRadius: 8,
     borderTopLeftRadius: 2,
     overflow: 'hidden',
   },
@@ -61,7 +62,7 @@ const Message = ({
 }) => {
   const style = styles(theme);
   const ownMessage = profileUid === sender.id;
-  const { body, attachment, dimensions } = message.payload;
+  const { body, attachment, dimensions, previewDataOfURL } = message.payload;
 
   const winDimensions = Dimensions.get('window');
   const maxWidth = winDimensions.width / 3 * 2;
@@ -99,7 +100,7 @@ const Message = ({
           ]}
         >
           {!ownMessage && (
-            <Text style={[style.sender, style.senderTextImage]}>{sender.username}</Text>
+            <Text style={[style.sender, style.senderTextWithImage]}>{sender.username}</Text>
           )}
           <OpenImageWrapper
             imageUrl={attachment}
@@ -113,11 +114,24 @@ const Message = ({
               }}
             />
           </OpenImageWrapper>
-        </View>) : (
-          <View style={[style.messageBubble, ownMessage && style.ownBubble]}>
+        </View>)
+        : previewDataOfURL ? (
+          <View
+            style={[style.messageBubble, ownMessage && style.ownBubble]}
+          >
             {!ownMessage && (<Text style={style.sender}>{sender.username}</Text>)}
-            <Text style={style.messageBody}>{body}</Text>
-          </View>)
+            <Text style={[style.messageBody]}>{body}</Text>
+            <UrlPreview
+              description={previewDataOfURL.description}
+              image={previewDataOfURL.image}
+              title={previewDataOfURL.title}
+              url={previewDataOfURL.url}
+            />
+          </View>) : (
+            <View style={[style.messageBubble, ownMessage && style.ownBubble]}>
+              {!ownMessage && (<Text style={style.sender}>{sender.username}</Text>)}
+              <Text style={style.messageBody}>{body}</Text>
+            </View>)
       }
     </View>
   );
