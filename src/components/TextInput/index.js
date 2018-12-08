@@ -24,10 +24,14 @@ const TextInput = ({
   validate,
   ...props
 }) => {
-  const isValid = validate(value);
+  const isValid = validate ? validate(value) : true;
   return (
     <RNTextInput
-      style={[styles(theme).input, style, !isValid ? { borderColor: theme.actionHero, borderWidth: 0.5 } : null]}
+      style={[
+        styles(theme).input,
+        style,
+        !isValid ? { borderColor: theme.actionHero, borderWidth: 0.5 } : null,
+      ]}
       onChangeText={onChangeText}
       placeholder={placeholder}
       placeholderTextColor={theme.inputPlaceholder}
