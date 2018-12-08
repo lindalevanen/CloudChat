@@ -341,7 +341,7 @@ function resizePromise(configuration, tempFilePath, tempFileName) {
   const { key, resolution } = configuration;
   const origFile = `${tempFilePath}/${tempFileName}`;
   const convertedFile = `${tempFilePath}/${getFileName(key, tempFileName)}`;
-  return spawn('convert', [origFile, '-thumbnail', resolution, convertedFile])
+  return spawn('convert', [origFile, '-resize', resolution, convertedFile])
 }
 
 function uploadPromise(bucket, configuration, tempFilePath, tempFileName, uploadDir, metadata) {
