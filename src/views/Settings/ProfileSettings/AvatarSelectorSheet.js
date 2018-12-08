@@ -12,7 +12,7 @@ const AvatarSelectorSheet = ({
 }) => {
   const style = styles(theme);
   return (
-    <View style={[style.view, style.container, style.section]}>
+    <View style={[style.view]}>
       <AvatarSelector />
     </View>
   );

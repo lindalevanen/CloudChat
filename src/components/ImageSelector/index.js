@@ -81,9 +81,9 @@ const ImageSelector = ({
     }
   };
   return (
-    <View style={[style.sameSizedChildren]}>
-      <Button style={{ ...buttonStyle, backgroundColor: theme.actionHero }} title="Camera" onPress={takeFromCamera} type="Success" />
-      <Button style={{ ...buttonStyle, backgroundColor: theme.actionHero }} title="Gallery" onPress={pickImage} type="Success" />
+    <View style={{ flexDirection: 'row' }}>
+      <Button style={buttonStyle} color="transparent" titleColor={theme.actionHero} title="Camera" onPress={takeFromCamera} />
+      <Button style={buttonStyle} color="transparent" titleColor={theme.actionHero} title="Gallery" onPress={pickImage} />
     </View>
   );
 };

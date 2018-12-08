@@ -37,18 +37,21 @@ const AvatarSelector = ({
     const downloadUrl = await ref.getDownloadURL();
     await firebase.updateProfile({ avatarUrl: downloadUrl });
     setLoading(false);
-  }
+  };
   return (
     <View style={[style.view]}>
-      <View style={[style.container, style.setting]}>
-        <Text>{error}</Text>
+      <View style={[style.container, style.panel, style.setting, { flexDirection: 'column', alignItems: 'center' }]}>
         <Avatar url={profile.avatarUrl} size={120} />
+        {loading ? <Text>Uploading...</Text> : null}
+      </View>
+      <View style={[style.container, style.panel, style.setting]}>
+        <Text style={style.text}>Pick from</Text>
         <ImageSelector
           setError={setError}
           setLoading={setLoading}
           onFileReceived={handleFileReceived}
           imageOptions={imgOptions}
-          buttonStyle={{ marginLeft: 10 }}
+          buttonStyle={{ marginLeft: 6 }}
         />
       </View>
     </View>
