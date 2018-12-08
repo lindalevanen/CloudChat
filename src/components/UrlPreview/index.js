@@ -1,5 +1,7 @@
 import React from 'react';
-import { Text, View, TouchableOpacity, Image, Linking } from 'react-native';
+import {
+  Text, View, TouchableOpacity, Image, Linking,
+} from 'react-native';
 import { compose } from 'recompose';
 
 import { withTheme } from '../ThemedWrapper';
@@ -9,21 +11,17 @@ const styles = theme => ({
     marginTop: 8,
   },
   wrapper: {
-    marginLeft: 14,
-  },
-  quote: {
-    position: 'absolute',
-    width: 2,
-    height: '100%',
-    marginLeft: 4,
-    backgroundColor: theme.quoteSeparator,
+    marginLeft: 2,
+    paddingLeft: 8,
+    borderLeftColor: theme.quoteSeparator,
+    borderLeftWidth: 1.4,
   },
   title: {
-    top: -5,
     fontWeight: 'bold',
+    color: theme.messageBody,
   },
   desc: {
-    top: -5,
+    color: theme.messageBody,
   },
 });
 
@@ -36,18 +34,17 @@ const UrlPreview = ({
 }) => {
   const style = styles(theme);
   const desc = description.length > 150
-    ? description.slice(0, 150) + "..."
+    ? `${description.slice(0, 150)}...`
     : description;
   return (
     <TouchableOpacity style={style.container} onPress={() => Linking.openURL(url)}>
-      <View style={style.quote} />
       <View style={style.wrapper}>
         <Text style={style.title}>{title}</Text>
-        {description !== '' &&
-          <Text style={style.desc}>{desc}</Text>
+        {description !== ''
+          && <Text style={style.desc}>{desc}</Text>
         }
-        {image !== '' &&
-          <Image style={{ width: '100%', height: 160 }} source={{ uri: image }} />
+        {image !== ''
+          && <Image style={{ height: 160 }} source={{ uri: image }} />
         }
       </View>
     </TouchableOpacity>
