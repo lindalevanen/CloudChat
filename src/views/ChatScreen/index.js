@@ -109,6 +109,7 @@ class ChatScreen extends React.Component {
               setError={setError}
               onFileReceived={this.handlePhoto}
               imageOptions={imageOptions}
+              expanded
               buttonStyle={{ width: '50%' }}
             />
           )}

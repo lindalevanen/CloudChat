@@ -1,14 +1,15 @@
 import React from 'react';
-import { View, StyleSheet } from 'react-native';
+import { View } from 'react-native';
 import { ImagePicker, ImageManipulator, Permissions } from 'expo';
 import { compose } from 'recompose';
 import { firebaseConnect } from 'react-redux-firebase';
 import { connect } from 'react-redux';
+import { Ionicons } from '@expo/vector-icons';
 
 import urlToBlob from '../../store/utils/urlToBlob';
 import Button from '../Button';
 import { withTheme } from '../ThemedWrapper';
-import { styles } from '../../styles/form/style';
+import ImageSelectorButton from './ImageSelectorButton';
 
 const resolutions = {
   low: {
@@ -21,6 +22,14 @@ const resolutions = {
   },
 };
 
+const getStyles = theme => ({
+  container: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    paddingBottom: 5,
+  },
+});
+
 const ImageSelector = ({
   setLoading,
   setError,
@@ -29,20 +38,27 @@ const ImageSelector = ({
   onFileReceived,
   theme,
   buttonStyle,
+  expanded = false,
 }) => {
-  const style = styles(theme);
+  const styles = getStyles(theme);
   const resizeImage = async (originalUri, resolution) => {
     const { width, height } = resolution;
-    const actions = [{
-      resize: {
-        width,
-        height,
+    const actions = [
+      {
+        resize: {
+          width,
+          height,
+        },
       },
-    }];
+    ];
     const saveOptions = {
       format: 'jpeg',
     };
-    const resizedResult = await ImageManipulator.manipulateAsync(originalUri, actions, saveOptions);
+    const resizedResult = await ImageManipulator.manipulateAsync(
+      originalUri,
+      actions,
+      saveOptions,
+    );
     const { uri } = resizedResult;
     return uri;
   };
@@ -51,7 +67,7 @@ const ImageSelector = ({
       setLoading(true);
       const { uri } = result;
       const resolution = resolutions[imageQuality];
-      const finalUri = (resolution) ? await resizeImage(uri, resolution) : uri;
+      const finalUri = resolution ? await resizeImage(uri, resolution) : uri;
       const file = await urlToBlob(finalUri);
       const fileData = {
         file,
@@ -80,10 +96,34 @@ const ImageSelector = ({
       handleResult(await ImagePicker.launchImageLibraryAsync(imageOptions));
     }
   };
-  return (
+  return expanded ? (
+    <View style={styles.container}>
+      <ImageSelectorButton
+        onPress={takeFromCamera}
+        icon={<Ionicons name="ios-camera" color={theme.actionHero} size={30} />}
+      />
+      <ImageSelectorButton
+        onPress={pickImage}
+        style={{ marginLeft: 0 }}
+        icon={<Ionicons name="ios-photos" color={theme.actionHero} size={30} />}
+      />
+    </View>
+  ) : (
     <View style={{ flexDirection: 'row' }}>
-      <Button style={buttonStyle} color="transparent" titleColor={theme.actionHero} title="Camera" onPress={takeFromCamera} />
-      <Button style={buttonStyle} color="transparent" titleColor={theme.actionHero} title="Gallery" onPress={pickImage} />
+      <Button
+        style={buttonStyle}
+        color="transparent"
+        titleColor={theme.actionHero}
+        title="Camera"
+        onPress={takeFromCamera}
+      />
+      <Button
+        style={buttonStyle}
+        color="transparent"
+        titleColor={theme.actionHero}
+        title="Gallery"
+        onPress={pickImage}
+      />
     </View>
   );
 };
