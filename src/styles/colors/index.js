@@ -3,6 +3,7 @@ import { darken, lighten } from 'polished';
 const colors = {
   black: '#000',
   white: '#fff',
+  lightestGrey: '#eaeaea',
   lightgrey: '#efefef',
   grey: '#ddd',
   darkGrey: '#bcbcbc',

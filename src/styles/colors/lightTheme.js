@@ -18,7 +18,7 @@ const palette = {
   switchActive: colors.green,
   switchInactive: colors.darkGrey,
   separator: colors.lightgrey,
-  inputBackground: colors.lightgrey,
+  inputBackground: colors.lightestGrey,
   inputPlaceholder: colors.darkGrey,
   text1: 'black',
   text2: colors.darkestGrey,
