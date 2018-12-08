@@ -11,7 +11,11 @@ import MessageList from './MessageList';
 import MessageInput from './MessageInput';
 import ImageSelector from '../../components/ImageSelector';
 
-import { sendMessage, uploadChatImage, setDownloadUrl } from '../../store/utils/firebase';
+import {
+  sendMessage,
+  uploadChatImage,
+  setMessageAttachment,
+} from '../../store/utils/firebase';
 
 const imageOptions = {
   mediaTypes: ImagePicker.MediaTypeOptions.Images,
@@ -36,22 +40,40 @@ class ChatScreen extends React.Component {
 
   handlePhoto = async (data) => {
     const {
-      firebase,
-      profileUid,
-      imageQuality,
-      setLoading,
+      firebase, profileUid, imageQuality, setLoading,
     } = this.props;
     const chatId = await this.getChatId();
 
-    const snapshot = await sendMessage(firebase, '', chatId, profileUid, 'placeholder', data);
+    const snapshot = await sendMessage(
+      firebase,
+      '',
+      chatId,
+      profileUid,
+      'placeholder',
+      data,
+    );
     const messageId = snapshot.path.pieces_[2];
     const {
-      uploadTaskSnapshot: { ref }, key,
+      key, filename, downloadUrl,
     } = await uploadChatImage(firebase, data, chatId, profileUid, imageQuality);
-    const downloadUrl = await ref.getDownloadURL();
-    await setDownloadUrl(firebase, chatId, messageId, downloadUrl, key);
+
+    const attachment = {
+      id: key,
+      chatId,
+      downloadUrl,
+      parentRefPath: `chatImages/${chatId}`,
+      filename,
+    };
+    await setMessageAttachment(
+      firebase,
+      chatId,
+      messageId,
+      downloadUrl,
+      attachment,
+      key,
+    );
     setLoading(false);
-  }
+  };
 
   getChatId = async () => {
     const {
@@ -66,7 +88,7 @@ class ChatScreen extends React.Component {
       chatId = await createChatFromDraft();
     }
     return chatId;
-  }
+  };
 
   render() {
     const {
@@ -93,10 +115,7 @@ class ChatScreen extends React.Component {
           behavior="padding"
           keyboardVerticalOffset={90}
         >
-          <MessageList
-            chatMetadata={chatMetadata}
-            messageList={messageList}
-          />
+          <MessageList chatMetadata={chatMetadata} messageList={messageList} />
           <MessageInput
             messageString={messageString}
             setMessageString={setMessageString}

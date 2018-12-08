@@ -128,7 +128,6 @@ export async function createChatRoom(
   return res;
 }
 
-
 function uploadImageWithMetadata(
   firebaseRef,
   file,
@@ -186,16 +185,28 @@ export function uploadAvatar(firebaseRef, file, profileUid, quality = null) {
   );
 }
 
-export function uploadChatImage(firebaseRef, data, chatId, profileUid, quality = null) {
-  return uploadImageWithMetadata(
+export async function uploadChatImage(
+  firebaseRef,
+  data,
+  chatId,
+  profileUid,
+  quality = null,
+) {
+  const filename = `${nameImage(quality)}.jpg`;
+  const {
+    uploadTaskSnapshot: { ref },
+    key,
+  } = await uploadImageWithMetadata(
     firebaseRef,
     data.file,
     `chatImages/${chatId}`,
-    `${nameImage(quality)}.jpg`,
+    filename,
     profileUid,
     data.width,
     data.height,
   );
+  const downloadUrl = await ref.getDownloadURL();
+  return { key, filename, downloadUrl };
 }
 
 export function pushChatEvent(firebaseRef, eventData, path) {
@@ -235,10 +246,42 @@ export async function sendMessage(
   return pushChatEvent(firebaseRef, messageEvent, `chatEvents/${chatId}`);
 }
 
-export function setDownloadUrl(firebaseRef, chatId, messageId, url, metadataId) {
+export function setDownloadUrl(
+  firebaseRef,
+  chatId,
+  messageId,
+  url,
+  metadataId,
+) {
   const res = firebaseRef.set(
-    `storageMetadata/chatImages/${chatId}/${metadataId}/url`, url, () => {
-      firebaseRef.set(`chatEvents/${chatId}/${messageId}/payload/attachment`, url);
+    `storageMetadata/chatImages/${chatId}/${metadataId}/url`,
+    url,
+    () => {
+      firebaseRef.set(
+        `chatEvents/${chatId}/${messageId}/payload/attachment`,
+        url,
+      );
+    },
+  );
+  return res;
+}
+
+export function setMessageAttachment(
+  firebaseRef,
+  chatId,
+  messageId,
+  url,
+  attachment,
+  metadataId,
+) {
+  const res = firebaseRef.set(
+    `storageMetadata/chatImages/${chatId}/${metadataId}/url`,
+    url,
+    () => {
+      firebaseRef.set(
+        `chatEvents/${chatId}/${messageId}/payload/attachment`,
+        attachment,
+      );
     },
   );
   return res;

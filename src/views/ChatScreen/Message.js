@@ -9,6 +9,7 @@ import { AvatarWithProfileLink } from '../../components/Avatar';
 import { withTheme } from '../../components/ThemedWrapper';
 import OpenImageWrapper from '../../components/OpenImageWrapper';
 import UrlPreview from '../../components/UrlPreview';
+import ImageWithQuality from '../../components/ImageWithQuality';
 
 const styles = theme => ({
   container: {
@@ -62,10 +63,14 @@ const Message = ({
 }) => {
   const style = styles(theme);
   const ownMessage = profileUid === sender.id;
-  const { body, attachment, dimensions, previewDataOfURL } = message.payload;
+  const {
+    body, attachment, dimensions, previewDataOfURL,
+  } = message.payload;
+
+  const hasFancyImage = typeof attachment === 'object';
 
   const winDimensions = Dimensions.get('window');
-  const maxWidth = winDimensions.width / 3 * 2;
+  const maxWidth = (winDimensions.width / 3) * 2;
   const maxHeight = 200;
 
   let width = 0;
@@ -75,10 +80,10 @@ const Message = ({
     const h = dimensions.height;
     if (w > h) {
       width = maxWidth;
-      height = h / w * maxWidth;
+      height = (h / w) * maxWidth;
     } else {
       height = maxHeight;
-      width = w / h * maxHeight;
+      width = (w / h) * maxHeight;
     }
   }
 
@@ -93,46 +98,47 @@ const Message = ({
         />
       )}
       {attachment ? (
-        <View
-          style={[
-            style.chatImageWrapper,
-            ownMessage && style.ownBubble,
-          ]}
-        >
+        <View style={[style.chatImageWrapper, ownMessage && style.ownBubble]}>
           {!ownMessage && (
-            <Text style={[style.sender, style.senderTextWithImage]}>{sender.username}</Text>
+            <Text style={[style.sender, style.senderTextWithImage]}>
+              {sender.username}
+            </Text>
           )}
-          <OpenImageWrapper
-            imageUrl={attachment}
-          >
-            <Image
-              style={{ height, width }}
-              source={{ uri: attachment }}
-              indicator={ProgressBar}
-              indicatorProps={{
-                color: 'white',
-              }}
-            />
+          <OpenImageWrapper imageUrl={attachment} attachment={attachment}>
+            {hasFancyImage ? (
+              <ImageWithQuality
+                style={{ height, width }}
+                attachment={attachment}
+              />
+            ) : (
+              <Image
+                style={{ height, width }}
+                source={{ uri: attachment }}
+                indicator={ProgressBar}
+                indicatorProps={{
+                  color: 'white',
+                }}
+              />
+            )}
           </OpenImageWrapper>
-        </View>)
-        : previewDataOfURL ? (
-          <View
-            style={[style.messageBubble, ownMessage && style.ownBubble]}
-          >
-            {!ownMessage && (<Text style={style.sender}>{sender.username}</Text>)}
-            <Text style={[style.messageBody]}>{body}</Text>
-            <UrlPreview
-              description={previewDataOfURL.description}
-              image={previewDataOfURL.image}
-              title={previewDataOfURL.title}
-              url={previewDataOfURL.url}
-            />
-          </View>) : (
-            <View style={[style.messageBubble, ownMessage && style.ownBubble]}>
-              {!ownMessage && (<Text style={style.sender}>{sender.username}</Text>)}
-              <Text style={style.messageBody}>{body}</Text>
-            </View>)
-      }
+        </View>
+      ) : previewDataOfURL ? (
+        <View style={[style.messageBubble, ownMessage && style.ownBubble]}>
+          {!ownMessage && <Text style={style.sender}>{sender.username}</Text>}
+          <Text style={[style.messageBody]}>{body}</Text>
+          <UrlPreview
+            description={previewDataOfURL.description}
+            image={previewDataOfURL.image}
+            title={previewDataOfURL.title}
+            url={previewDataOfURL.url}
+          />
+        </View>
+      ) : (
+        <View style={[style.messageBubble, ownMessage && style.ownBubble]}>
+          {!ownMessage && <Text style={style.sender}>{sender.username}</Text>}
+          <Text style={style.messageBody}>{body}</Text>
+        </View>
+      )}
     </View>
   );
 };
