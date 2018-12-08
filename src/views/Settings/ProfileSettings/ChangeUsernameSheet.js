@@ -11,6 +11,8 @@ import { withTheme } from '../../../components/ThemedWrapper';
 
 import { styles } from '../../../styles/form/style';
 
+const validateUsername = value => value.length > 0;
+
 const ChangeUsernameSheet = ({
   theme,
   username,
@@ -30,18 +32,21 @@ const ChangeUsernameSheet = ({
     }
   };
   const style = styles(theme);
+  const isValid = validateUsername(username);
   return (
     <View style={[style.view]}>
-      <View style={[style.container, style.section]}>
+      <View style={[style.container, style.panel]}>
         <TextInput
           style={style.input}
           placeholder="Username"
+          placeholderTextColor={theme.inputPlaceholder}
           autoCapitalize="none"
           autoCorrect={false}
+          validate={validateUsername}
           value={username}
           onChangeText={setUsername}
         />
-        <Button title="Save" onPress={onUsernameSaved} type="Success" />
+        <Button title="Save" onPress={onUsernameSaved} color="transparent" titleColor={theme.actionHero} disabled={!isValid} />
       </View>
     </View>
   );
