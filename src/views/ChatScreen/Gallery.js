@@ -21,26 +21,12 @@ const imageMargin = 2;
 // TODO: get the thumbnail url (just add _thumb in the filename part in the url)
 const thumbOf = url => url;
 
-const formatDate = (date) => {
-  var day = date.getDate();
-  var monthIndex = date.getMonth();
-  var year = date.getFullYear();
-
-  return day + ' ' + monthNames[monthIndex] + ' ' + year;
-}
-
-export const options = [
-  {
-    value: 'date',
-    key: '0',
-    label: 'Date',
+const galleryStyles = theme => ({
+  container: {
+    backgroundColor: theme.backdrop,
+    flex: 1,
   },
-  {
-    value: 'group',
-    key: '1',
-    label: 'Group',
-  },
-];
+});
 
 const Gallery = ({
   imageMetadata,

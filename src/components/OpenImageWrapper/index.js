@@ -29,7 +29,9 @@ const footer = (sender, time, width) => (
 
 class OpenImageWrapper extends React.Component {
   componentDidMount() {
-    this.props.setIndex(this.props.index);
+    if(this.props.index) {
+      this.props.setIndex(this.props.index);
+    }    
   }
 
   render() {
@@ -37,7 +39,7 @@ class OpenImageWrapper extends React.Component {
       imageData,
       children,
       modalOpen,
-      index,
+      currentIndex,
       setModalOpen,
       setIndex,
     } = this.props
@@ -53,11 +55,11 @@ class OpenImageWrapper extends React.Component {
           <ImageViewer
             imageUrls={urls}
             onChange={i => setIndex(i)}
-            index={index}
+            index={currentIndex}
             onSwipeDown={() => { setModalOpen(false); }}
             onSave={() => console.log("TODO: Implement saving")}
             enableSwipeDown
-            renderFooter={() => footer(imageData[index].sender, imageData[index].time, width)}
+            renderFooter={() => footer(imageData[currentIndex].sender, imageData[currentIndex].time, width)}
           />
         </Modal>
       </TouchableOpacity>
@@ -67,7 +69,7 @@ class OpenImageWrapper extends React.Component {
 
 const enhancer = compose(
   withTheme,
-  withState('index', 'setIndex', 0),
+  withState('currentIndex', 'setIndex', 0),
   withState('modalOpen', 'setModalOpen', false),
   connect(),
 );
