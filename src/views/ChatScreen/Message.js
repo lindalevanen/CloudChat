@@ -10,6 +10,7 @@ import { withTheme } from '../../components/ThemedWrapper';
 import OpenImageWrapper from '../../components/OpenImageWrapper';
 import UrlPreview from '../../components/UrlPreview';
 import ImageWithQuality from '../../components/ImageWithQuality';
+import TextWithTranslation from './TextWithTranslation';
 
 const styles = theme => ({
   container: {
@@ -125,7 +126,7 @@ const Message = ({
       ) : previewDataOfURL ? (
         <View style={[style.messageBubble, ownMessage && style.ownBubble]}>
           {!ownMessage && <Text style={style.sender}>{sender.username}</Text>}
-          <Text style={[style.messageBody]}>{body}</Text>
+          <TextWithTranslation theme={theme} style={[style.messageBody]} payload={message.payload} />
           <UrlPreview
             description={previewDataOfURL.description}
             image={previewDataOfURL.image}
@@ -136,7 +137,7 @@ const Message = ({
       ) : (
         <View style={[style.messageBubble, ownMessage && style.ownBubble]}>
           {!ownMessage && <Text style={style.sender}>{sender.username}</Text>}
-          <Text style={style.messageBody}>{body}</Text>
+          <TextWithTranslation theme={theme} style={[style.messageBody]} payload={message.payload} />
         </View>
       )}
     </View>
