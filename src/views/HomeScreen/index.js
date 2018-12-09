@@ -6,7 +6,6 @@ import {
 } from 'react-navigation';
 import { Ionicons } from '@expo/vector-icons';
 
-import UserSearch from '../../components/UserSearch';
 import ChatMock from '../Chats';
 import SettingsView from '../Settings';
 import ThemedTabBarComponent from './ThemedTabBarComponent';
@@ -37,13 +36,6 @@ const Tabs = createBottomTabNavigator(
       navigationOptions: {
         title: 'Chats',
         tabBarIcon: ({ tintColor }) => <Ionicons name="ios-chatbubbles" size={25} color={tintColor} />,
-      },
-    },
-    Contacts: {
-      screen: UserSearch,
-      navigationOptions: {
-        title: 'Contacts',
-        tabBarIcon: ({ tintColor }) => <Ionicons name="ios-contacts" size={25} color={tintColor} />,
       },
     },
     Settings: {
