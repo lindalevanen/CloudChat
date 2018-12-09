@@ -1,7 +1,8 @@
 import React from 'react';
-import { Text, View } from 'react-native';
+import { View } from 'react-native';
 import ThemeSettings from '../ThemeSettings';
 import ImageSettings from '../ImageSettings';
+import LanguageSetting from '../LanguageSetting';
 
 import { styles } from '../../../styles/form/style';
 
@@ -11,6 +12,7 @@ const GeneralSettings = ({ theme }) => {
     <View style={[style.section, style.panel]}>
       <ThemeSettings theme={theme} />
       <ImageSettings theme={theme} />
+      <LanguageSetting theme={theme} />
     </View>
   );
 };
