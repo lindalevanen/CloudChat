@@ -29,9 +29,7 @@ const Checkbox = ({
     <TouchableOpacity onPress={onPress} style={[themedStyle.checkbox, style]}>
       <MaterialCommunityIcons
         color={colorToUse}
-        name={
-        selected ? 'check-circle' : 'checkbox-blank-circle-outline'
-      }
+        name={selected ? 'check-circle' : 'checkbox-blank-circle-outline'}
         size={24}
       />
     </TouchableOpacity>
@@ -49,6 +47,9 @@ const VerticalButtons = ({
   showLabels = false,
 }) => {
   const themedStyle = styles(theme);
+  const selectedLabel = selectedValue && options
+    ? options.find(({ value }) => value === selectedValue).label
+    : selectedValue;
   return (
     <View style={themedStyle.container}>
       <View style={[style, themedStyle.buttonContainer]}>
@@ -63,7 +64,7 @@ const VerticalButtons = ({
         ))}
       </View>
       {showLabels ? (
-        <Text style={[themedStyle.text]}>{selectedValue}</Text>
+        <Text style={[themedStyle.text]}>{selectedLabel}</Text>
       ) : null}
     </View>
   );
