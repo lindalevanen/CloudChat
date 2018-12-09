@@ -48,6 +48,7 @@ const LanguageSetting = ({ theme, messageLanguage, setMessageLanguage }) => {
         <Text style={[style.text]}>Message translations</Text>
       </View>
       <Picker
+        placeholderTextColor={theme.inputPlaceholder}
         items={options}
         value={messageLanguage}
         onValueChange={setMessageLanguage}
