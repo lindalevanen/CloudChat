@@ -28,6 +28,7 @@ const palette = {
   ownMessageBubble: colors.hack1,
   messageSender: colors.lightgrey,
   messageBody: colors.white,
+  messageTranslationButton: colors.hack2,
   checkBox: colors.white,
   quoteSeparator: colors.white,
 };
