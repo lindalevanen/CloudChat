@@ -1,6 +1,6 @@
 import React from 'react';
 import {
-  Text, View, TouchableOpacity, Modal,
+  Text, View, TouchableOpacity, Modal, Dimensions,
 } from 'react-native';
 import { connect } from 'react-redux';
 import { Ionicons } from '@expo/vector-icons';
@@ -36,7 +36,7 @@ const themedStyles = theme => ({
   },
   modalContent: {
     position: 'absolute',
-    marginTop: 200,
+    marginTop: Dimensions.get('window').height / 5,
     left: 0,
     right: 0,
     marginHorizontal: 20,
