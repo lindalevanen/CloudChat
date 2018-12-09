@@ -233,6 +233,7 @@ export async function sendMessage(
     payload: {
       body: messageString,
       dimensions: null,
+      translations: { loading: true },
       sender,
       attachment,
     },
