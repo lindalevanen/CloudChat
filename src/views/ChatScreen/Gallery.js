@@ -1,5 +1,5 @@
 import React from 'react';
-import { Text, View, Dimensions, TouchableOpacity, FlatList, StyleSheet, SectionList } from 'react-native';
+import { Text, View, Dimensions, TouchableOpacity, FlatList, StyleSheet, SectionList, ScrollView } from 'react-native';
 import { connect } from 'react-redux';
 import { compose, withState } from 'recompose';
 import { firebaseConnect, populate } from 'react-redux-firebase';
@@ -14,17 +14,31 @@ import OpenImageWrapper from '../../components/OpenImageWrapper';
 import { styles } from '../../styles/form/style';
 import ImageGrid from '../../components/ImageGrid';
 
-
 const columnAmount = 3;
 const imageMargin = 2;
 
 // TODO: get the thumbnail url (just add _thumb in the filename part in the url)
 const thumbOf = url => url;
 
+export const options = [
+  {
+    value: 'date',
+    key: '0',
+    label: 'Date',
+  },
+  {
+    value: 'group',
+    key: '1',
+    label: 'Group',
+  },
+];
+
 const galleryStyles = theme => ({
-  container: {
-    backgroundColor: theme.backdrop,
-    flex: 1,
+  text: {
+    color: theme.text1,
+    top: 8,
+    right: 10,
+    fontSize: 16,
   },
 });
 
@@ -35,34 +49,31 @@ const Gallery = ({
   theme,
 }) => {
   const style = styles(theme);
-  const arr = _map(imageMetadata, (data, key) => ({
-    ...data,
-    key,
-  }));
-  const imageData = _map(arr, data => ({
-    url: data.url,
-    sender: data.fileOwner ? data.fileOwner.username : '',
-    time: (new Date(data.timeCreated).toLocaleDateString()),
-  }));
-  const screenWidth = Dimensions.get('window').width;
-  const imageWidth = screenWidth / columnAmount;
+  const galleryStyle = galleryStyles(theme);
+  const changeListType = (val) => {
+    setListType(val);
+  };
+
   if (imageMetadata) {
     return (
-      <View>
-        <View style={style.settingTitle}>
-          <Ionicons style={style.settingIcon} name="ios-globe" size={24} color="deepskyblue" />
-          <Text style={[style.text]}>Sort by:</Text>
+      <ScrollView style={{ flex: 1, backgroundColor: theme.backdrop }}>
+        <View style={[style.setting, style.container, styles.panel, { flex: 1 }]}>
+          <View style={style.settingTitle}>
+            <Text style={[style.text, { top: 5 }]}>Sort by:</Text>
+          </View>
+          <Picker
+            items={options}
+            style={{ inputIOS: galleryStyle.text, inputAndroid: galleryStyle.text }}
+            useNativeAndroidPickerStyle={false}
+            value={listType}
+            onValueChange={changeListType}
+          />
         </View>
-        <Picker
-          placeholderTextColor={theme.inputPlaceholder}
-          items={options}
-          useNativeAndroidPickerStyle={false}
-          value={listType}
-          onValueChange={setListType}
-          placeholder={{ value: null, label: 'Original' }}
+        <ImageGrid
+          imageMetadata={imageMetadata}
+          listType={listType}
         />
-        
-      </View>
+      </ScrollView>
     );
   }
   return <View />;

@@ -59,6 +59,16 @@ const styles = theme => ({
   },
 });
 
+const formatDate = (date) => {
+  const day = date.getDate();
+  const month = date.getMonth();
+  const year = date.getFullYear();
+  const hours = date.getHours();
+  const mins = date.getMinutes();
+
+  return day + '/' + (month + 1) + '/' + year + ' ' + hours + ':' + mins;
+};
+
 const Message = ({
   theme, sender, message, profileUid,
 }) => {
@@ -110,7 +120,7 @@ const Message = ({
             imageData={[{
               url: attachment,
               sender: sender.username,
-              time: new Date(timestamp).toString(),
+              time: formatDate(new Date(timestamp)),
             }]}
           >
             {hasFancyImage ? (

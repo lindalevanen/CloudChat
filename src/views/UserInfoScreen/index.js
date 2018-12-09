@@ -6,7 +6,11 @@ import { compose } from 'recompose';
 import ProfileInfo from '../../components/ProfileInfo';
 
 const UserInfoScreen = ({ navigation, profile }) => (
-  <ProfileInfo profile={profile} />
+  <ProfileInfo
+    profile={profile}
+    fromChat={navigation.state.params.fromChat}
+    chatId={navigation.state.params.chatId}
+  />
 );
 
 const enhance = compose(

@@ -19,10 +19,10 @@ import ChatScreen from '../ChatScreen';
 import OneToOneChat from '../ChatScreen/OneToOneChat';
 import ChatInfoScreen from '../ChatScreen/ChatInfoScreen';
 import UserInfoScreen from '../UserInfoScreen';
+import Gallery from '../ChatScreen/Gallery';
 
 import ThemedHeaderComponent from '../../components/ThemedHeaderComponent';
 import { resolveNavigationOptionsForScreen } from './routeUtils';
-import Gallery from '../ChatScreen/Gallery';
 
 const Test = ({ text }) => (
   <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>

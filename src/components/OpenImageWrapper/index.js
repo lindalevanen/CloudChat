@@ -31,7 +31,7 @@ class OpenImageWrapper extends React.Component {
   componentDidMount() {
     if(this.props.index) {
       this.props.setIndex(this.props.index);
-    }    
+    }
   }
 
   render() {
@@ -44,7 +44,7 @@ class OpenImageWrapper extends React.Component {
       setIndex,
     } = this.props
     
-    const urls = _map(imageData, data => ({ url: data.url }));
+    const urls = _map(imageData, data => ({ url: data.url && data.url.downloadUrl ? data.url.downloadUrl : data.url }));
     const width = Dimensions.get('window').width;
     return (
       <TouchableOpacity
