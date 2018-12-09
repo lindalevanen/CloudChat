@@ -61,7 +61,7 @@ const themedStyles = theme => ({
 
 const TranslationViewerModal = ({
   theme, styles, original, translations, close, ...props
-}) => (
+}) => ((translations && !translations.loading) ? (
   <Modal style={styles.modal} {...props} onRequestClose={close} animationType="slide" transparent>
     <TouchableOpacity style={styles.modalBackdrop} onPress={close} />
     <View style={styles.modalContent}>
@@ -80,7 +80,7 @@ const TranslationViewerModal = ({
       ))}
     </View>
   </Modal>
-);
+) : null);
 
 const TextWithTranslation = ({
   theme,
