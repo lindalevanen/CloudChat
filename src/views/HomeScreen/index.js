@@ -18,6 +18,7 @@ import ChatScreen from '../ChatScreen';
 import OneToOneChat from '../ChatScreen/OneToOneChat';
 import ChatInfoScreen from '../ChatScreen/ChatInfoScreen';
 import UserInfoScreen from '../UserInfoScreen';
+import Gallery from '../ChatScreen/Gallery';
 import AddUsersScreen from '../AddUsersScreen';
 
 import ThemedHeaderComponent from '../../components/ThemedHeaderComponent';
@@ -103,6 +104,12 @@ export default createStackNavigator({
   },
   UserInfoScreen: {
     screen: UserInfoScreen,
+  },
+  GalleryScreen: {
+    screen: Gallery,
+    navigationOptions: {
+      headerTitle: 'Gallery',
+    },
   },
   AddUsersScreen: {
     screen: AddUsersScreen,

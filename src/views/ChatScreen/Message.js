@@ -1,7 +1,7 @@
 import React from 'react';
 import { Text, View, Dimensions } from 'react-native';
 import { connect } from 'react-redux';
-import { compose } from 'recompose';
+import { compose, withState } from 'recompose';
 import Image from 'react-native-image-progress';
 import ProgressBar from 'react-native-progress/Circle';
 
@@ -59,11 +59,22 @@ const styles = theme => ({
   },
 });
 
+const formatDate = (date) => {
+  const day = date.getDate();
+  const month = date.getMonth();
+  const year = date.getFullYear();
+  const hours = date.getHours();
+  const mins = date.getMinutes();
+
+  return day + '/' + (month + 1) + '/' + year + ' ' + hours + ':' + mins;
+};
+
 const Message = ({
-  theme, sender, message, profileUid,
+  theme, sender, message, profileUid, imageSource, setImageSource,
 }) => {
   const style = styles(theme);
   const ownMessage = profileUid === sender.id;
+  const { timestamp } = message
   const {
     body, attachment, dimensions, previewDataOfURL,
   } = message.payload;
@@ -105,11 +116,18 @@ const Message = ({
               {sender.username}
             </Text>
           )}
-          <OpenImageWrapper imageUrl={attachment} attachment={attachment}>
+          <OpenImageWrapper
+            imageData={[{
+              url: imageSource,
+              sender: sender.username,
+              time: formatDate(new Date(timestamp)),
+            }]}
+          >
             {hasFancyImage ? (
               <ImageWithQuality
                 style={{ height, width }}
                 attachment={attachment}
+                setImageSource={src => setImageSource(src)}
               />
             ) : (
               <Image
@@ -150,6 +168,7 @@ const mapStateToProps = state => ({
 });
 
 const enhance = compose(
+  withState('imageSource', 'setImageSource', ''),
   connect(mapStateToProps),
   withTheme,
 );

@@ -23,10 +23,13 @@ const openInfoScreen = (routeName, navigation, params) => () => navigation.dispa
 );
 
 export const OneToOneChatHeaderButton = ({ navigation }) => {
-  const { userId, username, avatarUrl } = navigation.state.params;
+  const { userId, username, avatarUrl, chatId } = navigation.state.params;
+  const fromChat = true;
   const screenParams = {
     headerTitle: username,
     userId,
+    fromChat,
+    chatId,
   };
   return (
     <TouchableOpacity
@@ -44,6 +47,7 @@ const ChatScreenHeaderButton = ({ navigation }) => {
   } = navigation.state.params;
 
   const routeName = isGroupChat ? 'ChatInfoScreen' : 'UserInfoScreen';
+  const fromChat = true;
   const screenParams = isGroupChat ? {
     headerTitle: 'Chat info',
     chatId,
@@ -53,6 +57,8 @@ const ChatScreenHeaderButton = ({ navigation }) => {
     userId,
     chatName,
     chatAvatarUrl,
+    fromChat,
+    chatId,
   };
   return (
     <TouchableOpacity

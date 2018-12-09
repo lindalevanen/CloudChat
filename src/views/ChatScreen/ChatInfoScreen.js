@@ -59,6 +59,15 @@ const ChatInfoScreen = ({
     );
   };
 
+  const navigateToGallery = () => {
+    navigation.dispatch(StackActions.push({
+      routeName: 'GalleryScreen',
+      params: {
+        chatId: navigation.state.params.chatId,
+      },
+    }));
+  };
+
   const addUserToRoom = () => {
     openAddUserScreen(navigation);
   };
@@ -90,6 +99,7 @@ const ChatInfoScreen = ({
           title="Chat gallery"
           titleStyle={{ alignSelf: 'flex-start' }}
           color="transparent"
+          onPress={() => navigateToGallery()}
           titleColor={theme.actionPrimary}
         />
       </View>

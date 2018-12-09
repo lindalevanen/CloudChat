@@ -1,10 +1,13 @@
 import React from 'react';
 import { Text, View } from 'react-native';
+import { compose } from 'recompose';
+import { withNavigation, StackActions } from 'react-navigation';
 
 import { styles as formStyles } from '../../styles/form/style';
 
 import { withTheme } from '../ThemedWrapper';
 import Avatar from '../Avatar';
+import Button from '../Button';
 
 const styles = theme => ({
   section: {
@@ -23,9 +26,21 @@ const styles = theme => ({
   },
 });
 
-const ProfileInfo = ({ profile, theme }) => {
+const ProfileInfo = ({
+  navigation, profile, theme, fromChat, chatId,
+}) => {
   const style = styles(theme);
   const formStyle = formStyles(theme);
+
+  const navigateToGallery = () => {
+    navigation.dispatch(StackActions.push({
+      routeName: 'GalleryScreen',
+      params: {
+        chatId,
+      },
+    }));
+  };
+
   return (
     <View style={formStyle.view}>
       <View style={[style.topContainer, style.section]}>
@@ -44,8 +59,24 @@ const ProfileInfo = ({ profile, theme }) => {
           </Text>
         </View>
       </View>
+      {fromChat && chatId && (
+        <View style={[style.section, style.panel]}>
+          <Button
+            title="Chat gallery"
+            titleStyle={{ alignSelf: 'flex-start' }}
+            color="transparent"
+            onPress={() => navigateToGallery()}
+            titleColor={theme.actionPrimary}
+          />
+        </View>
+      )}
     </View>
   );
 };
 
-export default withTheme(ProfileInfo);
+const enhance = compose(
+  withTheme,
+  withNavigation,
+);
+
+export default enhance(ProfileInfo);
