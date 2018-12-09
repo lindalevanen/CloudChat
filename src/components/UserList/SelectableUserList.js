@@ -9,9 +9,7 @@ import UserList from './index';
 
 const usersToRender = (users, selectedUserIds) => {
   if (users && selectedUserIds.length > 0) {
-    const found = _filter(users, ({ id }) => selectedUserIds.includes(id));
-    console.log(found);
-    return found;
+    return _filter(users, ({ id }) => selectedUserIds.includes(id));
   }
   return [];
 };
@@ -44,7 +42,7 @@ const SelectableUserList = ({
           >
             <Text style={{ color: 'white', marginRight: 4 }}>{user.username}</Text>
             <TouchableOpacity onPress={() => toggleUserIdSelection(user.id)}>
-              <Ionicons size="14" color="white" name="ios-remove-circle" />
+              <Ionicons size={14} color="white" name="ios-remove-circle" />
             </TouchableOpacity>
           </View>
         ))}
