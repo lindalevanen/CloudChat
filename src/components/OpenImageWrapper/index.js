@@ -1,12 +1,33 @@
 import React from 'react';
-import { TouchableOpacity, Modal, View, Text, Dimensions } from 'react-native';
+import { TouchableOpacity, Modal, ToastAndroid, View, Text, Dimensions } from 'react-native';
 import { compose, withState } from 'recompose';
 import { connect } from 'react-redux';
+import { FileSystem, MediaLibrary } from 'expo';
 import _map from 'lodash/map';
 
 import ImageViewer from 'react-native-image-zoom-viewer';
 
 import { withTheme } from '../ThemedWrapper';
+
+const downloadImage = async (url) => {
+  try {
+    const saveFolder = `${FileSystem.documentDirectory}CloudChat`;
+    const { exists } = await FileSystem.getInfoAsync(saveFolder);
+    if (!exists) {
+      await FileSystem.makeDirectoryAsync(saveFolder, { intermediates: true });
+    }
+    const fileName = 'tempfile';
+    const saveTo = `${saveFolder}/${fileName}`;
+    const { uri } = await FileSystem.downloadAsync(url, saveTo);
+    const asset = await MediaLibrary.createAssetAsync(uri);
+    const albumName = 'CloudChat';
+    const { title } = await MediaLibrary.createAlbumAsync(albumName, asset);
+    return title;
+  } catch (error) {
+    console.error(`Error downloading image ${error}`);
+    return error;
+  }
+};
 
 const styles = {
   footerWrapper: {
@@ -37,15 +58,17 @@ class OpenImageWrapper extends React.Component {
   render() {
     const {
       imageData,
+      attachment,
       children,
       modalOpen,
       currentIndex,
-      setModalOpen,
       setIndex,
-    } = this.props
-    
+      setModalOpen,
+    } = this.props;
+
     const urls = _map(imageData, data => ({ url: data.url && data.url.downloadUrl ? data.url.downloadUrl : data.url }));
     const width = Dimensions.get('window').width;
+
     return (
       <TouchableOpacity
         onPress={() => setModalOpen(true)}
@@ -57,7 +80,11 @@ class OpenImageWrapper extends React.Component {
             onChange={i => setIndex(i)}
             index={currentIndex}
             onSwipeDown={() => { setModalOpen(false); }}
-            onSave={() => console.log("TODO: Implement saving")}
+            onSave={async (url) => {
+              await downloadImage(url);
+              setModalOpen(false);
+              ToastAndroid.show('Image saved!', ToastAndroid.SHORT);
+            }}
             enableSwipeDown
             renderFooter={() => footer(imageData[currentIndex].sender, imageData[currentIndex].time, width)}
           />

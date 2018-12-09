@@ -1,5 +1,5 @@
 import React from 'react';
-import { View } from 'react-native';
+import { View, ToastAndroid } from 'react-native';
 import { ImagePicker, ImageManipulator, Permissions } from 'expo';
 import { compose } from 'recompose';
 import { firebaseConnect } from 'react-redux-firebase';
@@ -70,6 +70,11 @@ const ImageSelector = ({
   };
   const handleResult = async (result) => {
     if (!result.cancelled) {
+      if (result.width > 10000 || result.height > 10000) {
+        ToastAndroid.show('Too large image', ToastAndroid.SHORT);
+        console.log('Too large image');
+        return;
+      }
       setLoading(true);
       const limitingFactor = getLimitingFactor(result.width, result.height);
       const LARGEST_DIMENSION_VALUE = 3000;
@@ -88,7 +93,6 @@ const ImageSelector = ({
           resoWithRatio.height = LARGEST_DIMENSION_VALUE;
         }
       }
-      console.log(resoWithRatio);
       const finalUri = resolution ? await resizeImage(uri, resoWithRatio) : uri;
       const file = await urlToBlob(finalUri);
       const fileData = {
