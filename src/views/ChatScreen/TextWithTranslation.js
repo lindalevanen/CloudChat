@@ -25,12 +25,14 @@ const TextWithTranslation = ({
   return (
     <View>
       <Text style={style}>{body}</Text>
-      <View style={styles.footer}>
-        {!loading ? <Ionicons name="ios-globe" size={12} color="white" />
-          : <Circle indeterminate size={12} color="white" />
+      {language ? (
+        <View style={styles.footer}>
+          {!loading ? <Ionicons name="ios-globe" size={12} color="white" />
+            : <Circle indeterminate size={12} color="white" />
         }
-        <Text style={[style, { fontSize: 11, marginLeft: 4 }]}>{language}</Text>
-      </View>
+          <Text style={[style, { fontSize: 11, marginLeft: 4 }]}>{language}</Text>
+        </View>
+      ) : null}
     </View>
   );
 };
