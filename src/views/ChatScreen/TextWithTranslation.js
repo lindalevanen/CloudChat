@@ -1,6 +1,6 @@
 import React from 'react';
 import {
-  Text, View, TouchableOpacity, Modal, Dimensions,
+  Text, View, TouchableOpacity, Modal, Dimensions, ScrollView,
 } from 'react-native';
 import { connect } from 'react-redux';
 import { Ionicons } from '@expo/vector-icons';
@@ -43,7 +43,6 @@ const themedStyles = theme => ({
     marginHorizontal: 20,
     backgroundColor: theme.foreground,
     padding: 10,
-    minHeight: 200,
     borderRadius: 10,
   },
   translationItem: {
@@ -61,9 +60,27 @@ const themedStyles = theme => ({
 });
 
 const TranslationViewerModal = ({
-  theme, styles, original, translations, close, ...props
-}) => ((translations && !translations.loading) ? (
-  <Modal style={styles.modal} {...props} onRequestClose={close} animationType="slide" transparent>
+  theme,
+  styles,
+  original,
+  translations,
+  close,
+  ...props
+}) => (translations && !translations.loading ? (
+  <Modal
+    style={styles.modal}
+    {...props}
+    onRequestClose={close}
+    supportedOrientations={[
+      'portrait',
+      'portrait-upside-down',
+      'landscape',
+      'landscape-left',
+      'landscape-right',
+    ]}
+    animationType="slide"
+    transparent
+  >
     <TouchableOpacity style={styles.modalBackdrop} onPress={close} />
     <View style={styles.modalContent}>
       <View style={styles.modalHeader}>
@@ -73,12 +90,16 @@ const TranslationViewerModal = ({
         <Text style={[styles.text]}>Original message:</Text>
         <Text style={styles.text}>{original}</Text>
       </View>
-      {_map(translations, (value, key) => (
-        <View key={key} style={styles.translationItem}>
-          <Text style={[styles.text, { fontStyle: 'italic' }]}>{`${languages.find(val => val.key === key).label}:`}</Text>
-          <Text style={styles.text}>{value}</Text>
-        </View>
-      ))}
+      <ScrollView>
+        {_map(translations, (value, key) => (
+          <View key={key} style={styles.translationItem}>
+            <Text style={[styles.text, { fontStyle: 'italic' }]}>
+              {`${languages.find(val => val.key === key).label}:`}
+            </Text>
+            <Text style={styles.text}>{value}</Text>
+          </View>
+        ))}
+      </ScrollView>
     </View>
   </Modal>
 ) : null);
