@@ -1,5 +1,5 @@
 import React from 'react';
-import { View } from 'react-native';
+import { View, ToastAndroid } from 'react-native';
 import { firebaseConnect } from 'react-redux-firebase';
 import { withNavigation, StackActions } from 'react-navigation';
 
@@ -11,6 +11,8 @@ import { withTheme } from '../../../components/ThemedWrapper';
 
 import { styles } from '../../../styles/form/style';
 
+const fetch = require('node-fetch');
+
 const validateUsername = value => value.length > 0;
 
 const ChangeUsernameSheet = ({
@@ -21,6 +23,14 @@ const ChangeUsernameSheet = ({
   navigation,
 }) => {
   const onUsernameSaved = async () => {
+    const userNameCheckURL = `https://europe-west1-mcc-fall-2018-g20-223013.cloudfunctions.net/uniqueUsername?username=${username}`;
+    const res = await fetch(userNameCheckURL);
+    const resJSON = await res.json();
+    const isUnique = resJSON.unique;
+    if (!isUnique) {
+      ToastAndroid.show('Username is already in use', ToastAndroid.SHORT);
+      return;
+    }
     try {
       // Update profile to firebase with firebaseConnect
       // (successful updates flow back to redux)

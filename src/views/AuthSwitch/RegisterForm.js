@@ -1,5 +1,7 @@
 import React from 'react';
-import { View, StyleSheet, Text } from 'react-native';
+import {
+  View, StyleSheet, Text, ToastAndroid,
+} from 'react-native';
 import { compose, withState } from 'recompose';
 import StepIndicator from 'react-native-step-indicator';
 
@@ -9,8 +11,9 @@ import { createChatUser, authErrorMessage } from '../../store/utils/firebase';
 import TextInput from '../../components/TextInput';
 import Avatar from '../../components/Avatar';
 import Button from '../../components/Button';
-
 import stepStyles from './stepStyles';
+
+const fetch = require('node-fetch');
 
 const styles = StyleSheet.create({
   container: {
@@ -70,6 +73,14 @@ const ProfileForm = ({
   const onRegisterPressed = async () => {
     try {
       const avatarUrl = 'https://firebasestorage.googleapis.com/v0/b/snazzy-narwhal-on-fire.appspot.com/o/icon.png?alt=media&token=0f162cf6-8b1e-4c27-9d7c-b653bb01381a';
+      const userNameCheckURL = `https://europe-west1-mcc-fall-2018-g20-223013.cloudfunctions.net/uniqueUsername?username=${username}`;
+      const res = await fetch(userNameCheckURL);
+      const resJSON = await res.json();
+      const isUnique = resJSON.unique;
+      if (!isUnique) {
+        ToastAndroid.show('Username is already in use', ToastAndroid.SHORT);
+        return;
+      }
       const result = await createChatUser(
         firebase,
         { email, password, signIn: true },
