@@ -20,10 +20,15 @@ class ImageWithQuality extends React.Component {
       .storage()
       .ref(imageRef)
       .getDownloadURL()
-      .then(uri => this.setState({
-        imageSource: { uri, cache: 'force-cache' },
-        resizeMode: 'cover',
-      }))
+      .then(uri => {
+        this.setState({
+          imageSource: { uri, cache: 'force-cache' },
+          resizeMode: 'cover',
+        })
+        if (this.props.setImageSource) {
+          this.props.setImageSource(uri)
+        }
+      })
       .catch((error) => {
         console.log(error);
         this.setState({ error });

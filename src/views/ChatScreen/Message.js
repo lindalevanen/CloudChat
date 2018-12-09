@@ -1,7 +1,7 @@
 import React from 'react';
 import { Text, View, Dimensions } from 'react-native';
 import { connect } from 'react-redux';
-import { compose } from 'recompose';
+import { compose, withState } from 'recompose';
 import Image from 'react-native-image-progress';
 import ProgressBar from 'react-native-progress/Circle';
 
@@ -70,7 +70,7 @@ const formatDate = (date) => {
 };
 
 const Message = ({
-  theme, sender, message, profileUid,
+  theme, sender, message, profileUid, imageSource, setImageSource,
 }) => {
   const style = styles(theme);
   const ownMessage = profileUid === sender.id;
@@ -118,7 +118,7 @@ const Message = ({
           )}
           <OpenImageWrapper
             imageData={[{
-              url: attachment,
+              url: imageSource,
               sender: sender.username,
               time: formatDate(new Date(timestamp)),
             }]}
@@ -127,6 +127,7 @@ const Message = ({
               <ImageWithQuality
                 style={{ height, width }}
                 attachment={attachment}
+                setImageSource={src => setImageSource(src)}
               />
             ) : (
               <Image
@@ -167,6 +168,7 @@ const mapStateToProps = state => ({
 });
 
 const enhance = compose(
+  withState('imageSource', 'setImageSource', ''),
   connect(mapStateToProps),
   withTheme,
 );
