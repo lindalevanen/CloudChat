@@ -33,6 +33,7 @@ const themedStyles = theme => ({
   },
   modalBackdrop: {
     flex: 1,
+    backgroundColor: '#0000002e',
   },
   modalContent: {
     position: 'absolute',
@@ -55,7 +56,7 @@ const themedStyles = theme => ({
     alignSelf: 'flex-start',
   },
   text: {
-    color: theme.text2,
+    color: theme.text1,
   },
 });
 
