@@ -35,6 +35,15 @@ const infoStyles = theme => ({
   },
 });
 
+const openAddUserScreen = navigation => navigation.dispatch(
+  StackActions.push({
+    routeName: 'AddUsersScreen',
+    params: {
+      chatId: navigation.state.params.chatId,
+    },
+  }),
+);
+
 const ChatInfoScreen = ({
   firebase, theme, chatMetadata, profileUid, navigation,
 }) => {
@@ -48,6 +57,10 @@ const ChatInfoScreen = ({
       navigation.state.params.chatId,
       profileUid,
     );
+  };
+
+  const addUserToRoom = () => {
+    openAddUserScreen(navigation);
   };
 
   if (!chatMetadata || !chatMetadata.members) { // without this the app crashes on leaving group
@@ -84,6 +97,13 @@ const ChatInfoScreen = ({
         <UserList
           scrollEnabled={false}
           users={_map(chatMetadata.members, (user, id) => ({ id, ...user }))}
+        />
+        <Button
+          title="Add users"
+          titleStyle={{ alignSelf: 'flex-start' }}
+          color="transparent"
+          titleColor={theme.actionPrimary}
+          onPress={addUserToRoom}
         />
       </View>
       <View style={[style.section, style.panel]}>
