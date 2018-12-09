@@ -35,7 +35,7 @@ const CreateChatSheet = ({ theme, navigation }) => {
           onPress={openGroupChatSheet}
         />
       </View>
-      <UserSearch onUserPress={openOneToOneChat} />
+      <UserSearch style={{ flex: 1 }} onUserPress={openOneToOneChat} />
     </View>
   );
 };
