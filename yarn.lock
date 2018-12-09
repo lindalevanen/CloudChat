@@ -3498,6 +3498,10 @@ lodash-es@^4.2.1:
   version "4.17.11"
   resolved "https://registry.yarnpkg.com/lodash-es/-/lodash-es-4.17.11.tgz#145ab4a7ac5c5e52a3531fb4f310255a152b4be0"
 
+lodash.isequal@^4.5.0:
+  version "4.5.0"
+  resolved "https://registry.yarnpkg.com/lodash.isequal/-/lodash.isequal-4.5.0.tgz#415c4478f2bcc30120c22ce10ed3226f7d3e18e0"
+
 lodash.map@^4.6.0:
   version "4.6.0"
   resolved "https://registry.yarnpkg.com/lodash.map/-/lodash.map-4.6.0.tgz#771ec7839e3473d9c4cde28b19394c3562f4f6d3"
@@ -4605,7 +4609,6 @@ react-native-gesture-handler@1.0.9:
 react-native-image-pan-zoom@^2.1.9:
   version "2.1.11"
   resolved "https://registry.yarnpkg.com/react-native-image-pan-zoom/-/react-native-image-pan-zoom-2.1.11.tgz#61bcb69219d95e76a9797d23e4a2e8e0bd654ae9"
-  integrity sha512-ZCisGUFpPchHXsjT7ZI0anlSLPgcTmjRKXqpVnPu3RDWFXfKjuL4zpY57DX4Y8YgGZCpbf9fApN7KjVYody2Mw==
 
 react-native-image-progress@^1.1.1:
   version "1.1.1"
@@ -4616,7 +4619,6 @@ react-native-image-progress@^1.1.1:
 react-native-image-zoom-viewer@^2.2.24:
   version "2.2.24"
   resolved "https://registry.yarnpkg.com/react-native-image-zoom-viewer/-/react-native-image-zoom-viewer-2.2.24.tgz#a405852fad76e543ed5345e8b55cf859b67c182e"
-  integrity sha512-kySTnc2AttTG6Ed0VRj1Fnrer5kwv28VOyyYkSxmZy0hTiLSZEHIDCkeowvTjDTkQZc0wKRMK7/Y5diEgpuDCg==
   dependencies:
     react-native-image-pan-zoom "^2.1.9"
 
@@ -4626,6 +4628,12 @@ react-native-maps@expo/react-native-maps#v0.22.0-exp.0:
   dependencies:
     babel-plugin-module-resolver "^3.1.0"
     babel-preset-react-native "1.9.0"
+
+react-native-picker-select@^5.1.0:
+  version "5.1.0"
+  resolved "https://registry.yarnpkg.com/react-native-picker-select/-/react-native-picker-select-5.1.0.tgz#528cb6a4bd113d8329ea795a8f4497c14f9d3433"
+  dependencies:
+    lodash.isequal "^4.5.0"
 
 react-native-progress@^3.5.0:
   version "3.5.0"

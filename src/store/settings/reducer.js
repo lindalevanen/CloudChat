@@ -1,6 +1,7 @@
 const initialState = {
   useDarkTheme: false,
   imageQuality: 'original',
+  messageLanguage: 'fi',
 };
 
 export function settingsReducer(state = initialState, action) {
