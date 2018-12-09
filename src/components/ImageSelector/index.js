@@ -30,6 +30,12 @@ const getStyles = theme => ({
   },
 });
 
+
+function getLimitingFactor(width, height) {
+  const limitingFactor = width > height ? 'width' : 'height';
+  return limitingFactor;
+}
+
 const ImageSelector = ({
   setLoading,
   setError,
@@ -65,9 +71,25 @@ const ImageSelector = ({
   const handleResult = async (result) => {
     if (!result.cancelled) {
       setLoading(true);
+      const limitingFactor = getLimitingFactor(result.width, result.height);
+      const LARGEST_DIMENSION_VALUE = 3000;
       const { uri } = result;
-      const resolution = resolutions[imageQuality];
-      const finalUri = resolution ? await resizeImage(uri, resolution) : uri;
+      let resolution = resolutions[imageQuality];
+      const resoWithRatio = {};
+      if (resolution && limitingFactor === 'width') {
+        resoWithRatio.width = resolution.width;
+      } else if (resolution) {
+        resoWithRatio.height = resolution.height;
+      } else if (result.width > LARGEST_DIMENSION_VALUE || result.height > LARGEST_DIMENSION_VALUE) {
+        resolution = { imageTooBig: true };
+        if (limitingFactor === 'width') {
+          resoWithRatio.width = LARGEST_DIMENSION_VALUE;
+        } else {
+          resoWithRatio.height = LARGEST_DIMENSION_VALUE;
+        }
+      }
+      console.log(resoWithRatio);
+      const finalUri = resolution ? await resizeImage(uri, resoWithRatio) : uri;
       const file = await urlToBlob(finalUri);
       const fileData = {
         file,
