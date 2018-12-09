@@ -66,7 +66,7 @@ const formatDate = (date) => {
   const hours = date.getHours();
   const mins = date.getMinutes();
 
-  return day + '/' + (month + 1) + '/' + year + ' ' + hours + ':' + mins;
+  return day + '/' + (month + 1) + '/' + year + ' ' + hours + ':' + ((mins < 10) ? '0' + mins : mins);
 };
 
 const Message = ({
