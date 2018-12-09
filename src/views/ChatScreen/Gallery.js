@@ -17,9 +17,6 @@ import ImageGrid from '../../components/ImageGrid';
 const columnAmount = 3;
 const imageMargin = 2;
 
-// TODO: get the thumbnail url (just add _thumb in the filename part in the url)
-const thumbOf = url => url;
-
 export const options = [
   {
     value: 'date',

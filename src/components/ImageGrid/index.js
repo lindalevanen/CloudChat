@@ -8,12 +8,10 @@ import _groupBy from 'lodash/groupBy';
 
 import { withTheme } from '../ThemedWrapper';
 import OpenImageWrapper from '../OpenImageWrapper';
+import ImageWithQuality from '../ImageWithQuality';
 
 const columnAmount = 3;
 const imageMargin = 2;
-
-// TODO: get the thumbnail url (just add _thumb in the filename part in the url)
-const thumbOf = url => url;
 
 const formatDate = (date) => {
   const day = date.getDate();
@@ -96,14 +94,25 @@ const ImageGrid = ({
                   imageData={imageData}
                   index={index}
                 >
-                  <Image
-                    source={{ uri: thumbOf(item.url) }}
-                    style={{
-                      margin: imageMargin,
-                      width: imageWidth - imageMargin * 2,
-                      minHeight: imageWidth - imageMargin * 2,
-                    }}
-                  />
+                  { typeof item.url === 'object' ? (
+                    <ImageWithQuality
+                      style={{
+                        margin: imageMargin,
+                        width: imageWidth - imageMargin * 2,
+                        minHeight: imageWidth - imageMargin * 2,
+                      }}
+                      attachment={item.url}
+                    />
+                  ) : (
+                    <Image
+                      source={{ uri: item.url }}
+                      style={{
+                        margin: imageMargin,
+                        width: imageWidth - imageMargin * 2,
+                        minHeight: imageWidth - imageMargin * 2,
+                      }}
+                    />
+                  )}
                 </OpenImageWrapper>
               )
             )}
@@ -129,14 +138,25 @@ const ImageGrid = ({
                         imageData={finalGroups[key]}
                         index={index}
                       >
-                        <Image
-                          source={{ uri: thumbOf(item.url) }}
-                          style={{
-                            margin: imageMargin,
-                            width: imageWidth - imageMargin * 2,
-                            minHeight: imageWidth - imageMargin * 2,
-                          }}
-                        />
+                        { typeof item.url === 'object' ? (
+                          <ImageWithQuality
+                            style={{
+                              margin: imageMargin,
+                              width: imageWidth - imageMargin * 2,
+                              minHeight: imageWidth - imageMargin * 2,
+                            }}
+                            attachment={item.url}
+                          />
+                        ) : (
+                          <Image
+                            source={{ uri: item.url }}
+                            style={{
+                              margin: imageMargin,
+                              width: imageWidth - imageMargin * 2,
+                              minHeight: imageWidth - imageMargin * 2,
+                            }}
+                          />
+                        )}
                       </OpenImageWrapper>
                     )
                   )}

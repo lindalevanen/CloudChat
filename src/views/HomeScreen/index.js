@@ -115,6 +115,9 @@ export default createStackNavigator({
   },
   GalleryScreen: {
     screen: Gallery,
+    navigationOptions: {
+      headerTitle: 'Gallery',
+    },
   },
   AddUsersScreen: {
     screen: AddUsersScreen,
