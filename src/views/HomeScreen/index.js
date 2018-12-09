@@ -20,6 +20,7 @@ import OneToOneChat from '../ChatScreen/OneToOneChat';
 import ChatInfoScreen from '../ChatScreen/ChatInfoScreen';
 import UserInfoScreen from '../UserInfoScreen';
 import Gallery from '../ChatScreen/Gallery';
+import AddUsersScreen from '../AddUsersScreen';
 
 import ThemedHeaderComponent from '../../components/ThemedHeaderComponent';
 import { resolveNavigationOptionsForScreen } from './routeUtils';
@@ -114,6 +115,12 @@ export default createStackNavigator({
   },
   GalleryScreen: {
     screen: Gallery,
+  },
+  AddUsersScreen: {
+    screen: AddUsersScreen,
+    navigationOptions: {
+      headerTitle: 'Add users to group',
+    },
   },
 }, {
   // mode: 'modal',

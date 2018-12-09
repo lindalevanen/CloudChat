@@ -53,7 +53,7 @@ const UserSearch = ({
           onSelectionDone={onSelectionDone}
         />
       ) : (
-        <Text>no users</Text>
+        <Text />
       )}
     </View>
   );
@@ -66,7 +66,7 @@ const enhance = compose(
   connect((state, { searchString }) => ({
     users: _filter(
       _map(state.firebase.data.users, (item, key) => ({ id: key, ...item })),
-      ({ username }) => username.toLowerCase().indexOf(searchString.toLowerCase()) >= 0,
+      ({ username }) => searchString.length > 2 && username.toLowerCase().indexOf(searchString.toLowerCase()) >= 0,
     ),
   })),
 );
