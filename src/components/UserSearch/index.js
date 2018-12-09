@@ -12,15 +12,20 @@ import SelectableUserList from '../UserList/SelectableUserList';
 import { withTheme } from '../ThemedWrapper';
 
 const UserListComponent = ({
-  theme, users, onSelectionDone, onUserPress,
+  theme,
+  users,
+  filteredUsers,
+  onSelectionDone,
+  onUserPress,
 }) => (onSelectionDone ? (
   <SelectableUserList
     theme={theme}
     users={users}
+    filteredUsers={filteredUsers}
     onSelectionDone={onSelectionDone}
   />
 ) : (
-  <UserList theme={theme} users={users} onUserPress={onUserPress} />
+  <UserList theme={theme} users={filteredUsers} onUserPress={onUserPress} />
 ));
 
 const UserSearch = ({
@@ -31,6 +36,7 @@ const UserSearch = ({
   searchString,
   setSearchString,
   users,
+  filteredUsers,
 }) => {
   const loading = !isLoaded(users);
   const hasUsers = !loading && !isEmpty(users);
@@ -38,7 +44,7 @@ const UserSearch = ({
     <View style={[{ backgroundColor: theme.backdrop }, style]}>
       <View style={{ padding: 10, backgroundColor: theme.foreground }}>
         <TextInput
-          placeholder="Search users"
+          placeholder="Search users..."
           onChangeText={setSearchString}
           autoCorrect={false}
           autoCapitalize="none"
@@ -49,6 +55,7 @@ const UserSearch = ({
         <UserListComponent
           theme={theme}
           users={users}
+          filteredUsers={filteredUsers}
           onUserPress={onUserPress}
           onSelectionDone={onSelectionDone}
         />
@@ -64,9 +71,14 @@ const enhance = compose(
   withState('searchString', 'setSearchString', ''),
   firebaseConnect([{ path: 'users', queryParams: ['orderByChild=username'] }]),
   connect((state, { searchString }) => ({
-    users: _filter(
+    users: _map(state.firebase.data.users, (item, key) => ({
+      id: key,
+      ...item,
+    })),
+    filteredUsers: _filter(
       _map(state.firebase.data.users, (item, key) => ({ id: key, ...item })),
-      ({ username }) => searchString.length > 2 && username.toLowerCase().indexOf(searchString.toLowerCase()) >= 0,
+      ({ username }) => searchString.length > 2
+        && username.toLowerCase().indexOf(searchString.toLowerCase()) >= 0,
     ),
   })),
 );
