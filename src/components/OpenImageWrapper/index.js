@@ -1,5 +1,5 @@
 import React from 'react';
-import { TouchableOpacity, Modal } from 'react-native';
+import { TouchableOpacity, Modal, ToastAndroid } from 'react-native';
 import { compose, withState } from 'recompose';
 import { connect } from 'react-redux';
 import { FileSystem, MediaLibrary } from 'expo';
@@ -53,6 +53,7 @@ const OpenImageWrapper = ({
           onSave={async (url) => {
             await downloadImage(url);
             setModalOpen(false);
+            ToastAndroid.show('Image saved!', ToastAndroid.SHORT);
           }}
           enableSwipeDown
         />
