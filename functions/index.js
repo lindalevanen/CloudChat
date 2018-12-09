@@ -213,25 +213,19 @@ exports.deleteGroupsThatHaveNoUser = functions.region(region).database.ref('chat
     await ref.remove()
   });
 
-exports.sendNotificationOnCreateGroup = functions.region(region).database.ref('/chatMetadata/{chatUid}')
+exports.sendNotificationWhenAddedToGroup = functions.region(region).database.ref('/chatMetadata/{chatUid}/members/{userID}')
   .onCreate(async (snapshot, context) => {
     const chatUid = context.params.chatUid;
-    const original = snapshot.val();
+    const userID = context.params.userID;
+    const ref = await admin.database().ref(`/chatMetadata/${chatUid}`).once('value')
+    const original = ref.val();
     const groupChat = original.groupChat;
     if(!groupChat) {
       return
     }
-    const members = original.members;
     const title = original.title;
     const creator = original.creator;
-    const membersToNotify = [];
-
-    for (var key in members) {
-      if (members.hasOwnProperty(key)) {
-        membersToNotify.push(members[key].id)
-      }
-    }
-
+    const membersToNotify = [userID];
     // Get device tokens corresponding to members
     const getDeviceTokensPromises = []
 
@@ -245,7 +239,6 @@ exports.sendNotificationOnCreateGroup = functions.region(region).database.ref('/
     if(results.length === 0) {
       return;
     }
-
     const notifications = []
       
     for (let i = 0; i < results.length; i++) {
