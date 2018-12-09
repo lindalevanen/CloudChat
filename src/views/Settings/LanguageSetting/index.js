@@ -52,6 +52,7 @@ const LanguageSetting = ({ theme, messageLanguage, setMessageLanguage }) => {
         items={options}
         useNativeAndroidPickerStyle={false}
         value={messageLanguage}
+        style={{ inputIOS: { color: theme.text1 }, inputAndroid: { color: theme.text1 } }}
         onValueChange={setMessageLanguage}
         placeholder={{ value: null, label: 'Original' }}
       />
