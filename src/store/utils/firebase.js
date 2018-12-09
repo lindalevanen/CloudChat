@@ -59,6 +59,18 @@ export async function addRoomToUsers(firebaseRef, roomId, userIds) {
   );
 }
 
+export async function updateRoomUsers(firebaseRef, roomId, userIds) {
+  const updateUsersPromise = addRoomToUsers(firebaseRef, roomId, userIds);
+  const userInfo = userIds.map(id => ({
+    id,
+    joined: Date.now(),
+  }));
+  const updateRoomsPromise = Promise.all(
+    userInfo.map(info => firebaseRef.set(`chatMetadata/${roomId}/members/${info.id}`, info)),
+  );
+  return Promise.all([updateUsersPromise, updateRoomsPromise]);
+}
+
 export async function registerForPushNotificationsAsync(firebaseRef, userId) {
   const { status: existingStatus } = await Permissions.getAsync(
     Permissions.NOTIFICATIONS,
